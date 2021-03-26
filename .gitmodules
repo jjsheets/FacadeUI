@@ -1,0 +1,3 @@
+[submodule "external/utf8.h"]
+	path = external/utf8.h
+	url = https://github.com/sheredom/utf8.h.git
