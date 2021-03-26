@@ -26,23 +26,7 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef JJSHEETS_FACADE_TEST_CC_INCLUDED
-#define JJSHEETS_FACADE_TEST_CC_INCLUDED
+#ifndef JJSHEETS_TEST_STATE_CC_INCLUDED
+#define JJSHEETS_TEST_STATE_CC_INCLUDED
 
-#include "facade_test.h"
-#include <iostream>
-
-int main (int argc, char *argv[]) {
-  LR_PRELUDE(argc, argv);
-  // print out the command line options provided by labrat and exit.
-  std::cout << "Usage: " << argv[0] << " --lr-run-tests" << std::endl;
-  std::cout << "       " << argv[0] << " --lr-run-benchmarks [num]" << std::endl;
-  std::cout << std::endl;
-  std::cout << "    --lr-run-tests" << std::endl;
-  std::cout << "        Run the test suite. << std::endl"
-  std::cout << "    --lr-run-benchmarks [num]" << std::endl;
-  std::cout << "        Run the benchmarks [num] times per benchmark." << std::endl << std::endl;
-  return 0;
-}
-
-#endif // JJSHEETS_FACADE_TEST_CC_INCLUDED
+#endif // JJSHEETS_TEST_STATE_CC_INCLUDED
