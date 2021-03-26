@@ -26,43 +26,13 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_H_INCLUDED
-#define FACADE_FACADE_H_INCLUDED
+#ifndef FACADE_TEST_BUTTON_CC_INCLUDED
+#define FACADE_TEST_BUTTON_CC_INCLUDED
 
-#include <functional>
+#include "facade_test.h"
 
-namespace facade {
-
-  struct _state {
-    int mouse_x;
-    int mouse_y;
-    bool mouse_left_down;
-    bool mouse_middle_down;
-    bool mouse_right_down;
-    void* hover_item;
-    void* active_item;
-  };
-
-  void init(_facade_state* _state);
-  void setMouseXY(_state* _state, int _x, int _y);
-  void setLeftMouseButton(_state* _state, bool _down);
-  void setMiddleMouseButton(_state* _state, bool _down);
-  void setRightMouseButton(_state* _state, bool _down);
-  bool mouseInRegion(_state* state, int x, int y, int w, int h);
-
-  // Buttons can have four display states: enabled, hovered, pressed, and disabled.
-  // States for input focusing and draggable buttons are currently not planned.
-  enum button_display_state {
-    enabled,
-    hovered,
-    pressed,
-    disabled
-  };
-  // Buttons also support a rendering function, which allows for custom rendering of buttons
-  typedef std::function<void (int, int, int, int, button_display_state)> button_renderer;
-
-  bool button(_state* state, void* id, int x, int y, int w, int h, bool disabled,
-    button_renderer renderer = nullptr);
+// TODO: Write the test cases for the button ui element.
+TEST_CASE(test_button) {
 }
 
-#endif // FACADE_FACADE_H_INCLUDED
+#endif // FACADE_TEST_BUTTON_CC_INCLUDED

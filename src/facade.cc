@@ -26,12 +26,12 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef JJSHEETS_FACADE_CC_INCLUDED
-#define JJSHEETS_FACADE_CC_INCLUDED
+#ifndef FACADE_FACADE_CC_INCLUDED
+#define FACADE_FACADE_CC_INCLUDED
 
 #include "facade.h"
 
- facade::init(facade::_state* state) {
+facade::init(facade::_state* state) {
   state->mouse_x = 0;
   state->mouse_y = 0;
   state->mouse_left_down = false;
@@ -58,4 +58,11 @@ void facade::setRightMouseButton(facade::_state* state, bool down) {
   state->mouse_right_down = down;
 }
 
-#endif // JJSHEETS_FACADE_CC_INCLUDED
+bool facade::mouseInRegion(facade::_state* state, int x, int y, int w, int h) {
+  return !(state->mouse_x < x ||
+           state->mouse_y < y ||
+           state->mouse_x >= x + w ||
+           state->mouse_y >= y + h);
+}
+
+#endif // FACADE_FACADE_CC_INCLUDED

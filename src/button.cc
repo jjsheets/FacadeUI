@@ -26,43 +26,32 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_H_INCLUDED
-#define FACADE_FACADE_H_INCLUDED
+#ifndef FACADE_BUTTON_CC_INCLUDED
+#define FACADE_BUTTON_CC_INCLUDED
 
-#include <functional>
+#include "facade.h"
 
-namespace facade {
-
-  struct _state {
-    int mouse_x;
-    int mouse_y;
-    bool mouse_left_down;
-    bool mouse_middle_down;
-    bool mouse_right_down;
-    void* hover_item;
-    void* active_item;
-  };
-
-  void init(_facade_state* _state);
-  void setMouseXY(_state* _state, int _x, int _y);
-  void setLeftMouseButton(_state* _state, bool _down);
-  void setMiddleMouseButton(_state* _state, bool _down);
-  void setRightMouseButton(_state* _state, bool _down);
-  bool mouseInRegion(_state* state, int x, int y, int w, int h);
-
-  // Buttons can have four display states: enabled, hovered, pressed, and disabled.
-  // States for input focusing and draggable buttons are currently not planned.
-  enum button_display_state {
-    enabled,
-    hovered,
-    pressed,
-    disabled
-  };
-  // Buttons also support a rendering function, which allows for custom rendering of buttons
-  typedef std::function<void (int, int, int, int, button_display_state)> button_renderer;
-
-  bool button(_state* state, void* id, int x, int y, int w, int h, bool disabled,
-    button_renderer renderer = nullptr);
+// TODO: Write unit test to verify the behavior.
+void facade::button(facade::_state* state, void* id, int x, int y, int w, int h, bool disabled, facade::button_renderer renderer) {
+  // check/update hover and active.
+  if (!disabled && facade::mouseInRegion(state, x, y, w, h)) {
+    state->hover_item = id;
+    if (state->active_item == nullptr && state->mouse_left_down)
+      state->active_item = id;
+  }
+  // render the button
+  facade::button_renderer _renderer = renderer ? renderer : state->default_button_renderer;
+  if (disabled) {
+    _renderer(x, y, w, h, facade::button_display_state::disabled);
+  } else if (state->mouse_left_down && state->active_item == id) {
+    _renderer(x, y, w, h, facade::button_display_state::pressed);
+  } else if (state->hover_item == id) {
+    _renderer(x, y, w, h, facade::button_display_state::hovered);
+  } else {
+    _renderer(x, y, w, h, facade::button_display_state::enabled);
+  }
+  // return true if the button is clicked
+  return (!disabled && !state->mouse_left_down && state->hot_item == id && state->active_item == id);
 }
 
-#endif // FACADE_FACADE_H_INCLUDED
+#endif // FACADE_FACADE_CC_INCLUDED

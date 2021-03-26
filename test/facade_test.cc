@@ -26,8 +26,8 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef JJSHEETS_FACADE_TEST_CC_INCLUDED
-#define JJSHEETS_FACADE_TEST_CC_INCLUDED
+#ifndef FACADE_FACADE_TEST_CC_INCLUDED
+#define FACADE_FACADE_TEST_CC_INCLUDED
 
 #include "facade_test.h"
 #include <iostream>
@@ -45,4 +45,4 @@ int main (int argc, char *argv[]) {
   return 0;
 }
 
-#endif // JJSHEETS_FACADE_TEST_CC_INCLUDED
+#endif // FACADE_FACADE_TEST_CC_INCLUDED

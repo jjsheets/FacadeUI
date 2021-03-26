@@ -26,8 +26,8 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef JJSHEETS_TEST_STATE_CC_INCLUDED
-#define JJSHEETS_TEST_STATE_CC_INCLUDED
+#ifndef FACADE_TEST_STATE_CC_INCLUDED
+#define FACADE_TEST_STATE_CC_INCLUDED
 
 #include "facade_test.h"
 
@@ -78,4 +78,29 @@ TEST_CASE(test_setRightMouseButton) {
   ASSERT_FALSE(state.mouse_right_down);
 }
 
-#endif // JJSHEETS_TEST_STATE_CC_INCLUDED
+TEST_CASE(test_mouseInRegion) {
+  facade::_state state;
+  facade::init(&state);
+  const int x = 50;
+  const int y = 50;
+  const int w = 50;
+  const int h = 50;
+  facade::setMouseXY(&state, x - 1,     y + h / 2);
+  ASSERT_FALSE(facade::mouseInRegion(&state, x, y, w, h));
+  facade::setMouseXY(&state, x,         y + h / 2);
+  ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
+  facade::setMouseXY(&state, x + w,     y + h / 2);
+  ASSERT_FALSE(facade::mouseInRegion(&state, x, y, w, h));
+  facade::setMouseXY(&state, x + w + 1, y + h / 2);
+  ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
+  facade::setMouseXY(&state, x + w / 2, y - 1);
+  ASSERT_FALSE(facade::mouseInRegion(&state, x, y, w, h));
+  facade::setMouseXY(&state, x + w / 2, y);
+  ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
+  facade::setMouseXY(&state, x + w / 2, y + h);
+  ASSERT_FALSE(facade::mouseInRegion(&state, x, y, w, h));
+  facade::setMouseXY(&state, x + w / 2, y + h + 1);
+  ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
+}
+
+#endif // FACADE_TEST_STATE_CC_INCLUDED

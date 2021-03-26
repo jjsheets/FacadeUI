@@ -26,10 +26,10 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef JJSHEETS_FACADE_TEST_H_INCLUDED
-#define JJSHEETS_FACADE_TEST_H_INCLUDED
+#ifndef FACADE_FACADE_TEST_H_INCLUDED
+#define FACADE_FACADE_TEST_H_INCLUDED
 
 #include "labrat.h"
 #include "facade.h"
 
-#endif // JJSHEETS_FACADE_TEST_H_INCLUDED
+#endif // FACADE_FACADE_TEST_H_INCLUDED
