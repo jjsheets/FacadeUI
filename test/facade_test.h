@@ -29,4 +29,7 @@
 #ifndef JJSHEETS_FACADE_TEST_H_INCLUDED
 #define JJSHEETS_FACADE_TEST_H_INCLUDED
 
+#include "labrat.h"
+#include "facade.h"
+
 #endif // JJSHEETS_FACADE_TEST_H_INCLUDED

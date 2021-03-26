@@ -29,4 +29,53 @@
 #ifndef JJSHEETS_TEST_STATE_CC_INCLUDED
 #define JJSHEETS_TEST_STATE_CC_INCLUDED
 
+#include "facade_test.h"
+
+TEST_CASE(test_init) {
+  facade::_state state;
+  facade::init(&state);
+  ASSERT_EQ(state.mouse_x, 0, "%d");
+  ASSERT_EQ(state.mouse_y, 0, "%d");
+  ASSERT_FALSE(state.mouse_left_down);
+  ASSERT_FALSE(state.mouse_middle_down);
+  ASSERT_FALSE(state.mouse_right_down);
+  ASSERT_TRUE(state.hover_item == nullptr);
+  ASSERT_TRUE(state.active_item == nullptr);
+}
+
+TEST_CASE(test_setMouseXY) {
+  facade::_state state;
+  facade::init(&state);
+  facade::setMouseXY(&state, 10, 15);
+  ASSERT_EQ(state.mouse_x, 10, "%d");
+  ASSERT_EQ(state.mouse_y, 15, "%d");
+}
+
+TEST_CASE(test_setLeftMouseButton) {
+  facade::_state state;
+  facade::init(&state);
+  facade::setLeftMouseButton(&state, true);
+  ASSERT_TRUE(state.mouse_left_down);
+  facade::setLeftMouseButton(&state, false);
+  ASSERT_FALSE(state.mouse_left_down);
+}
+
+TEST_CASE(test_setMiddleMouseButton) {
+  facade::_state state;
+  facade::init(&state);
+  facade::setMiddleMouseButton(&state, true);
+  ASSERT_TRUE(state.mouse_middle_down);
+  facade::setMiddleMouseButton(&state, false);
+  ASSERT_FALSE(state.mouse_middle_down);
+}
+
+TEST_CASE(test_setRightMouseButton) {
+  facade::_state state;
+  facade::init(&state);
+  facade::setRightMouseButton(&state, true);
+  ASSERT_TRUE(state.mouse_right_down);
+  facade::setRightMouseButton(&state, false);
+  ASSERT_FALSE(state.mouse_right_down);
+}
+
 #endif // JJSHEETS_TEST_STATE_CC_INCLUDED

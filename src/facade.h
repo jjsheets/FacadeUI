@@ -29,6 +29,24 @@
 #ifndef JJSHEETS_FACADE_H_INCLUDED
 #define JJSHEETS_FACADE_H_INCLUDED
 
+namespace facade {
 
+  struct _state {
+    int mouse_x;
+    int mouse_y;
+    bool mouse_left_down;
+    bool mouse_middle_down;
+    bool mouse_right_down;
+    void* hover_item;
+    void* active_item;
+  };
+
+  void init(_facade_state* _state);
+  void setMouseXY(_state* _state, int _x, int _y);
+  void setLeftMouseButton(_state* _state, bool _down);
+  void setMiddleMouseButton(_state* _state, bool _down);
+  void setRightMouseButton(_state* _state, bool _down);
+
+}
 
 #endif // JJSHEETS_FACADE_H_INCLUDED

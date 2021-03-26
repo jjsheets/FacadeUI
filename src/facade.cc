@@ -29,41 +29,33 @@
 #ifndef JJSHEETS_FACADE_CC_INCLUDED
 #define JJSHEETS_FACADE_CC_INCLUDED
 
-struct _facade_state {
-  int mouse_x;
-  int mouse_y;
-  bool mouse_left_down;
-  bool mouse_middle_down;
-  bool mouse_right_down;
-  void* hover_item;
-  void* active_item;
-};
+#include "facade.h"
 
-struct _facade_state _cur_state = {
-  .mouse_x = 0,
-  .mouse_y = 0,
-  .mouse_left_down = false,
-  .mouse_middle_down = false,
-  .mouse_right_down = false,
-  .hover_item = nullptr,
-  .active_item = nullptr
-};
-
-void setMouseXY(int _x, int _y) {
-  _cur_state.mouse_x = _x;
-  _cur_state.mouse_y = _y;
+ facade::init(facade::_state* state) {
+  state->mouse_x = 0;
+  state->mouse_y = 0;
+  state->mouse_left_down = false;
+  state->mouse_middle_down = false;
+  state->mouse_right_down = false;
+  state->hover_item = nullptr;
+  state->active_item = nullptr;
 }
 
-void setLeftMouseButton(bool _down) {
-  _cur_state.mouse_left_down = _down;
+void facade::setMouseXY(facade::_state* state, int x, int y) {
+  state->mouse_x = x;
+  state->mouse_y = y;
 }
 
-void setMiddleMouseButton(bool _down) {
-  _cur_state.mouse_middle_down = _down;
+void facade::setLeftMouseButton(facade::_state* state, bool down) {
+  state->mouse_left_down = down;
 }
 
-void setRightMouseButton(bool _down) {
-  _cur_state.mouse_right_down = _down;
+void facade::setMiddleMouseButton(facade::_state* state, bool down) {
+  state->mouse_middle_down = down;
+}
+
+void facade::setRightMouseButton(facade::_state* state, bool down) {
+  state->mouse_right_down = down;
 }
 
 #endif // JJSHEETS_FACADE_CC_INCLUDED
