@@ -37,17 +37,17 @@ void facade::initButton() {
   state_default_button_renderer = nullptr;
 }
 
-bool facade::button(void* id, int x, int y, int w, int h, bool disabled, facade::button_renderer renderer) {
+bool facade::button(std::u8string id, int x, int y, int w, int h, bool disabled, facade::button_renderer renderer) {
   // check/update hover and active.
   if (!disabled && facade::mouseInRegion(x, y, w, h)) {
     facade::setHoverItem(id);
-    if (facade::isActiveItem(nullptr) && facade::getLeftMouseButton())
+    if (facade::isActiveItem(u8"") && facade::getLeftMouseButton())
       facade::setActiveItem(id);
   }
   // render the button
   facade::button_renderer _renderer = renderer ? renderer : state_default_button_renderer;
   if (!_renderer) {
-    throw "No button renderer provided.";
+    throw u8"No button renderer provided.";
   }
   if (disabled) {
     _renderer(x, y, w, h, facade::button_display_state::disabled);

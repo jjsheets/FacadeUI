@@ -36,8 +36,8 @@ UTEST(state, init) {
   ASSERT_FALSE(facade::getLeftMouseButton());
   ASSERT_FALSE(facade::getMiddleMouseButton());
   ASSERT_FALSE(facade::getRightMouseButton());
-  ASSERT_TRUE(facade::isHoverItem(nullptr));
-  ASSERT_TRUE(facade::isActiveItem(nullptr));
+  ASSERT_TRUE(facade::isHoverItem(u8""));
+  ASSERT_TRUE(facade::isActiveItem(u8""));
 }
 
 UTEST(state, setMouseXY) {

@@ -36,8 +36,8 @@ int state_mouse_y;
 bool state_mouse_left_down;
 bool state_mouse_middle_down;
 bool state_mouse_right_down;
-void* state_hover_item;
-void* state_active_item;
+std::u8string state_hover_item;
+std::u8string state_active_item;
 
 void facade::init() {
   state_mouse_x = 0;
@@ -45,8 +45,8 @@ void facade::init() {
   state_mouse_left_down = false;
   state_mouse_middle_down = false;
   state_mouse_right_down = false;
-  state_hover_item = nullptr;
-  state_active_item = nullptr;
+  state_hover_item = u8"";
+  state_active_item = u8"";
 }
 
 void facade::setMouseXY(int x, int y) {
@@ -93,31 +93,31 @@ bool facade::mouseInRegion(int x, int y, int w, int h) {
            state_mouse_y >= y + h);
 }
 
-bool facade::isHoverItem(void* id) {
+bool facade::isHoverItem(std::u8string id) {
   return state_hover_item == id;
 }
 
-void facade::setHoverItem(void* id) {
+void facade::setHoverItem(std::u8string id) {
   state_hover_item = id;
 }
 
-bool facade::isActiveItem(void* id) {
+bool facade::isActiveItem(std::u8string id) {
   return state_active_item == id;
 }
 
-void facade::setActiveItem(void* id) {
+void facade::setActiveItem(std::u8string id) {
   state_active_item = id;
 }
 
 void facade::preFrame() {
-  state_hover_item = nullptr;
+  state_hover_item = u8"";
 }
 
 void facade::postFrame() {
   if (!state_mouse_left_down) {
-    state_active_item = nullptr;
-  } else if (!state_active_item) {
-    state_active_item = (void*)("_unavailable");
+    state_active_item = u8"";
+  } else if (state_active_item == u8"") {
+    state_active_item = u8"_unavailable";
   }
 }
 

@@ -30,6 +30,7 @@
 #define FACADE_FACADE_H_INCLUDED
 
 #include <functional>
+#include <string>
 
 namespace facade {
 
@@ -44,10 +45,10 @@ namespace facade {
   bool getMiddleMouseButton();
   bool getRightMouseButton();
   bool mouseInRegion(int x, int y, int w, int h);
-  bool isHoverItem(void* id);
-  void setHoverItem(void* id);
-  bool isActiveItem(void* id);
-  void setActiveItem(void* id);
+  bool isHoverItem(std::u8string id);
+  void setHoverItem(std::u8string id);
+  bool isActiveItem(std::u8string id);
+  void setActiveItem(std::u8string id);
   void preFrame();
   void postFrame();
 

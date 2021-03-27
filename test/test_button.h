@@ -32,9 +32,10 @@
 UTEST(button, noRenderer) {
   facade::init();
   facade::initButton();
+  facade::preFrame();
   bool exceptionThrown = false;
   try {
-    facade::button((void*)("test"), 10, 15, 80, 20);
+    facade::button(u8"test", 10, 15, 80, 20);
   } catch (...) {
     exceptionThrown = true;
   }
@@ -44,19 +45,21 @@ UTEST(button, noRenderer) {
 UTEST(button, defaultRenderer) {
   facade::init();
   facade::initButton();
+  facade::preFrame();
   bool rendered = false;
   facade::setDefaultButtonRenderer([&](int x, int y, int w, int h, facade::button_display_state buttonState) {
     rendered = true;
   });
-  facade::button((void*)("test"), 10, 15, 80, 20);
+  facade::button(u8"test", 10, 15, 80, 20);
   ASSERT_TRUE(rendered);
 }
 
 UTEST(button, buttonRenderer) {
   facade::init();
   facade::initButton();
+  facade::preFrame();
   bool rendered = false;
-  facade::button((void*)("test"), 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
+  facade::button(u8"test", 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
     rendered = true;
   });
   ASSERT_TRUE(rendered);
@@ -66,7 +69,8 @@ UTEST(button, buttonEnabled) {
   facade::init();
   facade::initButton();
   facade::setMouseXY(5, 5);
-  facade::button((void*)("test"), 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
+  facade::preFrame();
+  facade::button(u8"test", 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
     ASSERT_TRUE(buttonState == facade::button_display_state::enabled);
   });
 }
@@ -75,7 +79,8 @@ UTEST(button, buttonHover) {
   facade::init();
   facade::initButton();
   facade::setMouseXY(15, 20);
-  facade::button((void*)("test"), 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
+  facade::preFrame();
+  facade::button(u8"test", 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
     ASSERT_TRUE(buttonState == facade::button_display_state::hovered);
   });
 }
@@ -85,18 +90,18 @@ UTEST(button, buttonPressed) {
   facade::initButton();
   facade::setMouseXY(15, 20);
   facade::preFrame();
-  facade::button((void*)("test"), 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {});
+  facade::button(u8"test", 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {});
   facade::postFrame();
   facade::setLeftMouseButton(true);
   facade::preFrame();
-  facade::button((void*)("test"), 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
+  facade::button(u8"test", 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
     ASSERT_TRUE(buttonState == facade::button_display_state::pressed);
   });
   // Make sure the button stays pressed even after moving the mouse out of the button boundary
   facade::postFrame();
   facade::setMouseXY(5, 5);
   facade::preFrame();
-  facade::button((void*)("test"), 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
+  facade::button(u8"test", 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
     ASSERT_TRUE(buttonState == facade::button_display_state::pressed);
   });
 }
@@ -104,7 +109,7 @@ UTEST(button, buttonPressed) {
 UTEST(button, buttonDisabled) {
   facade::init();
   facade::initButton();
-  facade::button((void*)("test"), 10, 15, 80, 20, true, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
+  facade::button(u8"test", 10, 15, 80, 20, true, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
     ASSERT_TRUE(buttonState == facade::button_display_state::disabled);
   });
 }
@@ -114,15 +119,15 @@ UTEST(button, buttonClicked) {
   facade::initButton();
   facade::setMouseXY(15, 20);
   facade::preFrame();
-  ASSERT_FALSE(facade::button((void*)("test"), 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {}));
+  ASSERT_FALSE(facade::button(u8"test", 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {}));
   facade::postFrame();
   facade::setLeftMouseButton(true);
   facade::preFrame();
-  ASSERT_FALSE(facade::button((void*)("test"), 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {}));
+  ASSERT_FALSE(facade::button(u8"test", 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {}));
   facade::postFrame();
   facade::setLeftMouseButton(false);
   facade::preFrame();
-  ASSERT_TRUE(facade::button((void*)("test"), 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {}));
+  ASSERT_TRUE(facade::button(u8"test", 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {}));
 }
 
 #endif // FACADE_TEST_BUTTON_H_INCLUDED

@@ -45,7 +45,7 @@ namespace facade {
   typedef std::function<void (int, int, int, int, button_display_state)> button_renderer;
 
   void initButton();
-  bool button(void* id, int x, int y, int w, int h, bool disabled = false, button_renderer renderer = nullptr);
+  bool button(std::u8string id, int x, int y, int w, int h, bool disabled = false, button_renderer renderer = nullptr);
   void setDefaultButtonRenderer(button_renderer renderer);
 
 }
