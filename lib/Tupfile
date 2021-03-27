@@ -1,4 +1,6 @@
-: foreach ../src/*.cc |> g++ -Wall -c %f -o %o |> %B.o
-: *.o |> ar crs %o %f |> libfacade.a
+include_rules
+
+: foreach ../src/*.cc |> !cc |>
+: *.o |> !ar |> libfacade.a
 
 .gitignore
