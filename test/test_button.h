@@ -75,7 +75,6 @@ UTEST(button, buttonRenderer) {
 UTEST(button, buttonRendererParameters) {
   facade::init();
   facade::initButton();
-  bool rendered = false;
   // Initialization complete
   facade::preFrame();
   facade::button(u8"test", u8"Button Label", 10, 15, 80, 20, false,
