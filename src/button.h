@@ -29,8 +29,6 @@
 #ifndef FACADE_BUTTON_H_INCLUDED
 #define FACADE_BUTTON_H_INCLUDED
 
-#include <functional>
-
 namespace facade {
 
   // Buttons can have four display states: enabled, hovered, pressed, and disabled.
