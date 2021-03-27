@@ -29,8 +29,6 @@
 #ifndef FACADE_LABEL_H_INCLUDED
 #define FACADE_LABEL_H_INCLUDED
 
-#include <functional>
-
 namespace facade {
 
   // Labels support a rendering function, which allows for custom rendering of labels
