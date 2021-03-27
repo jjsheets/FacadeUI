@@ -42,10 +42,10 @@ namespace facade {
     disabled
   };
   // Buttons also support a rendering function, which allows for custom rendering of buttons
-  typedef std::function<void (int, int, int, int, button_display_state)> button_renderer;
+  typedef std::function<void (std::u8string, int, int, int, int, button_display_state)> button_renderer;
 
   void initButton();
-  bool button(std::u8string id, int x, int y, int w, int h, bool disabled = false, button_renderer renderer = nullptr);
+  bool button(std::u8string id, std::u8string label, int x, int y, int w, int h, bool disabled = false, button_renderer renderer = nullptr);
   void setDefaultButtonRenderer(button_renderer renderer);
 
 }
