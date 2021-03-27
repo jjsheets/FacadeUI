@@ -26,17 +26,26 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_TEST_CC_INCLUDED
-#define FACADE_FACADE_TEST_CC_INCLUDED
+#ifndef FACADE_SLIDER_H_INCLUDED
+#define FACADE_SLIDER_H_INCLUDED
 
-#include "utest.h"
-#include "facade.h"
 
-#include "test_state.h"
-#include "test_button.h"
-#include "test_label.h"
-#include "test_slider.h"
+namespace facade {
 
-UTEST_MAIN();
+  // Buttons can have four display states: enabled, hovered, pressed, and disabled.
+  // States for input focusing and draggable buttons are currently not planned.
+  enum class slider_type {
+    horizontal,
+    vertical
+  };
+  // Buttons also support a rendering function, which allows for custom rendering of buttons
+  typedef std::function<void (slider_type, int, int, int, int, double, display_state)> slider_renderer;
 
-#endif // FACADE_FACADE_TEST_CC_INCLUDED
+  void initSlider();
+  double slider(std::u8string id, slider_type type, int x, int y, int w, int l, double min, double max, double val,
+    slider_renderer renderer = nullptr);
+  void setDefaultSliderRenderer(slider_renderer renderer);
+
+}
+
+#endif // FACADE_SLIDER_H_INCLUDED
