@@ -109,4 +109,16 @@ void facade::setActiveItem(void* id) {
   state_active_item = id;
 }
 
+void facade::preFrame() {
+  state_hover_item = nullptr;
+}
+
+void facade::postFrame() {
+  if (!state_mouse_left_down) {
+    state_active_item = nullptr;
+  } else if (!state_active_item) {
+    state_active_item = (void*)("_unavailable");
+  }
+}
+
 #endif // FACADE_FACADE_CC_INCLUDED

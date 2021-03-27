@@ -48,6 +48,8 @@ namespace facade {
   void setHoverItem(void* id);
   bool isActiveItem(void* id);
   void setActiveItem(void* id);
+  void preFrame();
+  void postFrame();
 
 }
 
