@@ -53,7 +53,8 @@ namespace facade {
   // Buttons also support a rendering function, which allows for custom rendering of buttons
   typedef std::function<void (int, int, int, int, button_display_state)> button_renderer;
 
-  bool button(_state* state, void* id, int x, int y, int w, int h, bool disabled, button_renderer renderer = nullptr);
+  bool button(_state* state, void* id, int x, int y, int w, int h, bool disabled = false, button_renderer renderer = nullptr);
+  void setDefaultButtonRenderer(_state* state, button_renderer renderer);
 
   struct _state {
     int mouse_x;
