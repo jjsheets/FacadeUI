@@ -26,16 +26,28 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_TEST_CC_INCLUDED
-#define FACADE_FACADE_TEST_CC_INCLUDED
+#ifndef FACADE_LABEL_CC_INCLUDED
+#define FACADE_LABEL_CC_INCLUDED
 
-#include "utest.h"
 #include "facade.h"
 
-#include "test_state.h"
-#include "test_button.h"
-#include "test_label.h"
+facade::label_renderer state_default_label_renderer;
 
-UTEST_MAIN();
+void facade::initLabel() {
+  state_default_label_renderer = nullptr;
+}
 
-#endif // FACADE_FACADE_TEST_CC_INCLUDED
+void facade::label(std::u8string label, int x, int y, int w, int h, facade::label_renderer renderer) {
+  // render the button
+  facade::label_renderer _renderer = renderer ? renderer : state_default_label_renderer;
+  if (!_renderer) {
+    throw u8"No label renderer provided.";
+  }
+  _renderer(label, x, y, w, h);
+}
+
+void facade::setDefaultLabelRenderer(facade::label_renderer renderer) {
+  state_default_label_renderer = renderer;
+}
+
+#endif // FACADE_LABEL_CC_INCLUDED

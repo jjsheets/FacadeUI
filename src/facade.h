@@ -54,6 +54,8 @@ namespace facade {
 
 }
 
+// Widget includes
 #include "button.h"
+#include "label.h"
 
 #endif // FACADE_FACADE_H_INCLUDED

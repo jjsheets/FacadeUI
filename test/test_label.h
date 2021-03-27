@@ -26,16 +26,52 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_TEST_CC_INCLUDED
-#define FACADE_FACADE_TEST_CC_INCLUDED
+#ifndef FACADE_TEST_LABEL_H_INCLUDED
+#define FACADE_TEST_LABEL_H_INCLUDED
 
-#include "utest.h"
-#include "facade.h"
+UTEST(label, defaultRenderer) {
+  facade::init();
+  facade::initLabel();
+  bool rendered = false;
+  // Initialization complete
+  facade::preFrame();
+  facade::setDefaultLabelRenderer(
+    [&](std::u8string label, int x, int y, int w, int h) {
+      rendered = true;
+    }
+  );
+  facade::label(u8"Label", 10, 15, 80, 20);
+  ASSERT_TRUE(rendered);
+}
 
-#include "test_state.h"
-#include "test_button.h"
-#include "test_label.h"
+UTEST(label, labelRenderer) {
+  facade::init();
+  facade::initLabel();
+  bool rendered = false;
+  // Initialization complete
+  facade::preFrame();
+  facade::label(u8"Label", 10, 15, 80, 20,
+    [&](std::u8string label, int x, int y, int w, int h) {
+      rendered = true;
+    }
+  );
+  ASSERT_TRUE(rendered);
+}
 
-UTEST_MAIN();
+UTEST(label, labelRendererParameters) {
+  facade::init();
+  facade::initLabel();
+  // Initialization complete
+  facade::preFrame();
+  facade::label(u8"Label", 10, 15, 80, 20,
+    [&](std::u8string label, int x, int y, int w, int h) {
+      ASSERT_TRUE(label == u8"Label");
+      ASSERT_EQ(x, 10);
+      ASSERT_EQ(y, 15);
+      ASSERT_EQ(w, 80);
+      ASSERT_EQ(h, 20);
+    }
+  );
+}
 
-#endif // FACADE_FACADE_TEST_CC_INCLUDED
+#endif // FACADE_TEST_LABEL_H_INCLUDED

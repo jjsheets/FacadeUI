@@ -26,16 +26,20 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_TEST_CC_INCLUDED
-#define FACADE_FACADE_TEST_CC_INCLUDED
+#ifndef FACADE_LABEL_H_INCLUDED
+#define FACADE_LABEL_H_INCLUDED
 
-#include "utest.h"
-#include "facade.h"
+#include <functional>
 
-#include "test_state.h"
-#include "test_button.h"
-#include "test_label.h"
+namespace facade {
 
-UTEST_MAIN();
+  // Labels support a rendering function, which allows for custom rendering of labels
+  typedef std::function<void (std::u8string, int, int, int, int)> label_renderer;
 
-#endif // FACADE_FACADE_TEST_CC_INCLUDED
+  void initLabel();
+  void label(std::u8string label, int x, int y, int w, int h, label_renderer renderer = nullptr);
+  void setDefaultLabelRenderer(label_renderer renderer);
+
+}
+
+#endif // FACADE_LABEL_H_INCLUDED
