@@ -92,6 +92,13 @@ UTEST(button, buttonPressed) {
   facade::button((void*)("test"), 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
     ASSERT_TRUE(buttonState == facade::button_display_state::pressed);
   });
+  // Make sure the button stays pressed even after moving the mouse out of the button boundary
+  facade::postFrame();
+  facade::setMouseXY(5, 5);
+  facade::preFrame();
+  facade::button((void*)("test"), 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
+    ASSERT_TRUE(buttonState == facade::button_display_state::pressed);
+  });
 }
 
 UTEST(button, buttonDisabled) {
