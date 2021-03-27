@@ -26,31 +26,28 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_H_INCLUDED
-#define FACADE_FACADE_H_INCLUDED
+#ifndef FACADE_BUTTON_H_INCLUDED
+#define FACADE_BUTTON_H_INCLUDED
 
 #include <functional>
 
 namespace facade {
 
-  void init();
-  void setMouseXY(int _x, int _y);
-  int getMouseX();
-  int getMouseY();
-  void setLeftMouseButton(bool _down);
-  void setMiddleMouseButton(bool _down);
-  void setRightMouseButton(bool _down);
-  bool getLeftMouseButton();
-  bool getMiddleMouseButton();
-  bool getRightMouseButton();
-  bool mouseInRegion(int x, int y, int w, int h);
-  bool isHoverItem(void* id);
-  void setHoverItem(void* id);
-  bool isActiveItem(void* id);
-  void setActiveItem(void* id);
+  // Buttons can have four display states: enabled, hovered, pressed, and disabled.
+  // States for input focusing and draggable buttons are currently not planned.
+  enum class button_display_state {
+    enabled,
+    hovered,
+    pressed,
+    disabled
+  };
+  // Buttons also support a rendering function, which allows for custom rendering of buttons
+  typedef std::function<void (int, int, int, int, button_display_state)> button_renderer;
+
+  void initButton();
+  bool button(void* id, int x, int y, int w, int h, bool disabled = false, button_renderer renderer = nullptr);
+  void setDefaultButtonRenderer(button_renderer renderer);
 
 }
 
-#include "button.h"
-
-#endif // FACADE_FACADE_H_INCLUDED
+#endif // FACADE_BUTTON_H_INCLUDED

@@ -29,20 +29,50 @@
 #ifndef FACADE_TEST_BUTTON_H_INCLUDED
 #define FACADE_TEST_BUTTON_H_INCLUDED
 
-UTEST(button, renderer) {
-  facade::_state state;
-  facade::init(&state);
-  facade::setMouseXY(&state, 5, 5);
+UTEST(button, noRenderer) {
+  facade::init();
+  facade::initButton();
+  facade::setMouseXY(5, 5);
+  bool exceptionThrown = false;
+  try {
+    facade::button((void*)("test"), 10, 15, 80, 20);
+  } catch (...) {
+    exceptionThrown = true;
+  }
+  ASSERT_TRUE(exceptionThrown);
+}
+
+UTEST(button, defaultRenderer) {
+  facade::init();
+  facade::initButton();
+  facade::setMouseXY(5, 5);
   bool rendered = false;
-  facade::setDefaultButtonRenderer(&state, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
+  facade::setDefaultButtonRenderer([&](int x, int y, int w, int h, facade::button_display_state buttonState) {
     ASSERT_EQ(x, 10);
     ASSERT_EQ(y, 15);
     ASSERT_EQ(w, 80);
     ASSERT_EQ(h, 20);
-    ASSERT_EQ(buttonState, facade::button_display_state::enabled);
+    ASSERT_TRUE(buttonState == facade::button_display_state::enabled);
     rendered = true;
   });
-  bool buttonPressed = facade::button(&state, (void*)("test"), 10, 15, 80, 20);
+  bool buttonPressed = facade::button((void*)("test"), 10, 15, 80, 20);
+  ASSERT_FALSE(buttonPressed);
+  ASSERT_TRUE(rendered);
+}
+
+UTEST(button, buttonRenderer) {
+  facade::init();
+  facade::initButton();
+  facade::setMouseXY(5, 5);
+  bool rendered = false;
+  bool buttonPressed = facade::button((void*)("test"), 10, 15, 80, 20, false, [&](int x, int y, int w, int h, facade::button_display_state buttonState) {
+    ASSERT_EQ(x, 10);
+    ASSERT_EQ(y, 15);
+    ASSERT_EQ(w, 80);
+    ASSERT_EQ(h, 20);
+    ASSERT_TRUE(buttonState == facade::button_display_state::enabled);
+    rendered = true;
+  });
   ASSERT_FALSE(buttonPressed);
   ASSERT_TRUE(rendered);
 }

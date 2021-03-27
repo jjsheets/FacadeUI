@@ -31,30 +31,39 @@
 
 #include "facade.h"
 
-bool facade::button(facade::_state* state, void* id, int x, int y, int w, int h, bool disabled, facade::button_renderer renderer) {
+facade::button_renderer state_default_button_renderer;
+
+void facade::initButton() {
+  state_default_button_renderer = nullptr;
+}
+
+bool facade::button(void* id, int x, int y, int w, int h, bool disabled, facade::button_renderer renderer) {
   // check/update hover and active.
-  if (!disabled && facade::mouseInRegion(state, x, y, w, h)) {
-    state->hover_item = id;
-    if (state->active_item == nullptr && state->mouse_left_down)
-      state->active_item = id;
+  if (!disabled && facade::mouseInRegion(x, y, w, h)) {
+    facade::setHoverItem(id);
+    if (facade::isActiveItem(nullptr) && facade::getLeftMouseButton())
+      facade::setActiveItem(id);
   }
   // render the button
-  facade::button_renderer _renderer = renderer ? renderer : state->default_button_renderer;
+  facade::button_renderer _renderer = renderer ? renderer : state_default_button_renderer;
+  if (!_renderer) {
+    throw "No button renderer provided.";
+  }
   if (disabled) {
     _renderer(x, y, w, h, facade::button_display_state::disabled);
-  } else if (state->mouse_left_down && state->active_item == id) {
+  } else if (facade::getLeftMouseButton() && facade::isActiveItem(id)) {
     _renderer(x, y, w, h, facade::button_display_state::pressed);
-  } else if (state->hover_item == id) {
+  } else if (facade::isHoverItem(id)) {
     _renderer(x, y, w, h, facade::button_display_state::hovered);
   } else {
     _renderer(x, y, w, h, facade::button_display_state::enabled);
   }
   // return true if the button is clicked
-  return (!disabled && !state->mouse_left_down && state->hover_item == id && state->active_item == id);
+  return (!disabled && !facade::getLeftMouseButton() && facade::isHoverItem(id) && facade::isActiveItem(id));
 }
 
-void facade::setDefaultButtonRenderer(facade::_state* state, facade::button_renderer renderer) {
-  state->default_button_renderer = renderer;
+void facade::setDefaultButtonRenderer(facade::button_renderer renderer) {
+  state_default_button_renderer = renderer;
 }
 
 #endif // FACADE_FACADE_CC_INCLUDED

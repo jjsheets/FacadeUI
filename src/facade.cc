@@ -31,38 +31,82 @@
 
 #include "facade.h"
 
-void facade::init(facade::_state* state) {
-  state->mouse_x = 0;
-  state->mouse_y = 0;
-  state->mouse_left_down = false;
-  state->mouse_middle_down = false;
-  state->mouse_right_down = false;
-  state->hover_item = nullptr;
-  state->active_item = nullptr;
+int state_mouse_x;
+int state_mouse_y;
+bool state_mouse_left_down;
+bool state_mouse_middle_down;
+bool state_mouse_right_down;
+void* state_hover_item;
+void* state_active_item;
+
+void facade::init() {
+  state_mouse_x = 0;
+  state_mouse_y = 0;
+  state_mouse_left_down = false;
+  state_mouse_middle_down = false;
+  state_mouse_right_down = false;
+  state_hover_item = nullptr;
+  state_active_item = nullptr;
 }
 
-void facade::setMouseXY(facade::_state* state, int x, int y) {
-  state->mouse_x = x;
-  state->mouse_y = y;
+void facade::setMouseXY(int x, int y) {
+  state_mouse_x = x;
+  state_mouse_y = y;
 }
 
-void facade::setLeftMouseButton(facade::_state* state, bool down) {
-  state->mouse_left_down = down;
+int facade::getMouseX() {
+  return state_mouse_x;
 }
 
-void facade::setMiddleMouseButton(facade::_state* state, bool down) {
-  state->mouse_middle_down = down;
+int facade::getMouseY() {
+  return state_mouse_y;
 }
 
-void facade::setRightMouseButton(facade::_state* state, bool down) {
-  state->mouse_right_down = down;
+void facade::setLeftMouseButton(bool down) {
+  state_mouse_left_down = down;
 }
 
-bool facade::mouseInRegion(facade::_state* state, int x, int y, int w, int h) {
-  return !(state->mouse_x < x ||
-           state->mouse_y < y ||
-           state->mouse_x >= x + w ||
-           state->mouse_y >= y + h);
+void facade::setMiddleMouseButton(bool down) {
+  state_mouse_middle_down = down;
+}
+
+void facade::setRightMouseButton(bool down) {
+  state_mouse_right_down = down;
+}
+
+bool facade::getLeftMouseButton() {
+  return state_mouse_left_down;
+}
+
+bool facade::getMiddleMouseButton() {
+  return state_mouse_middle_down;
+}
+
+bool facade::getRightMouseButton() {
+  return state_mouse_right_down;
+}
+
+bool facade::mouseInRegion(int x, int y, int w, int h) {
+  return !(state_mouse_x < x ||
+           state_mouse_y < y ||
+           state_mouse_x >= x + w ||
+           state_mouse_y >= y + h);
+}
+
+bool facade::isHoverItem(void* id) {
+  return state_hover_item == id;
+}
+
+void facade::setHoverItem(void* id) {
+  state_hover_item = id;
+}
+
+bool facade::isActiveItem(void* id) {
+  return state_active_item == id;
+}
+
+void facade::setActiveItem(void* id) {
+  state_active_item = id;
 }
 
 #endif // FACADE_FACADE_CC_INCLUDED

@@ -30,75 +30,69 @@
 #define FACADE_TEST_STATE_H_INCLUDED
 
 UTEST(state, init) {
-  facade::_state state;
-  facade::init(&state);
-  ASSERT_EQ(state.mouse_x, 0);
-  ASSERT_EQ(state.mouse_y, 0);
-  ASSERT_FALSE(state.mouse_left_down);
-  ASSERT_FALSE(state.mouse_middle_down);
-  ASSERT_FALSE(state.mouse_right_down);
-  ASSERT_TRUE(state.hover_item == nullptr);
-  ASSERT_TRUE(state.active_item == nullptr);
+  facade::init();
+  ASSERT_EQ(facade::getMouseX(), 0);
+  ASSERT_EQ(facade::getMouseY(), 0);
+  ASSERT_FALSE(facade::getLeftMouseButton());
+  ASSERT_FALSE(facade::getMiddleMouseButton());
+  ASSERT_FALSE(facade::getRightMouseButton());
+  ASSERT_TRUE(facade::isHoverItem(nullptr));
+  ASSERT_TRUE(facade::isActiveItem(nullptr));
 }
 
 UTEST(state, setMouseXY) {
-  facade::_state state;
-  facade::init(&state);
-  facade::setMouseXY(&state, 10, 15);
-  ASSERT_EQ(state.mouse_x, 10);
-  ASSERT_EQ(state.mouse_y, 15);
+  facade::init();
+  facade::setMouseXY(10, 15);
+  ASSERT_EQ(facade::getMouseX(), 10);
+  ASSERT_EQ(facade::getMouseY(), 15);
 }
 
 UTEST(state, setLeftMouseButton) {
-  facade::_state state;
-  facade::init(&state);
-  facade::setLeftMouseButton(&state, true);
-  ASSERT_TRUE(state.mouse_left_down);
-  facade::setLeftMouseButton(&state, false);
-  ASSERT_FALSE(state.mouse_left_down);
+  facade::init();
+  facade::setLeftMouseButton(true);
+  ASSERT_TRUE(facade::getLeftMouseButton());
+  facade::setLeftMouseButton(false);
+  ASSERT_FALSE(facade::getLeftMouseButton());
 }
 
 UTEST(state, setMiddleMouseButton) {
-  facade::_state state;
-  facade::init(&state);
-  facade::setMiddleMouseButton(&state, true);
-  ASSERT_TRUE(state.mouse_middle_down);
-  facade::setMiddleMouseButton(&state, false);
-  ASSERT_FALSE(state.mouse_middle_down);
+  facade::init();
+  facade::setMiddleMouseButton(true);
+  ASSERT_TRUE(facade::getMiddleMouseButton());
+  facade::setMiddleMouseButton(false);
+  ASSERT_FALSE(facade::getMiddleMouseButton());
 }
 
 UTEST(state, setRightMouseButton) {
-  facade::_state state;
-  facade::init(&state);
-  facade::setRightMouseButton(&state, true);
-  ASSERT_TRUE(state.mouse_right_down);
-  facade::setRightMouseButton(&state, false);
-  ASSERT_FALSE(state.mouse_right_down);
+  facade::init();
+  facade::setRightMouseButton(true);
+  ASSERT_TRUE(facade::getRightMouseButton());
+  facade::setRightMouseButton(false);
+  ASSERT_FALSE(facade::getRightMouseButton());
 }
 
 UTEST(state, mouseInRegion) {
-  facade::_state state;
-  facade::init(&state);
+  facade::init();
   const int x = 50;
   const int y = 50;
   const int w = 50;
   const int h = 50;
-  facade::setMouseXY(&state, x - 1,     y + h / 2);
-  ASSERT_FALSE(facade::mouseInRegion(&state, x, y, w, h));
-  facade::setMouseXY(&state, x,         y + h / 2);
-  ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
-  facade::setMouseXY(&state, x + w - 1, y + h / 2);
-  ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
-  facade::setMouseXY(&state, x + w,     y + h / 2);
-  ASSERT_FALSE(facade::mouseInRegion(&state, x, y, w, h));
-  facade::setMouseXY(&state, x + w / 2, y - 1);
-  ASSERT_FALSE(facade::mouseInRegion(&state, x, y, w, h));
-  facade::setMouseXY(&state, x + w / 2, y);
-  ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
-  facade::setMouseXY(&state, x + w / 2, y + h - 1);
-  ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
-  facade::setMouseXY(&state, x + w / 2, y + h);
-  ASSERT_FALSE(facade::mouseInRegion(&state, x, y, w, h));
+  facade::setMouseXY(x - 1,     y + h / 2);
+  ASSERT_FALSE(facade::mouseInRegion(x, y, w, h));
+  facade::setMouseXY(x,         y + h / 2);
+  ASSERT_TRUE(facade::mouseInRegion(x, y, w, h));
+  facade::setMouseXY(x + w - 1, y + h / 2);
+  ASSERT_TRUE(facade::mouseInRegion(x, y, w, h));
+  facade::setMouseXY(x + w,     y + h / 2);
+  ASSERT_FALSE(facade::mouseInRegion(x, y, w, h));
+  facade::setMouseXY(x + w / 2, y - 1);
+  ASSERT_FALSE(facade::mouseInRegion(x, y, w, h));
+  facade::setMouseXY(x + w / 2, y);
+  ASSERT_TRUE(facade::mouseInRegion(x, y, w, h));
+  facade::setMouseXY(x + w / 2, y + h - 1);
+  ASSERT_TRUE(facade::mouseInRegion(x, y, w, h));
+  facade::setMouseXY(x + w / 2, y + h);
+  ASSERT_FALSE(facade::mouseInRegion(x, y, w, h));
 }
 
 #endif // FACADE_TEST_STATE_H_INCLUDED
