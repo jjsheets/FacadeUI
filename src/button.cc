@@ -51,13 +51,13 @@ bool facade::button(std::u8string id, std::u8string label, int x, int y, int w, 
     throw u8"No button renderer provided.";
   }
   if (disabled) {
-    _renderer(label, x, y, w, h, facade::button_display_state::disabled);
+    _renderer(label, x, y, w, h, facade::display_state::disabled);
   } else if (facade::getLeftMouseButton() && facade::isActiveItem(id)) {
-    _renderer(label, x, y, w, h, facade::button_display_state::pressed);
+    _renderer(label, x, y, w, h, facade::display_state::pressed);
   } else if (facade::isHoverItem(id)) {
-    _renderer(label, x, y, w, h, facade::button_display_state::hovered);
+    _renderer(label, x, y, w, h, facade::display_state::hovered);
   } else {
-    _renderer(label, x, y, w, h, facade::button_display_state::enabled);
+    _renderer(label, x, y, w, h, facade::display_state::enabled);
   }
   // return true if the button is clicked
   return (!disabled && !facade::getLeftMouseButton() && facade::isHoverItem(id) && facade::isActiveItem(id));

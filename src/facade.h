@@ -51,6 +51,15 @@ namespace facade {
   void setActiveItem(std::u8string id);
   void preFrame();
   void postFrame();
+  
+  // Widgets can have four display states: enabled, hovered, pressed, and disabled.
+  // States for input focusing and draggable buttons are currently not planned.
+  enum class display_state {
+    enabled,
+    hovered,
+    pressed,
+    disabled
+  };
 
 }
 

@@ -50,7 +50,7 @@ UTEST(button, defaultRenderer) {
   // Initialization complete
   facade::preFrame();
   facade::setDefaultButtonRenderer(
-    [&](std::u8string label, int x, int y, int w, int h, facade::button_display_state buttonState) {
+    [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
       rendered = true;
     }
   );
@@ -65,7 +65,7 @@ UTEST(button, buttonRenderer) {
   // Initialization complete
   facade::preFrame();
   facade::button(u8"test", u8"Button Label", 10, 15, 80, 20, false,
-    [&](std::u8string label, int x, int y, int w, int h, facade::button_display_state buttonState) {
+    [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
       rendered = true;
     }
   );
@@ -78,7 +78,7 @@ UTEST(button, buttonRendererParameters) {
   // Initialization complete
   facade::preFrame();
   facade::button(u8"test", u8"Button Label", 10, 15, 80, 20, false,
-    [&](std::u8string label, int x, int y, int w, int h, facade::button_display_state buttonState) {
+    [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
       ASSERT_TRUE(label == u8"Button Label");
       ASSERT_EQ(x, 10);
       ASSERT_EQ(y, 15);
@@ -95,8 +95,8 @@ UTEST(button, buttonEnabled) {
   facade::setMouseXY(5, 5);
   facade::preFrame();
   facade::button(u8"test", u8"Button Label", 10, 15, 80, 20, false,
-    [&](std::u8string label, int x, int y, int w, int h, facade::button_display_state buttonState) {
-      ASSERT_TRUE(buttonState == facade::button_display_state::enabled);
+    [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
+      ASSERT_TRUE(displayState == facade::display_state::enabled);
     }
   );
 }
@@ -108,8 +108,8 @@ UTEST(button, buttonHover) {
   facade::setMouseXY(15, 20);
   facade::preFrame();
   facade::button(u8"test", u8"Button Label", 10, 15, 80, 20, false,
-    [&](std::u8string label, int x, int y, int w, int h, facade::button_display_state buttonState) {
-      ASSERT_TRUE(buttonState == facade::button_display_state::hovered);
+    [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
+      ASSERT_TRUE(displayState == facade::display_state::hovered);
     }
   );
 }
@@ -121,7 +121,7 @@ UTEST(button, buttonPressed) {
   facade::setMouseXY(15, 20);
   facade::preFrame();
   facade::button(u8"test", u8"Button Label", 10, 15, 80, 20, false,
-    [&](std::u8string label, int x, int y, int w, int h, facade::button_display_state buttonState) {
+    [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
     }
   );
   facade::postFrame();
@@ -129,8 +129,8 @@ UTEST(button, buttonPressed) {
   facade::setLeftMouseButton(true);
   facade::preFrame();
   facade::button(u8"test", u8"Button Label", 10, 15, 80, 20, false,
-    [&](std::u8string label, int x, int y, int w, int h, facade::button_display_state buttonState) {
-      ASSERT_TRUE(buttonState == facade::button_display_state::pressed);
+    [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
+      ASSERT_TRUE(displayState == facade::display_state::pressed);
     }
   );
   facade::postFrame();
@@ -139,8 +139,8 @@ UTEST(button, buttonPressed) {
   facade::setMouseXY(5, 5);
   facade::preFrame();
   facade::button(u8"test", u8"Button Label", 10, 15, 80, 20, false,
-    [&](std::u8string label, int x, int y, int w, int h, facade::button_display_state buttonState) {
-      ASSERT_TRUE(buttonState == facade::button_display_state::pressed);
+    [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
+      ASSERT_TRUE(displayState == facade::display_state::pressed);
     }
   );
 }
@@ -150,8 +150,8 @@ UTEST(button, buttonDisabled) {
   facade::initButton();
   // Initialization complete
   facade::button(u8"test", u8"Button Label", 10, 15, 80, 20, true,
-    [&](std::u8string label, int x, int y, int w, int h, facade::button_display_state buttonState) {
-      ASSERT_TRUE(buttonState == facade::button_display_state::disabled);
+    [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
+      ASSERT_TRUE(displayState == facade::display_state::disabled);
     }
   );
 }
@@ -159,7 +159,7 @@ UTEST(button, buttonDisabled) {
 UTEST(button, buttonClicked) {
   facade::init();
   facade::initButton();
-  auto renderer = [&](std::u8string label, int x, int y, int w, int h, facade::button_display_state buttonState) {};
+  auto renderer = [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {};
   // Initialization complete
   facade::setMouseXY(15, 20);
   facade::preFrame();

@@ -31,16 +31,8 @@
 
 namespace facade {
 
-  // Buttons can have four display states: enabled, hovered, pressed, and disabled.
-  // States for input focusing and draggable buttons are currently not planned.
-  enum class button_display_state {
-    enabled,
-    hovered,
-    pressed,
-    disabled
-  };
   // Buttons also support a rendering function, which allows for custom rendering of buttons
-  typedef std::function<void (std::u8string, int, int, int, int, button_display_state)> button_renderer;
+  typedef std::function<void (std::u8string, int, int, int, int, display_state)> button_renderer;
 
   void initButton();
   bool button(std::u8string id, std::u8string label, int x, int y, int w, int h, bool disabled = false, button_renderer renderer = nullptr);
