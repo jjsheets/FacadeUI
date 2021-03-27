@@ -29,20 +29,12 @@
 #ifndef FACADE_FACADE_TEST_CC_INCLUDED
 #define FACADE_FACADE_TEST_CC_INCLUDED
 
-#include "facade_test.h"
-#include <iostream>
+#include "utest.h"
+#include "facade.h"
 
-int main (int argc, char *argv[]) {
-  LR_PRELUDE(argc, argv);
-  // print out the command line options provided by labrat and exit.
-  std::cout << "Usage: " << argv[0] << " --lr-run-tests" << std::endl;
-  std::cout << "       " << argv[0] << " --lr-run-benchmarks [num]" << std::endl;
-  std::cout << std::endl;
-  std::cout << "    --lr-run-tests" << std::endl;
-  std::cout << "        Run the test suite. << std::endl"
-  std::cout << "    --lr-run-benchmarks [num]" << std::endl;
-  std::cout << "        Run the benchmarks [num] times per benchmark." << std::endl << std::endl;
-  return 0;
-}
+#include "test_state.h"
+#include "test_button.h"
+
+UTEST_MAIN();
 
 #endif // FACADE_FACADE_TEST_CC_INCLUDED

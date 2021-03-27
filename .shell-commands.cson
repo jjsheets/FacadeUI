@@ -1,0 +1,9 @@
+commands: [
+  {
+    name: "compile"
+    command: "tup"
+    options:
+      cwd: "{ProjectDir}"
+      keymap: 'f4'
+  }
+]

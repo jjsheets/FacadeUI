@@ -31,7 +31,7 @@
 
 #include "facade.h"
 
-facade::init(facade::_state* state) {
+void facade::init(facade::_state* state) {
   state->mouse_x = 0;
   state->mouse_y = 0;
   state->mouse_left_down = false;

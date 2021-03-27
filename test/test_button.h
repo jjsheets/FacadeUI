@@ -26,10 +26,11 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_TEST_H_INCLUDED
-#define FACADE_FACADE_TEST_H_INCLUDED
+#ifndef FACADE_TEST_BUTTON_H_INCLUDED
+#define FACADE_TEST_BUTTON_H_INCLUDED
 
-#include "labrat.h"
-#include "facade.h"
+// TODO: Write the test cases for the button ui element.
+UTEST(button, button) {
+}
 
-#endif // FACADE_FACADE_TEST_H_INCLUDED
+#endif // FACADE_TEST_BUTTON_H_INCLUDED

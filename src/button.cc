@@ -32,7 +32,7 @@
 #include "facade.h"
 
 // TODO: Write unit test to verify the behavior.
-void facade::button(facade::_state* state, void* id, int x, int y, int w, int h, bool disabled, facade::button_renderer renderer) {
+bool facade::button(facade::_state* state, void* id, int x, int y, int w, int h, bool disabled, facade::button_renderer renderer) {
   // check/update hover and active.
   if (!disabled && facade::mouseInRegion(state, x, y, w, h)) {
     state->hover_item = id;
@@ -51,7 +51,7 @@ void facade::button(facade::_state* state, void* id, int x, int y, int w, int h,
     _renderer(x, y, w, h, facade::button_display_state::enabled);
   }
   // return true if the button is clicked
-  return (!disabled && !state->mouse_left_down && state->hot_item == id && state->active_item == id);
+  return (!disabled && !state->mouse_left_down && state->hover_item == id && state->active_item == id);
 }
 
 #endif // FACADE_FACADE_CC_INCLUDED

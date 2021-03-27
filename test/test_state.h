@@ -26,16 +26,14 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_TEST_STATE_CC_INCLUDED
-#define FACADE_TEST_STATE_CC_INCLUDED
+#ifndef FACADE_TEST_STATE_H_INCLUDED
+#define FACADE_TEST_STATE_H_INCLUDED
 
-#include "facade_test.h"
-
-TEST_CASE(test_init) {
+UTEST(state, init) {
   facade::_state state;
   facade::init(&state);
-  ASSERT_EQ(state.mouse_x, 0, "%d");
-  ASSERT_EQ(state.mouse_y, 0, "%d");
+  ASSERT_EQ(state.mouse_x, 0);
+  ASSERT_EQ(state.mouse_y, 0);
   ASSERT_FALSE(state.mouse_left_down);
   ASSERT_FALSE(state.mouse_middle_down);
   ASSERT_FALSE(state.mouse_right_down);
@@ -43,15 +41,15 @@ TEST_CASE(test_init) {
   ASSERT_TRUE(state.active_item == nullptr);
 }
 
-TEST_CASE(test_setMouseXY) {
+UTEST(state, setMouseXY) {
   facade::_state state;
   facade::init(&state);
   facade::setMouseXY(&state, 10, 15);
-  ASSERT_EQ(state.mouse_x, 10, "%d");
-  ASSERT_EQ(state.mouse_y, 15, "%d");
+  ASSERT_EQ(state.mouse_x, 10);
+  ASSERT_EQ(state.mouse_y, 15);
 }
 
-TEST_CASE(test_setLeftMouseButton) {
+UTEST(state, setLeftMouseButton) {
   facade::_state state;
   facade::init(&state);
   facade::setLeftMouseButton(&state, true);
@@ -60,7 +58,7 @@ TEST_CASE(test_setLeftMouseButton) {
   ASSERT_FALSE(state.mouse_left_down);
 }
 
-TEST_CASE(test_setMiddleMouseButton) {
+UTEST(state, setMiddleMouseButton) {
   facade::_state state;
   facade::init(&state);
   facade::setMiddleMouseButton(&state, true);
@@ -69,7 +67,7 @@ TEST_CASE(test_setMiddleMouseButton) {
   ASSERT_FALSE(state.mouse_middle_down);
 }
 
-TEST_CASE(test_setRightMouseButton) {
+UTEST(state, setRightMouseButton) {
   facade::_state state;
   facade::init(&state);
   facade::setRightMouseButton(&state, true);
@@ -78,7 +76,7 @@ TEST_CASE(test_setRightMouseButton) {
   ASSERT_FALSE(state.mouse_right_down);
 }
 
-TEST_CASE(test_mouseInRegion) {
+UTEST(state, mouseInRegion) {
   facade::_state state;
   facade::init(&state);
   const int x = 50;
@@ -89,18 +87,18 @@ TEST_CASE(test_mouseInRegion) {
   ASSERT_FALSE(facade::mouseInRegion(&state, x, y, w, h));
   facade::setMouseXY(&state, x,         y + h / 2);
   ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
+  facade::setMouseXY(&state, x + w - 1, y + h / 2);
+  ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
   facade::setMouseXY(&state, x + w,     y + h / 2);
   ASSERT_FALSE(facade::mouseInRegion(&state, x, y, w, h));
-  facade::setMouseXY(&state, x + w + 1, y + h / 2);
-  ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
   facade::setMouseXY(&state, x + w / 2, y - 1);
   ASSERT_FALSE(facade::mouseInRegion(&state, x, y, w, h));
   facade::setMouseXY(&state, x + w / 2, y);
   ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
+  facade::setMouseXY(&state, x + w / 2, y + h - 1);
+  ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
   facade::setMouseXY(&state, x + w / 2, y + h);
   ASSERT_FALSE(facade::mouseInRegion(&state, x, y, w, h));
-  facade::setMouseXY(&state, x + w / 2, y + h + 1);
-  ASSERT_TRUE(facade::mouseInRegion(&state, x, y, w, h));
 }
 
-#endif // FACADE_TEST_STATE_CC_INCLUDED
+#endif // FACADE_TEST_STATE_H_INCLUDED

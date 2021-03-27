@@ -1,0 +1,9 @@
+CFLAGS += -Wall
+CFLAGS += -O
+CFLAGS += -I../src
+CFLAGS += -I../external/utest.h
+
+: foreach *.cc |> g++ $(CFLAGS) -c %f -o %o |> %B.o
+: *.o ../lib/libfacade.a |> g++ %f -o %o |> facade_test
+
+.gitignore

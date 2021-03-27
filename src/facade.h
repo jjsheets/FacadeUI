@@ -33,17 +33,9 @@
 
 namespace facade {
 
-  struct _state {
-    int mouse_x;
-    int mouse_y;
-    bool mouse_left_down;
-    bool mouse_middle_down;
-    bool mouse_right_down;
-    void* hover_item;
-    void* active_item;
-  };
+  struct _state;
 
-  void init(_facade_state* _state);
+  void init(_state* _state);
   void setMouseXY(_state* _state, int _x, int _y);
   void setLeftMouseButton(_state* _state, bool _down);
   void setMiddleMouseButton(_state* _state, bool _down);
@@ -61,8 +53,18 @@ namespace facade {
   // Buttons also support a rendering function, which allows for custom rendering of buttons
   typedef std::function<void (int, int, int, int, button_display_state)> button_renderer;
 
-  bool button(_state* state, void* id, int x, int y, int w, int h, bool disabled,
-    button_renderer renderer = nullptr);
+  bool button(_state* state, void* id, int x, int y, int w, int h, bool disabled, button_renderer renderer = nullptr);
+
+  struct _state {
+    int mouse_x;
+    int mouse_y;
+    bool mouse_left_down;
+    bool mouse_middle_down;
+    bool mouse_right_down;
+    void* hover_item;
+    void* active_item;
+    button_renderer default_button_renderer;
+  };
 }
 
 #endif // FACADE_FACADE_H_INCLUDED
