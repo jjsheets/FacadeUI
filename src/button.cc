@@ -41,7 +41,7 @@ bool facade::button(std::u8string id, std::u8string label, int x, int y, int w, 
   // check/update hover and active.
   if (!disabled && facade::mouseInRegion(x, y, w, h)) {
     facade::setHoverItem(id);
-    if (facade::isActiveItem(u8"") && facade::getLeftMouseButton()) {
+    if (facade::noActiveItem() && facade::getLeftMouseButton()) {
       facade::setActiveItem(id);
     }
   }

@@ -47,8 +47,11 @@ namespace facade {
   bool mouseInRegion(int x, int y, int w, int h);
   bool isHoverItem(std::u8string id);
   void setHoverItem(std::u8string id);
+  void clearHoverItem();
   bool isActiveItem(std::u8string id);
+  bool noActiveItem();
   void setActiveItem(std::u8string id);
+  void clearActiveItem();
   void preFrame();
   void postFrame();
   

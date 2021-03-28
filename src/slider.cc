@@ -44,7 +44,7 @@ double facade::slider(std::u8string id, facade::slider_type type, int x, int y, 
   const int regionH = type == facade::slider_type::horizontal ? w : l;
   if (facade::mouseInRegion(x, y, regionW, regionH)) {
     facade::setHoverItem(id);
-    if (facade::isActiveItem(u8"") && facade::getLeftMouseButton()) {
+    if (facade::noActiveItem() && facade::getLeftMouseButton()) {
       facade::setActiveItem(id);
     }
   }

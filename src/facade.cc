@@ -101,8 +101,20 @@ void facade::setHoverItem(std::u8string id) {
   state_hover_item = id;
 }
 
+void facade::clearHoverItem() {
+  state_hover_item = u8"";
+}
+
 bool facade::isActiveItem(std::u8string id) {
   return state_active_item == id;
+}
+
+bool facade::noActiveItem() {
+  return state_active_item == u8"";
+}
+
+void facade::clearActiveItem() {
+  state_active_item = u8"";
 }
 
 void facade::setActiveItem(std::u8string id) {
@@ -110,13 +122,13 @@ void facade::setActiveItem(std::u8string id) {
 }
 
 void facade::preFrame() {
-  state_hover_item = u8"";
+  clearHoverItem();
 }
 
 void facade::postFrame() {
   if (!state_mouse_left_down) {
-    state_active_item = u8"";
-  } else if (state_active_item == u8"") {
+    clearActiveItem();
+  } else if (noActiveItem()) {
     state_active_item = u8"_unavailable";
   }
 }
