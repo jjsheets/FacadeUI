@@ -54,7 +54,7 @@ namespace facade {
   void clearActiveItem();
   void preFrame();
   void postFrame();
-  
+
   // Widgets can have four display states: enabled, hovered, pressed, and disabled.
   // States for input focusing and draggable buttons are currently not planned.
   enum class display_state {
@@ -66,9 +66,25 @@ namespace facade {
 
 }
 
-// Widget includes
+// Include widget headers
+
 #include "button.h"
 #include "label.h"
 #include "slider.h"
+//#include "checkbox.h"
+//#include "togglebutton.h" // essentially a different way to implement checkbox logic, but with a button styled renderer
+//#include "radiobutton.h"
+//#include "textbox.h" // single line text entry
+//#include "editbox.h" // multi-line text entry
+//#include "colorwheel.h"
+
+// Include complex widgets
+
+//#include "uiconsole.h" // a traditional console system for a game, with layout of text sourced from a log (ideally with the capacity to scroll up) as well as a spot to enter debug/cheat commands
+
+// Include rendering primitives
+
+//#include "renderprims.h" // basic rendering primitives which can be used by custom renderers to achieve a desired styling to widgets
+//#include "defaultrenderers.h" // default renderers which provide reasonable default rendering of all implemented widgets.
 
 #endif // FACADE_FACADE_H_INCLUDED
