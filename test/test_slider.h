@@ -102,4 +102,134 @@ UTEST(slider, sliderEnabled) {
   );
 }
 
+UTEST(slider, sliderHovered) {
+  facade::init();
+  facade::initSlider();
+  // Initialization complete
+  facade::setMouseXY(80, 25);
+  facade::preFrame();
+  facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 0.0, 100.0, 0.0,
+    [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+      ASSERT_TRUE(displayState == facade::display_state::hovered);
+    }
+  );
+  facade::postFrame();
+
+  facade::preFrame();
+  facade::slider(u8"test", facade::slider_type::vertical, 10, 15, 20, 160, 0.0, 100.0, 0.0,
+    [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+      ASSERT_FALSE(displayState == facade::display_state::hovered);
+    }
+  );
+  facade::postFrame();
+
+  facade::setMouseXY(20, 85);
+  facade::preFrame();
+  facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 0.0, 100.0, 0.0,
+    [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+      ASSERT_FALSE(displayState == facade::display_state::hovered);
+    }
+  );
+  facade::postFrame();
+
+  facade::preFrame();
+  facade::slider(u8"test", facade::slider_type::vertical, 10, 15, 20, 160, 0.0, 100.0, 0.0,
+    [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+      ASSERT_TRUE(displayState == facade::display_state::hovered);
+    }
+  );
+}
+
+UTEST(slider, sliderPressed) {
+  facade::init();
+  facade::initSlider();
+  // Initialization complete
+  facade::setMouseXY(80, 25);
+  facade::preFrame();
+  facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 0.0, 100.0, 0.0,
+    [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+    }
+  );
+  facade::postFrame();
+
+  facade::setLeftMouseButton(true);
+  facade::preFrame();
+  facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 0.0, 100.0, 0.0,
+    [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+      ASSERT_TRUE(displayState == facade::display_state::pressed);
+    }
+  );
+  facade::postFrame();
+
+  facade::setMouseXY(20, 85);
+  facade::preFrame();
+  facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 0.0, 100.0, 0.0,
+    [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+      ASSERT_TRUE(displayState == facade::display_state::pressed);
+    }
+  );
+}
+
+UTEST(slider, sliderFunctionality) {
+  facade::init();
+  facade::initSlider();
+  auto val = 50.0;
+  auto renderer = [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {};
+  // Initialization complete
+  facade::setMouseXY(5, 25);
+  facade::preFrame();
+  val = facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 50.0, 100.0, val, renderer);
+  // Should be no change, since the button is not yet down.
+  ASSERT_EQ(50.0, val);
+  facade::postFrame();
+
+  facade::setMouseXY(90, 25);
+  facade::preFrame();
+  val = facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 50.0, 100.0, val, renderer);
+  // Should be no change, since the button is not yet down.
+  ASSERT_EQ(50.0, val);
+  facade::postFrame();
+
+  facade::setLeftMouseButton(true);
+  facade::preFrame();
+  val = facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 50.0, 100.0, val, renderer);
+  ASSERT_EQ(75.0, val);
+  facade::postFrame();
+
+  facade::setMouseXY(5, 25);
+  facade::preFrame();
+  val = facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 50.0, 100.0, val, renderer);
+  ASSERT_EQ(50.0, val);
+  facade::postFrame();
+
+  facade::setMouseXY(500, 25);
+  facade::preFrame();
+  val = facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 50.0, 100.0, val, renderer);
+  ASSERT_EQ(100.0, val);
+  facade::postFrame();
+
+  facade::setMouseXY(20, 25);
+  facade::preFrame();
+  val = facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 50.0, 100.0, val, renderer);
+  ASSERT_EQ(50.0, val);
+  facade::postFrame();
+
+  facade::setMouseXY(21, 25);
+  facade::preFrame();
+  val = facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 50.0, 100.0, val, renderer);
+  ASSERT_EQ(50.0 + 0.5 / 1.4, val);
+  facade::postFrame();
+
+  facade::setMouseXY(159, 25);
+  facade::preFrame();
+  val = facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 50.0, 100.0, val, renderer);
+  ASSERT_EQ(100.0 - 0.5 / 1.4, val);
+  facade::postFrame();
+
+  facade::setMouseXY(160, 25);
+  facade::preFrame();
+  val = facade::slider(u8"test", facade::slider_type::horizontal, 10, 15, 20, 160, 50.0, 100.0, val, renderer);
+  ASSERT_EQ(100.0, val);
+}
+
 #endif // FACADE_TEST_SLIDER_H_INCLUDED

@@ -48,6 +48,12 @@ double facade::slider(std::u8string id, facade::slider_type type, int x, int y, 
       facade::setActiveItem(id);
     }
   }
+  // update as needed
+  if (facade::isActiveItem(id)) {
+    int mouseOffset = (type == facade::slider_type::horizontal ? facade::getMouseX() - x : facade::getMouseY() - y) - w / 2;
+    mouseOffset = mouseOffset < 0 ? 0 : (mouseOffset > l - w ? l - w : mouseOffset);
+    val = min + (mouseOffset * (max - min)) / (l - w);
+  }
   // render the button
   auto _renderer = renderer ? renderer : state_default_slider_renderer;
   if (!_renderer) {
@@ -59,12 +65,6 @@ double facade::slider(std::u8string id, facade::slider_type type, int x, int y, 
     _renderer(type, x, y, w, l, val, facade::display_state::hovered);
   } else {
     _renderer(type, x, y, w, l, val, facade::display_state::enabled);
-  }
-  // update as needed
-  if (facade::isActiveItem(id)) {
-    int mouseOffset = (type == facade::slider_type::horizontal ? facade::getMouseX() - x : facade::getMouseY() - y) - w / 2;
-    mouseOffset = mouseOffset < 0 ? 0 : (mouseOffset > l - w ? l - w : mouseOffset);
-    val = (mouseOffset * max) / l;
   }
   return val;
 }
