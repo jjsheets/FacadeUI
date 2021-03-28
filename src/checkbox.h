@@ -26,18 +26,19 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_TEST_CC_INCLUDED
-#define FACADE_FACADE_TEST_CC_INCLUDED
+#ifndef FACADE_CHECKBOX_H_INCLUDED
+#define FACADE_CHECKBOX_H_INCLUDED
 
-#include "utest.h"
-#include "facade.h"
+namespace facade {
 
-#include "test_state.h"
-#include "test_button.h"
-#include "test_label.h"
-#include "test_slider.h"
-#include "test_checkbox.h"
+  // Buttons also support a rendering function, which allows for custom rendering of buttons
+  typedef std::function<void (std::u8string, int, int, int, int, bool, display_state)> checkbox_renderer;
 
-UTEST_MAIN();
+  void initCheckbox();
+  bool checkbox(std::u8string id, std::u8string label, int x, int y, int w, int h, bool val, bool disabled = false,
+    checkbox_renderer renderer = nullptr);
+  void setDefaultCheckboxRenderer(checkbox_renderer renderer);
 
-#endif // FACADE_FACADE_TEST_CC_INCLUDED
+}
+
+#endif // FACADE_CHECKBOX_H_INCLUDED
