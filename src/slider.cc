@@ -57,7 +57,7 @@ double facade::slider(std::u8string id, facade::slider_type type, int x, int y, 
   // render the button
   auto _renderer = renderer ? renderer : state_default_slider_renderer;
   if (!_renderer) {
-    throw u8"No button renderer provided.";
+    throw u8"No slider renderer provided.";
   }
   if (facade::getLeftMouseButton() && facade::isActiveItem(id)) {
     _renderer(type, x, y, w, l, val, facade::display_state::pressed);
