@@ -38,6 +38,8 @@
 #include "test_slider.h"
 #include "test_checkbox.h"
 
+#include "test_layout.h"
+
 UTEST_MAIN();
 
 #endif // FACADE_FACADE_TEST_CC_INCLUDED

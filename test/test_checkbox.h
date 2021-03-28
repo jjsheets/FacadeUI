@@ -30,7 +30,7 @@
 #define FACADE_TEST_CHECKBOX_H_INCLUDED
 
 UTEST(checkbox, noRenderer) {
-  facade::init();
+  facade::init(2560);
   facade::initCheckbox();
   bool exceptionThrown = false;
   bool val = false;
@@ -45,7 +45,7 @@ UTEST(checkbox, noRenderer) {
 }
 
 UTEST(checkbox, defaultRenderer) {
-  facade::init();
+  facade::init(2560);
   facade::initCheckbox();
   bool rendered = false;
   bool val = false;
@@ -61,7 +61,7 @@ UTEST(checkbox, defaultRenderer) {
 }
 
 UTEST(checkbox, checkboxRenderer) {
-  facade::init();
+  facade::init(2560);
   facade::initCheckbox();
   bool rendered = false;
   bool val = false;
@@ -76,7 +76,7 @@ UTEST(checkbox, checkboxRenderer) {
 }
 
 UTEST(checkbox, checkboxRendererParameters) {
-  facade::init();
+  facade::init(2560);
   facade::initCheckbox();
   bool val = false;
   // Initialization complete
@@ -94,7 +94,7 @@ UTEST(checkbox, checkboxRendererParameters) {
 }
 
 UTEST(checkbox, checkboxEnabled) {
-  facade::init();
+  facade::init(2560);
   facade::initCheckbox();
   bool val = false;
   // Initialization complete
@@ -108,7 +108,7 @@ UTEST(checkbox, checkboxEnabled) {
 }
 
 UTEST(checkbox, checkboxHover) {
-  facade::init();
+  facade::init(2560);
   facade::initCheckbox();
   bool val = false;
   // Initialization complete
@@ -122,7 +122,7 @@ UTEST(checkbox, checkboxHover) {
 }
 
 UTEST(checkbox, checkboxPressed) {
-  facade::init();
+  facade::init(2560);
   facade::initCheckbox();
   bool val = false;
   // Initialization complete
@@ -154,7 +154,7 @@ UTEST(checkbox, checkboxPressed) {
 }
 
 UTEST(checkbox, checkboxDisabled) {
-  facade::init();
+  facade::init(2560);
   facade::initCheckbox();
   bool val = false;
   // Initialization complete
@@ -166,7 +166,7 @@ UTEST(checkbox, checkboxDisabled) {
 }
 
 UTEST(checkbox, checkboxClicked) {
-  facade::init();
+  facade::init(2560);
   facade::initCheckbox();
   auto renderer = [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {};
   bool val = false;

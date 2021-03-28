@@ -34,7 +34,7 @@
 
 namespace facade {
 
-  void init();
+  void init(int screenWidth);
   void setMouseXY(int _x, int _y);
   int getMouseX();
   int getMouseY();
@@ -54,6 +54,10 @@ namespace facade {
   void clearActiveItem();
   void preFrame();
   void postFrame();
+  void beginLayout(int x, int y, int w, int rowHeight = 20, int xSpacing = 4, int ySpacing = 4);
+  void endLayout();
+  void indent(int w);
+  void updateLayout(int& x, int& y, int& w, int& h, bool resizeW = true);
 
   // Widgets can have four display states: enabled, hovered, pressed, and disabled.
   // States for input focusing and draggable buttons are currently not planned.

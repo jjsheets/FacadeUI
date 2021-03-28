@@ -30,6 +30,7 @@
 #define FACADE_FACADE_CC_INCLUDED
 
 #include "facade.h"
+#include <stack>
 
 int state_mouse_x;
 int state_mouse_y;
@@ -39,7 +40,13 @@ bool state_mouse_right_down;
 std::u8string state_hover_item;
 std::u8string state_active_item;
 
-void facade::init() {
+// Layout state
+struct _layout;
+std::stack<_layout*> layout_stack;
+_layout* curLayout;
+void facade::beginLayout(int x, int y, int w, int rowHeight, int xSpacing, int ySpacing);
+
+void facade::init(int screenWidth) {
   state_mouse_x = 0;
   state_mouse_y = 0;
   state_mouse_left_down = false;
@@ -47,6 +54,8 @@ void facade::init() {
   state_mouse_right_down = false;
   state_hover_item = u8"";
   state_active_item = u8"";
+  while (!layout_stack.empty()) layout_stack.pop();
+  facade::beginLayout(0, 0, screenWidth);
 }
 
 void facade::setMouseXY(int x, int y) {
@@ -130,6 +139,81 @@ void facade::postFrame() {
     clearActiveItem();
   } else if (noActiveItem()) {
     state_active_item = u8"_unavailable";
+  }
+}
+
+// layout functions, local variables, and structures
+
+struct _layout {
+  // base layout values that don't change after being initialized in beginLayout()
+  int baseX;
+  int baseY;
+  int baseW;
+  int rowHeight;
+  int xSpacing;
+  int ySpacing;
+  // variables that update during use
+  int indent;
+  int x;
+  int y;
+  int h;
+};
+
+void facade::beginLayout(int x, int y, int w, int rowHeight, int xSpacing, int ySpacing) {
+  // push a new curLayout to the stack after initializing it and make it available as curLayout.
+  curLayout = new _layout();
+  curLayout->baseX = x;
+  curLayout->baseY = y;
+  curLayout->baseW = w;
+  curLayout->rowHeight = rowHeight;
+  curLayout->xSpacing = xSpacing;
+  curLayout->ySpacing = ySpacing;
+  curLayout->indent = 0;
+  curLayout->x = 0;
+  curLayout->h = 0;
+  layout_stack.push(curLayout);
+}
+
+void facade::endLayout() {
+  // if the stack size is greater than 1, pop the top layout and discard it, then make curLayout reference the new top.
+  // We never pop the original layout, because that was initialized during facade::init()
+  if (layout_stack.size() > 1) {
+    delete curLayout;
+    layout_stack.pop();
+    curLayout = layout_stack.top();
+  }
+}
+
+void facade::indent(int w) {
+  curLayout->indent += w;
+  curLayout->indent = curLayout->indent < 0 ? 0 : curLayout->indent;
+  curLayout->indent = curLayout->indent > curLayout->baseW / 2 ? curLayout->baseW / 2 : curLayout->indent;
+}
+
+void _newRow(int h) {
+  curLayout->x = 0;
+  curLayout->y += curLayout->ySpacing + h;
+  curLayout->h = 0;
+}
+
+void facade::updateLayout(int& x, int& y, int& w, int& h, bool resizeW) {
+  int availableWidth = curLayout->baseW - curLayout->x - curLayout->indent;
+  x = curLayout->baseX + curLayout->x + curLayout->indent;
+  y = curLayout->baseY + curLayout->y;
+  h = h > 0 ? h : curLayout->rowHeight;
+  curLayout->h = curLayout->h < h ? h : curLayout->h;
+  if (resizeW) {
+    w = availableWidth;
+    _newRow(curLayout->h);
+  } else {
+    if (w > availableWidth) {
+      _newRow(curLayout->h);
+      x = curLayout->baseX + curLayout->x + curLayout->indent;
+      y = curLayout->baseY + curLayout->y;
+      availableWidth = curLayout->baseW - curLayout->x - curLayout->indent;
+    }
+    w = w > availableWidth ? availableWidth : w;
+    curLayout->x += w + curLayout->xSpacing;
   }
 }
 

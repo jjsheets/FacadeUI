@@ -30,7 +30,7 @@
 #define FACADE_TEST_BUTTON_H_INCLUDED
 
 UTEST(button, noRenderer) {
-  facade::init();
+  facade::init(2560);
   facade::initButton();
   bool exceptionThrown = false;
   // Initialization complete
@@ -44,7 +44,7 @@ UTEST(button, noRenderer) {
 }
 
 UTEST(button, defaultRenderer) {
-  facade::init();
+  facade::init(2560);
   facade::initButton();
   bool rendered = false;
   // Initialization complete
@@ -59,7 +59,7 @@ UTEST(button, defaultRenderer) {
 }
 
 UTEST(button, buttonRenderer) {
-  facade::init();
+  facade::init(2560);
   facade::initButton();
   bool rendered = false;
   // Initialization complete
@@ -73,7 +73,7 @@ UTEST(button, buttonRenderer) {
 }
 
 UTEST(button, buttonRendererParameters) {
-  facade::init();
+  facade::init(2560);
   facade::initButton();
   // Initialization complete
   facade::preFrame();
@@ -89,7 +89,7 @@ UTEST(button, buttonRendererParameters) {
 }
 
 UTEST(button, buttonEnabled) {
-  facade::init();
+  facade::init(2560);
   facade::initButton();
   // Initialization complete
   facade::setMouseXY(5, 5);
@@ -102,7 +102,7 @@ UTEST(button, buttonEnabled) {
 }
 
 UTEST(button, buttonHover) {
-  facade::init();
+  facade::init(2560);
   facade::initButton();
   // Initialization complete
   facade::setMouseXY(15, 20);
@@ -115,7 +115,7 @@ UTEST(button, buttonHover) {
 }
 
 UTEST(button, buttonPressed) {
-  facade::init();
+  facade::init(2560);
   facade::initButton();
   // Initialization complete
   facade::setMouseXY(15, 20);
@@ -146,7 +146,7 @@ UTEST(button, buttonPressed) {
 }
 
 UTEST(button, buttonDisabled) {
-  facade::init();
+  facade::init(2560);
   facade::initButton();
   // Initialization complete
   facade::button(u8"test", u8"Button Label", 10, 15, 80, 20, true,
@@ -157,7 +157,7 @@ UTEST(button, buttonDisabled) {
 }
 
 UTEST(button, buttonClicked) {
-  facade::init();
+  facade::init(2560);
   facade::initButton();
   auto renderer = [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {};
   // Initialization complete

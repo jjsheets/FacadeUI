@@ -30,7 +30,7 @@
 #define FACADE_TEST_SLIDER_H_INCLUDED
 
 UTEST(slider, noRenderer) {
-  facade::init();
+  facade::init(2560);
   facade::initSlider();
   bool exceptionThrown = false;
   // Initialization complete
@@ -44,7 +44,7 @@ UTEST(slider, noRenderer) {
 }
 
 UTEST(slider, defaultRenderer) {
-  facade::init();
+  facade::init(2560);
   facade::initSlider();
   bool rendered = false;
   // Initialization complete
@@ -59,7 +59,7 @@ UTEST(slider, defaultRenderer) {
 }
 
 UTEST(slider, sliderRenderer) {
-  facade::init();
+  facade::init(2560);
   facade::initSlider();
   bool rendered = false;
   // Initialization complete
@@ -73,7 +73,7 @@ UTEST(slider, sliderRenderer) {
 }
 
 UTEST(slider, sliderRendererParameters) {
-  facade::init();
+  facade::init(2560);
   facade::initSlider();
   // Initialization complete
   facade::preFrame();
@@ -90,7 +90,7 @@ UTEST(slider, sliderRendererParameters) {
 }
 
 UTEST(slider, sliderEnabled) {
-  facade::init();
+  facade::init(2560);
   facade::initSlider();
   // Initialization complete
   facade::setMouseXY(5, 5);
@@ -103,7 +103,7 @@ UTEST(slider, sliderEnabled) {
 }
 
 UTEST(slider, sliderHovered) {
-  facade::init();
+  facade::init(2560);
   facade::initSlider();
   // Initialization complete
   facade::setMouseXY(80, 25);
@@ -141,7 +141,7 @@ UTEST(slider, sliderHovered) {
 }
 
 UTEST(slider, sliderPressed) {
-  facade::init();
+  facade::init(2560);
   facade::initSlider();
   // Initialization complete
   facade::setMouseXY(80, 25);
@@ -171,7 +171,7 @@ UTEST(slider, sliderPressed) {
 }
 
 UTEST(slider, sliderFunctionality) {
-  facade::init();
+  facade::init(2560);
   facade::initSlider();
   auto val = 50.0;
   auto renderer = [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {};

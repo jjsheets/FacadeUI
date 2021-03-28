@@ -30,7 +30,7 @@
 #define FACADE_TEST_STATE_H_INCLUDED
 
 UTEST(state, init) {
-  facade::init();
+  facade::init(2560);
   ASSERT_EQ(facade::getMouseX(), 0);
   ASSERT_EQ(facade::getMouseY(), 0);
   ASSERT_FALSE(facade::getLeftMouseButton());
@@ -41,14 +41,14 @@ UTEST(state, init) {
 }
 
 UTEST(state, setMouseXY) {
-  facade::init();
+  facade::init(2560);
   facade::setMouseXY(10, 15);
   ASSERT_EQ(facade::getMouseX(), 10);
   ASSERT_EQ(facade::getMouseY(), 15);
 }
 
 UTEST(state, setLeftMouseButton) {
-  facade::init();
+  facade::init(2560);
   facade::setLeftMouseButton(true);
   ASSERT_TRUE(facade::getLeftMouseButton());
   facade::setLeftMouseButton(false);
@@ -56,7 +56,7 @@ UTEST(state, setLeftMouseButton) {
 }
 
 UTEST(state, setMiddleMouseButton) {
-  facade::init();
+  facade::init(2560);
   facade::setMiddleMouseButton(true);
   ASSERT_TRUE(facade::getMiddleMouseButton());
   facade::setMiddleMouseButton(false);
@@ -64,7 +64,7 @@ UTEST(state, setMiddleMouseButton) {
 }
 
 UTEST(state, setRightMouseButton) {
-  facade::init();
+  facade::init(2560);
   facade::setRightMouseButton(true);
   ASSERT_TRUE(facade::getRightMouseButton());
   facade::setRightMouseButton(false);
@@ -72,7 +72,7 @@ UTEST(state, setRightMouseButton) {
 }
 
 UTEST(state, mouseInRegion) {
-  facade::init();
+  facade::init(2560);
   const int x = 50;
   const int y = 50;
   const int w = 50;

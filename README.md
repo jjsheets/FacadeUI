@@ -6,7 +6,7 @@ FacadeUI is meant to be a minimalist immediate mode GUI library in C++, designed
 
 * Finish creating unit tests and widgets to satisfy them. The list of widgets to be added can be found in src/facade.h as commented out #include directives.
 * Layout system: Convert to a layout system where a layout begin/end function pair sets a default width, and maintains an x, y parameter, so the programmer doesn't need to maintain such info. Instead it can be stored in a layout structure and used by the UI state (via a stack), to determine where to draw the next widget at.
-** beginLayout(x, y, w, rowHeight, xSpacing, ySpacing) - Starts a new layout at x, y, with width w. Spacing can be used to add spacing between the rows of the layout.
+** beginLayout(x, y, w, rowHeight = 20, xSpacing = 4, ySpacing = 4) - Starts a new layout at x, y, with width w. Spacing can be used to add spacing between the rows of the layout.
 ** endLayout() - exits out of the current layout, returning to the previous layout.
 ** indent(w) - indent the current layout's x parameter by w pixels to the right. The parameter x can be negative, which allows it to be used to remove existing indents. That said, the current indent in a layout cannot be less than 0.
 ** updateLayout(&x, &y, &w, &h) - Updates the layout to prepare for a widget of the specified size. w can be 0 to let the layout decide the width, though the width is not allowed to be greater than layout width minus indent. Returns the x, y, w, and h the widget should use to render.

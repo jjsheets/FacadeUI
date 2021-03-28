@@ -30,7 +30,7 @@
 #define FACADE_TEST_LABEL_H_INCLUDED
 
 UTEST(label, defaultRenderer) {
-  facade::init();
+  facade::init(2560);
   facade::initLabel();
   bool rendered = false;
   // Initialization complete
@@ -45,7 +45,7 @@ UTEST(label, defaultRenderer) {
 }
 
 UTEST(label, labelRenderer) {
-  facade::init();
+  facade::init(2560);
   facade::initLabel();
   bool rendered = false;
   // Initialization complete
@@ -59,7 +59,7 @@ UTEST(label, labelRenderer) {
 }
 
 UTEST(label, labelRendererParameters) {
-  facade::init();
+  facade::init(2560);
   facade::initLabel();
   // Initialization complete
   facade::preFrame();
