@@ -67,4 +67,4 @@ void facade::setDefaultButtonRenderer(facade::button_renderer renderer) {
   state_default_button_renderer = renderer;
 }
 
-#endif // FACADE_FACADE_CC_INCLUDED
+#endif // FACADE_Button_CC_INCLUDED
