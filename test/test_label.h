@@ -34,13 +34,14 @@ UTEST(label, defaultRenderer) {
   bool rendered = false;
   // Initialization complete
   facade::preFrame();
-  facade::setDefaultLabelRenderer(
-    [&](std::u8string label, int x, int y, int w, int h) {
-      rendered = true;
-    }
-  );
-  facade::label(u8"Label", 10, 15, 80, 20);
-  ASSERT_TRUE(rendered);
+  facade::beginLayout(10, 15, 80);
+    facade::setDefaultLabelRenderer(
+      [&](std::u8string label, int x, int y, int w, int h) {
+        rendered = true;
+      }
+    );
+    facade::label(u8"Label");
+    ASSERT_TRUE(rendered);
 }
 
 UTEST(label, labelRenderer) {
@@ -48,27 +49,29 @@ UTEST(label, labelRenderer) {
   bool rendered = false;
   // Initialization complete
   facade::preFrame();
-  facade::label(u8"Label", 10, 15, 80, 20,
-    [&](std::u8string label, int x, int y, int w, int h) {
-      rendered = true;
-    }
-  );
-  ASSERT_TRUE(rendered);
+  facade::beginLayout(10, 15, 80);
+    facade::label(u8"Label",
+      [&](std::u8string label, int x, int y, int w, int h) {
+        rendered = true;
+      }
+    );
+    ASSERT_TRUE(rendered);
 }
 
 UTEST(label, labelRendererParameters) {
   facade::init(2560);
   // Initialization complete
   facade::preFrame();
-  facade::label(u8"Label", 10, 15, 80, 20,
-    [&](std::u8string label, int x, int y, int w, int h) {
-      ASSERT_TRUE(label == u8"Label");
-      ASSERT_EQ(x, 10);
-      ASSERT_EQ(y, 15);
-      ASSERT_EQ(w, 80);
-      ASSERT_EQ(h, 20);
-    }
-  );
+  facade::beginLayout(10, 15, 80);
+    facade::label(u8"Label",
+      [&](std::u8string label, int x, int y, int w, int h) {
+        ASSERT_TRUE(label == u8"Label");
+        ASSERT_EQ(x, 10);
+        ASSERT_EQ(y, 15);
+        ASSERT_EQ(w, 80);
+        ASSERT_EQ(h, 20);
+      }
+    );
 }
 
 #endif // FACADE_TEST_LABEL_H_INCLUDED
