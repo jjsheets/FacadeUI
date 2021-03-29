@@ -56,6 +56,10 @@ void facade::init(int screenWidth) {
   state_active_item = u8"";
   while (!layout_stack.empty()) layout_stack.pop();
   facade::beginLayout(0, 0, screenWidth);
+  facade::initButton();
+  facade::initLabel();
+  facade::initSlider();
+  facade::initCheckbox();
 }
 
 void facade::setMouseXY(int x, int y) {

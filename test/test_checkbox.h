@@ -31,7 +31,6 @@
 
 UTEST(checkbox, noRenderer) {
   facade::init(2560);
-  facade::initCheckbox();
   bool exceptionThrown = false;
   bool val = false;
   // Initialization complete
@@ -46,7 +45,6 @@ UTEST(checkbox, noRenderer) {
 
 UTEST(checkbox, defaultRenderer) {
   facade::init(2560);
-  facade::initCheckbox();
   bool rendered = false;
   bool val = false;
   // Initialization complete
@@ -62,7 +60,6 @@ UTEST(checkbox, defaultRenderer) {
 
 UTEST(checkbox, checkboxRenderer) {
   facade::init(2560);
-  facade::initCheckbox();
   bool rendered = false;
   bool val = false;
   // Initialization complete
@@ -77,7 +74,6 @@ UTEST(checkbox, checkboxRenderer) {
 
 UTEST(checkbox, checkboxRendererParameters) {
   facade::init(2560);
-  facade::initCheckbox();
   bool val = false;
   // Initialization complete
   facade::preFrame();
@@ -95,7 +91,6 @@ UTEST(checkbox, checkboxRendererParameters) {
 
 UTEST(checkbox, checkboxEnabled) {
   facade::init(2560);
-  facade::initCheckbox();
   bool val = false;
   // Initialization complete
   facade::setMouseXY(5, 5);
@@ -109,7 +104,6 @@ UTEST(checkbox, checkboxEnabled) {
 
 UTEST(checkbox, checkboxHover) {
   facade::init(2560);
-  facade::initCheckbox();
   bool val = false;
   // Initialization complete
   facade::setMouseXY(15, 20);
@@ -123,7 +117,6 @@ UTEST(checkbox, checkboxHover) {
 
 UTEST(checkbox, checkboxPressed) {
   facade::init(2560);
-  facade::initCheckbox();
   bool val = false;
   // Initialization complete
   facade::setMouseXY(15, 20);
@@ -155,7 +148,6 @@ UTEST(checkbox, checkboxPressed) {
 
 UTEST(checkbox, checkboxDisabled) {
   facade::init(2560);
-  facade::initCheckbox();
   bool val = false;
   // Initialization complete
   facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, true,
@@ -167,7 +159,6 @@ UTEST(checkbox, checkboxDisabled) {
 
 UTEST(checkbox, checkboxClicked) {
   facade::init(2560);
-  facade::initCheckbox();
   auto renderer = [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {};
   bool val = false;
   // Initialization complete

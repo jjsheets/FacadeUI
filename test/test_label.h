@@ -31,7 +31,6 @@
 
 UTEST(label, defaultRenderer) {
   facade::init(2560);
-  facade::initLabel();
   bool rendered = false;
   // Initialization complete
   facade::preFrame();
@@ -46,7 +45,6 @@ UTEST(label, defaultRenderer) {
 
 UTEST(label, labelRenderer) {
   facade::init(2560);
-  facade::initLabel();
   bool rendered = false;
   // Initialization complete
   facade::preFrame();
@@ -60,7 +58,6 @@ UTEST(label, labelRenderer) {
 
 UTEST(label, labelRendererParameters) {
   facade::init(2560);
-  facade::initLabel();
   // Initialization complete
   facade::preFrame();
   facade::label(u8"Label", 10, 15, 80, 20,

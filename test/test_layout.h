@@ -31,7 +31,6 @@
 
 UTEST(layout, simpleLayout) {
   facade::init(2560);
-  facade::initCheckbox();
   int x = 0;
   int y = 0;
   int w = 0;
@@ -62,7 +61,6 @@ UTEST(layout, simpleLayout) {
 
 UTEST(layout, sideBySideLayout) {
   facade::init(2560);
-  facade::initCheckbox();
   int x = 0;
   int y = 0;
   int w = 0;
@@ -87,9 +85,9 @@ UTEST(layout, sideBySideLayout) {
     h = 40;
     facade::updateLayout(x, y, w, h);
     ASSERT_EQ(104, x); ASSERT_EQ(112, y); ASSERT_EQ(316, w); ASSERT_EQ(40, h);
-    w = 400;
+    w = 0;
     h = 0;
-    facade::updateLayout(x, y, w, h, false);
+    facade::updateLayout(x, y, w, h);
     ASSERT_EQ(20, x); ASSERT_EQ(156, y); ASSERT_EQ(400, w); ASSERT_EQ(20, h);
   facade::endLayout();
 }
