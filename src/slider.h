@@ -42,8 +42,9 @@ namespace facade {
   typedef std::function<void (slider_type, int, int, int, int, double, display_state)> slider_renderer;
 
   void initSlider();
-  double slider(std::u8string id, slider_type type, int x, int y, int w, int l, double min, double max, double val,
-    slider_renderer renderer = nullptr);
+  double slider(std::u8string id, slider_type type, int w, int l, double min, double max, double val, slider_renderer renderer = nullptr);
+  double slider(std::u8string id, slider_type type, int l, double min, double max, double val, slider_renderer renderer = nullptr);
+  double slider(std::u8string id, slider_type type, double min, double max, double val, slider_renderer renderer = nullptr);
   void setDefaultSliderRenderer(slider_renderer renderer);
 
 }

@@ -37,8 +37,17 @@ void facade::initSlider() {
   state_default_slider_renderer = nullptr;
 }
 
-double facade::slider(std::u8string id, facade::slider_type type, int x, int y, int w, int l, double min, double max, double val,
+double facade::slider(std::u8string id, facade::slider_type type, int w, int l, double min, double max, double val,
     facade::slider_renderer renderer) {
+  int x = 0;
+  int y = 0;
+  w = w > 0 ? w : 20;
+  if (type == facade::slider_type::horizontal) {
+    facade::updateLayout(x, y, l, w, l == 0);
+  } else {
+    l = l > 0 ? l : 160;
+    facade::updateLayout(x, y, w, l, w == 0);
+  }
   // check/update hover and active.
   const int regionW = type == facade::slider_type::horizontal ? l : w;
   const int regionH = type == facade::slider_type::horizontal ? w : l;
@@ -67,6 +76,14 @@ double facade::slider(std::u8string id, facade::slider_type type, int x, int y, 
     _renderer(type, x, y, w, l, val, facade::display_state::enabled);
   }
   return val;
+}
+
+double facade::slider(std::u8string id, slider_type type, int l, double min, double max, double val, facade::slider_renderer renderer) {
+  return facade::slider(id, type, 0, l, min, max, val, renderer);
+}
+
+double facade::slider(std::u8string id, slider_type type, double min, double max, double val, facade::slider_renderer renderer) {
+  return facade::slider(id, type, 0, 0, min, max, val, renderer);
 }
 
 void facade::setDefaultSliderRenderer(facade::slider_renderer renderer) {
