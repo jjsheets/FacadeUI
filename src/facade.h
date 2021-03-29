@@ -76,7 +76,6 @@ namespace facade {
 #include "label.h"
 #include "slider.h"
 #include "checkbox.h"
-//#include "radiobutton.h"
 //#include "textbox.h" // single line text entry
 //#include "editbox.h" // multi-line text entry
 //#include "colorwheel.h"
