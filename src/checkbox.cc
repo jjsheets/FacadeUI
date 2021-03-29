@@ -37,7 +37,10 @@ void facade::initCheckbox() {
   state_default_checkbox_renderer = nullptr;
 }
 
-bool facade::checkbox(std::u8string id, std::u8string label, int x, int y, int w, int h, bool val, bool disabled, facade::checkbox_renderer renderer) {
+bool facade::checkbox(std::u8string id, std::u8string label, int w, int h, bool val, bool disabled, facade::checkbox_renderer renderer) {
+  int x = 0;
+  int y = 0;
+  facade::updateLayout(x, y, w, h, w == 0);
   // check/update hover and active.
   if (!disabled && facade::mouseInRegion(x, y, w, h)) {
     facade::setHoverItem(id);
@@ -64,6 +67,18 @@ bool facade::checkbox(std::u8string id, std::u8string label, int x, int y, int w
     _renderer(label, x, y, w, h, val, facade::display_state::enabled);
   }
   return val;
+}
+
+bool facade::checkbox(std::u8string id, std::u8string label, int w, bool val, bool disabled, checkbox_renderer renderer) {
+  return facade::checkbox(id, label, w, 0, val, disabled, renderer);
+}
+
+bool facade::checkbox(std::u8string id, std::u8string label, bool val, bool disabled, checkbox_renderer renderer) {
+  return facade::checkbox(id, label, 0, 0, val, disabled, renderer);
+}
+
+bool facade::checkbox(std::u8string id, std::u8string label, bool val, checkbox_renderer renderer) {
+  return facade::checkbox(id, label, 0, 0, val, false, renderer);
 }
 
 void facade::setDefaultCheckboxRenderer(facade::checkbox_renderer renderer) {

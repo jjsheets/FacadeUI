@@ -35,27 +35,29 @@ UTEST(checkbox, noRenderer) {
   bool val = false;
   // Initialization complete
   facade::preFrame();
-  try {
-    facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val);
-  } catch (...) {
-    exceptionThrown = true;
-  }
-  ASSERT_TRUE(exceptionThrown);
+  facade::beginLayout(10, 15, 80);
+    try {
+      facade::checkbox(u8"test", u8"Checkbox Label", val);
+    } catch (...) {
+      exceptionThrown = true;
+    }
+    ASSERT_TRUE(exceptionThrown);
 }
 
 UTEST(checkbox, defaultRenderer) {
   facade::init(2560);
   bool rendered = false;
   bool val = false;
-  // Initialization complete
-  facade::preFrame();
   facade::setDefaultCheckboxRenderer(
     [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
       rendered = true;
     }
   );
-  facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val);
-  ASSERT_TRUE(rendered);
+  // Initialization complete
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::checkbox(u8"test", u8"Checkbox Label", val);
+    ASSERT_TRUE(rendered);
 }
 
 UTEST(checkbox, checkboxRenderer) {
@@ -64,12 +66,13 @@ UTEST(checkbox, checkboxRenderer) {
   bool val = false;
   // Initialization complete
   facade::preFrame();
-  facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, false,
-    [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
-      rendered = true;
-    }
-  );
-  ASSERT_TRUE(rendered);
+  facade::beginLayout(10, 15, 80);
+    facade::checkbox(u8"test", u8"Checkbox Label", val,
+      [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
+        rendered = true;
+      }
+    );
+    ASSERT_TRUE(rendered);
 }
 
 UTEST(checkbox, checkboxRendererParameters) {
@@ -77,16 +80,17 @@ UTEST(checkbox, checkboxRendererParameters) {
   bool val = false;
   // Initialization complete
   facade::preFrame();
-  facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, false,
-    [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
-      ASSERT_TRUE(label == u8"Checkbox Label");
-      ASSERT_EQ(x, 10);
-      ASSERT_EQ(y, 15);
-      ASSERT_EQ(w, 80);
-      ASSERT_EQ(h, 20);
-      ASSERT_FALSE(val);
-    }
-  );
+  facade::beginLayout(10, 15, 80);
+    facade::checkbox(u8"test", u8"Checkbox Label", val,
+      [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
+        ASSERT_TRUE(label == u8"Checkbox Label");
+        ASSERT_EQ(x, 10);
+        ASSERT_EQ(y, 15);
+        ASSERT_EQ(w, 80);
+        ASSERT_EQ(h, 20);
+        ASSERT_FALSE(val);
+      }
+    );
 }
 
 UTEST(checkbox, checkboxEnabled) {
@@ -95,11 +99,12 @@ UTEST(checkbox, checkboxEnabled) {
   // Initialization complete
   facade::setMouseXY(5, 5);
   facade::preFrame();
-  facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, false,
-    [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
-      ASSERT_TRUE(displayState == facade::display_state::enabled);
-    }
-  );
+  facade::beginLayout(10, 15, 80);
+    facade::checkbox(u8"test", u8"Checkbox Label", val,
+      [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
+        ASSERT_TRUE(displayState == facade::display_state::enabled);
+      }
+    );
 }
 
 UTEST(checkbox, checkboxHover) {
@@ -108,11 +113,12 @@ UTEST(checkbox, checkboxHover) {
   // Initialization complete
   facade::setMouseXY(15, 20);
   facade::preFrame();
-  facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, false,
-    [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
-      ASSERT_TRUE(displayState == facade::display_state::hovered);
-    }
-  );
+  facade::beginLayout(10, 15, 80);
+    facade::checkbox(u8"test", u8"Checkbox Label", val,
+      [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
+        ASSERT_TRUE(displayState == facade::display_state::hovered);
+      }
+    );
 }
 
 UTEST(checkbox, checkboxPressed) {
@@ -121,40 +127,47 @@ UTEST(checkbox, checkboxPressed) {
   // Initialization complete
   facade::setMouseXY(15, 20);
   facade::preFrame();
-  facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, false,
-    [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
-    }
-  );
+  facade::beginLayout(10, 15, 80);
+    facade::checkbox(u8"test", u8"Checkbox Label", val,
+      [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
+      }
+    );
+  facade::endLayout();
   facade::postFrame();
 
   facade::setLeftMouseButton(true);
   facade::preFrame();
-  facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, false,
-    [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
-      ASSERT_TRUE(displayState == facade::display_state::pressed);
-    }
-  );
+  facade::beginLayout(10, 15, 80);
+    facade::checkbox(u8"test", u8"Checkbox Label", val,
+      [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
+        ASSERT_TRUE(displayState == facade::display_state::pressed);
+      }
+    );
+  facade::endLayout();
   facade::postFrame();
 
   // Make sure the button stays pressed even after moving the mouse out of the button boundary
   facade::setMouseXY(5, 5);
   facade::preFrame();
-  facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, false,
-    [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
-      ASSERT_TRUE(displayState == facade::display_state::pressed);
-    }
-  );
+  facade::beginLayout(10, 15, 80);
+    facade::checkbox(u8"test", u8"Checkbox Label", val,
+      [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
+        ASSERT_TRUE(displayState == facade::display_state::pressed);
+      }
+    );
 }
 
 UTEST(checkbox, checkboxDisabled) {
   facade::init(2560);
   bool val = false;
   // Initialization complete
-  facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, true,
-    [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
-      ASSERT_TRUE(displayState == facade::display_state::disabled);
-    }
-  );
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::checkbox(u8"test", u8"Checkbox Label", val, true,
+      [&](std::u8string label, int x, int y, int w, int h, bool val, facade::display_state displayState) {
+        ASSERT_TRUE(displayState == facade::display_state::disabled);
+      }
+    );
 }
 
 UTEST(checkbox, checkboxClicked) {
@@ -164,29 +177,38 @@ UTEST(checkbox, checkboxClicked) {
   // Initialization complete
   facade::setMouseXY(15, 20);
   facade::preFrame();
-  val = facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, false, renderer);
+  facade::beginLayout(10, 15, 80);
+    val = facade::checkbox(u8"test", u8"Checkbox Label", val, renderer);
+  facade::endLayout();
   facade::postFrame();
 
   facade::setLeftMouseButton(true);
   facade::preFrame();
-  val = facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, false, renderer);
+  facade::beginLayout(10, 15, 80);
+    val = facade::checkbox(u8"test", u8"Checkbox Label", val, renderer);
+  facade::endLayout();
   facade::postFrame();
 
   facade::setLeftMouseButton(false);
   facade::preFrame();
-  val = facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, false, renderer);
+  facade::beginLayout(10, 15, 80);
+    val = facade::checkbox(u8"test", u8"Checkbox Label", val, renderer);
   ASSERT_TRUE(val);
+  facade::endLayout();
   facade::postFrame();
 
   facade::setLeftMouseButton(true);
   facade::preFrame();
-  val = facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, false, renderer);
+  facade::beginLayout(10, 15, 80);
+    val = facade::checkbox(u8"test", u8"Checkbox Label", val, renderer);
+  facade::endLayout();
   facade::postFrame();
 
   facade::setLeftMouseButton(false);
   facade::preFrame();
-  val = facade::checkbox(u8"test", u8"Checkbox Label", 10, 15, 80, 20, val, false, renderer);
-  ASSERT_FALSE(val);
+  facade::beginLayout(10, 15, 80);
+    val = facade::checkbox(u8"test", u8"Checkbox Label", val, renderer);
+    ASSERT_FALSE(val);
 }
 
 #endif // FACADE_TEST_CHECKBOX_H_INCLUDED
