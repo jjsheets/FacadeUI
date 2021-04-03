@@ -31,7 +31,9 @@
 
 #include "facade.h"
 
-facade::button_renderer state_default_button_renderer;
+namespace {
+  facade::button_renderer state_default_button_renderer;
+}
 
 void facade::initButton() {
   state_default_button_renderer = nullptr;

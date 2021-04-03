@@ -31,7 +31,9 @@
 
 #include "facade.h"
 
-facade::slider_renderer state_default_slider_renderer;
+namespace {
+  facade::slider_renderer state_default_slider_renderer;
+}
 
 void facade::initSlider() {
   state_default_slider_renderer = nullptr;

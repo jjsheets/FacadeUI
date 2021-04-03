@@ -31,7 +31,9 @@
 
 #include "facade.h"
 
-facade::label_renderer state_default_label_renderer;
+namespace {
+  facade::label_renderer state_default_label_renderer;
+}
 
 void facade::initLabel() {
   state_default_label_renderer = nullptr;

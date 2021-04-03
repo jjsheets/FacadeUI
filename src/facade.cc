@@ -32,28 +32,32 @@
 #include "facade.h"
 #include <stack>
 
-// Mouse controlling state
-int state_mouse_x;
-int state_mouse_y;
-bool state_mouse_left_down;
-bool state_mouse_middle_down;
-bool state_mouse_right_down;
-std::u8string state_hover_item;
-std::u8string state_active_item;
-
-// Keyboard controlling state
-std::u8string state_focus_item;
-std::u8string state_previous_item;
-// state for a fully composed unicode codepoint as provided by the OS.
-char32_t state_key_char;
-// the following state is used to keep track of the last cursor control key sent.
-facade::control_code state_cursor_control;
-
-// Layout state
-struct _layout;
-std::stack<_layout*> layout_stack;
-_layout* curLayout;
 void facade::beginLayout(int x, int y, int w, int rowHeight, int xSpacing, int ySpacing);
+struct _layout;
+
+// Anonymous namespace to hold the state and maintain it as local to this file only.
+namespace {
+  // Mouse controlling state
+  int state_mouse_x;
+  int state_mouse_y;
+  bool state_mouse_left_down;
+  bool state_mouse_middle_down;
+  bool state_mouse_right_down;
+  std::u8string state_hover_item;
+  std::u8string state_active_item;
+
+  // Keyboard controlling state
+  std::u8string state_focus_item;
+  std::u8string state_previous_item;
+  // state for a fully composed unicode codepoint as provided by the OS.
+  char32_t state_key_char;
+  // the following state is used to keep track of the last cursor control key sent.
+  facade::control_code state_cursor_control;
+
+  // Layout state
+  std::stack<_layout*> layout_stack;
+  _layout* curLayout;
+}
 
 void facade::init(int screenWidth) {
   state_mouse_x = 0;

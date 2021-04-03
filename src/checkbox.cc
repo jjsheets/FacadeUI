@@ -31,7 +31,9 @@
 
 #include "facade.h"
 
-facade::checkbox_renderer state_default_checkbox_renderer;
+namespace {
+  facade::checkbox_renderer state_default_checkbox_renderer;
+}
 
 void facade::initCheckbox() {
   state_default_checkbox_renderer = nullptr;

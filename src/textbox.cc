@@ -31,7 +31,9 @@
 
 #include "facade.h"
 
-facade::textbox_renderer state_default_textbox_renderer;
+namespace {
+  facade::textbox_renderer state_default_textbox_renderer;
+}
 
 void facade::initTextbox() {
   state_default_textbox_renderer = nullptr;
