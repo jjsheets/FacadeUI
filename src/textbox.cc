@@ -26,21 +26,23 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_TEST_CC_INCLUDED
-#define FACADE_FACADE_TEST_CC_INCLUDED
+#ifndef FACADE_BUTTON_CC_INCLUDED
+#define FACADE_BUTTON_CC_INCLUDED
 
-#include "utest.h"
 #include "facade.h"
 
-#include "test_layout.h"
+facade::textbox_renderer state_default_textbox_renderer;
 
-#include "test_state.h"
-#include "test_button.h"
-#include "test_label.h"
-#include "test_slider.h"
-#include "test_checkbox.h"
-#include "test_textbox.h"
+void facade::initTextbox() {
+  state_default_textbox_renderer = nullptr;
+}
 
-UTEST_MAIN();
+bool facade::textbox(std::u8string id, std::u8string text, int w, int h, int cursorStart, int cursorEnd, bool disabled,
+    facade::textbox_renderer renderer) {
+}
 
-#endif // FACADE_FACADE_TEST_CC_INCLUDED
+void facade::setDefaultTextboxRenderer(facade::textbox_renderer renderer) {
+  state_default_textbox_renderer = renderer;
+}
+
+#endif // FACADE_Button_CC_INCLUDED
