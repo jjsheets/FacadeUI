@@ -32,6 +32,7 @@
 #include "facade.h"
 #include <stack>
 
+// Mouse controlling state
 int state_mouse_x;
 int state_mouse_y;
 bool state_mouse_left_down;
@@ -39,6 +40,14 @@ bool state_mouse_middle_down;
 bool state_mouse_right_down;
 std::u8string state_hover_item;
 std::u8string state_active_item;
+
+// Keyboard controlling state
+std::u8string state_focus_item;
+std::u8string state_previous_item;
+// state for a fully composed unicode codepoint as provided by the OS.
+char32_t state_key_char;
+// the following state is used to keep track of the last cursor control key sent.
+facade::control_code state_cursor_control;
 
 // Layout state
 struct _layout;
@@ -135,6 +144,57 @@ void facade::setActiveItem(std::u8string id) {
   state_active_item = id;
 }
 
+bool facade::isFocusItem(std::u8string id) {
+  return state_focus_item == id;
+}
+
+bool facade::noFocusItem() {
+  return state_focus_item == u8"";
+}
+
+void facade::clearFocusItem() {
+  state_focus_item = u8"";
+}
+
+void facade::setFocusItem(std::u8string id) {
+  state_focus_item = id;
+}
+
+void facade::focusPrevItem() {
+  state_focus_item = state_previous_item;
+}
+
+void facade::setPreviousItem(std::u8string id) {
+  state_previous_item = id;
+}
+
+bool facade::noKeyChar() {
+  return state_key_char == U'\0';
+}
+
+char32_t facade::getKeyChar() {
+  return state_key_char;
+}
+
+void facade::clearKeyChar() {
+  state_key_char = U'\0';
+}
+
+void facade::clearKeyChar(char32_t code) {
+  state_key_char = code;
+}
+
+facade::control_code facade::getControlCode() {
+  return state_cursor_control;
+}
+
+void facade::setControlCode(facade::control_code code) {
+  state_cursor_control = code;
+}
+
+// Frame handling functions.
+
+// update input events outside of preFrame()/postFrame() pairs
 void facade::preFrame() {
   clearHoverItem();
 }
@@ -145,6 +205,7 @@ void facade::postFrame() {
   } else if (noActiveItem()) {
     state_active_item = u8"_unavailable";
   }
+  clearKeyChar();
 }
 
 // layout functions, local variables, and structures

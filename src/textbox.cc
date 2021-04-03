@@ -35,6 +35,7 @@ facade::textbox_renderer state_default_textbox_renderer;
 
 void facade::initTextbox() {
   state_default_textbox_renderer = nullptr;
+  facade::clearFocusItem();
 }
 
 void facade::textbox(std::u8string id, std::u8string &text, int &cursorStart, int &cursorEnd, int w, int h, bool disabled,
@@ -42,6 +43,13 @@ void facade::textbox(std::u8string id, std::u8string &text, int &cursorStart, in
   int x = 0;
   int y = 0;
   facade::updateLayout(x, y, w, h, w == 0);
+  // check/update hover and active.
+  if (!disabled && facade::mouseInRegion(x, y, w, h)) {
+    facade::setHoverItem(id);
+    if (facade::noActiveItem() && facade::getLeftMouseButton()) {
+      facade::setActiveItem(id);
+    }
+  }
   // render the button
   auto _renderer = renderer ? renderer : state_default_textbox_renderer;
   if (!_renderer) {

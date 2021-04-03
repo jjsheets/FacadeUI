@@ -34,6 +34,28 @@
 
 namespace facade {
 
+  // Widgets can have four display states: enabled, hovered, pressed, and disabled.
+  // States for input focusing and draggable buttons are currently not planned.
+  enum class display_state {
+    enabled,
+    hovered,
+    pressed,
+    disabled
+  };
+
+  // control codes for text entry
+  enum class control_code {
+    tab,
+    shift_tab,
+    home,
+    end,
+    del,
+    backspace,
+    pageup,
+    pagedown,
+    enter
+  };
+
   void init(int screenWidth);
   void setMouseXY(int _x, int _y);
   int getMouseX();
@@ -52,21 +74,24 @@ namespace facade {
   bool noActiveItem();
   void setActiveItem(std::u8string id);
   void clearActiveItem();
+  bool isFocusItem(std::u8string id);
+  bool noFocusItem();
+  void clearFocusItem();
+  void setFocusItem(std::u8string id);
+  void focusPrevItem();
+  void setPreviousItem(std::u8string id);
+  bool noKeyChar();
+  char32_t getKeyChar();
+  void clearKeyChar();
+  void clearKeyChar(char32_t code);
+  control_code getControlCode();
+  void setControlCode(control_code code);
   void preFrame();
   void postFrame();
   void beginLayout(int x, int y, int w, int rowHeight = 20, int xSpacing = 4, int ySpacing = 4);
   void endLayout();
   void indent(int w);
   void updateLayout(int& x, int& y, int& w, int& h, bool resizeW = true);
-
-  // Widgets can have four display states: enabled, hovered, pressed, and disabled.
-  // States for input focusing and draggable buttons are currently not planned.
-  enum class display_state {
-    enabled,
-    hovered,
-    pressed,
-    disabled
-  };
 
 }
 

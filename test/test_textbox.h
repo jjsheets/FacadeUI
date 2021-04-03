@@ -117,4 +117,73 @@ UTEST(textbox, textboxEnabled) {
     );
 }
 
+UTEST(textbox, textboxHover) {
+  facade::init(2560);
+  // Initialization complete
+  facade::setMouseXY(15, 20);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    std::u8string text = u8"Textbox Content";
+    int cursorStart = 0;
+    int cursorEnd = 0;
+    facade::textbox(u8"test", text, cursorStart, cursorEnd,
+      [&](int x, int y, int w, int h, std::u8string text, int cursorStart, int cursorEnd, facade::display_state displayState) {
+        ASSERT_TRUE(displayState == facade::display_state::hovered);
+      }
+    );
+}
+
+UTEST(textbox, textboxPressed) {
+  facade::init(2560);
+  // Initialization complete
+  facade::setMouseXY(15, 20);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    std::u8string text = u8"Textbox Content";
+    int cursorStart = 0;
+    int cursorEnd = 0;
+    facade::textbox(u8"test", text, cursorStart, cursorEnd,
+      [&](int x, int y, int w, int h, std::u8string text, int cursorStart, int cursorEnd, facade::display_state displayState) {
+      }
+    );
+  facade::endLayout();
+  facade::postFrame();
+
+  facade::setLeftMouseButton(true);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox(u8"test", text, cursorStart, cursorEnd,
+      [&](int x, int y, int w, int h, std::u8string text, int cursorStart, int cursorEnd, facade::display_state displayState) {
+        ASSERT_TRUE(displayState == facade::display_state::pressed);
+      }
+    );
+  facade::endLayout();
+  facade::postFrame();
+
+  // Make sure the button stays pressed even after moving the mouse out of the button boundary
+  facade::setMouseXY(5, 5);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox(u8"test", text, cursorStart, cursorEnd,
+      [&](int x, int y, int w, int h, std::u8string text, int cursorStart, int cursorEnd, facade::display_state displayState) {
+        ASSERT_TRUE(displayState == facade::display_state::pressed);
+      }
+    );
+}
+
+UTEST(textbox, textboxDisabled) {
+  facade::init(2560);
+  // Initialization complete
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    std::u8string text = u8"Textbox Content";
+    int cursorStart = 0;
+    int cursorEnd = 0;
+    facade::textbox(u8"test", text, cursorStart, cursorEnd, true,
+      [&](int x, int y, int w, int h, std::u8string text, int cursorStart, int cursorEnd, facade::display_state displayState) {
+        ASSERT_TRUE(displayState == facade::display_state::disabled);
+      }
+    );
+}
+
 #endif // FACADE_TEST_TEXTBOX_H_INCLUDED
