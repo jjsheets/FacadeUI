@@ -37,8 +37,38 @@ void facade::initTextbox() {
   state_default_textbox_renderer = nullptr;
 }
 
-bool facade::textbox(std::u8string id, std::u8string text, int w, int h, int cursorStart, int cursorEnd, bool disabled,
+void facade::textbox(std::u8string id, std::u8string &text, int &cursorStart, int &cursorEnd, int w, int h, bool disabled,
     facade::textbox_renderer renderer) {
+  int x = 0;
+  int y = 0;
+  facade::updateLayout(x, y, w, h, w == 0);
+  // render the button
+  auto _renderer = renderer ? renderer : state_default_textbox_renderer;
+  if (!_renderer) {
+    throw u8"No button renderer provided.";
+  }
+  if (disabled) {
+    _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::disabled);
+  } else if (facade::getLeftMouseButton() && facade::isActiveItem(id)) {
+    _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::pressed);
+  } else if (facade::isHoverItem(id)) {
+    _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::hovered);
+  } else {
+    _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::enabled);
+  }
+}
+
+void facade::textbox(std::u8string id, std::u8string &text, int &cursorStart, int &cursorEnd, int w, bool disabled,
+    facade::textbox_renderer renderer) {
+  facade::textbox(id, text, cursorStart, cursorEnd, w, 0, disabled, renderer);
+}
+
+void facade::textbox(std::u8string id, std::u8string &text, int &cursorStart, int &cursorEnd, bool disabled, facade::textbox_renderer renderer) {
+  facade::textbox(id, text, cursorStart, cursorEnd, 0, 0, disabled, renderer);
+}
+
+void facade::textbox(std::u8string id, std::u8string &text, int &cursorStart, int &cursorEnd, facade::textbox_renderer renderer) {
+  facade::textbox(id, text, cursorStart, cursorEnd, 0, 0, false, renderer);
 }
 
 void facade::setDefaultTextboxRenderer(facade::textbox_renderer renderer) {

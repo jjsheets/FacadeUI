@@ -60,6 +60,7 @@ void facade::init(int screenWidth) {
   facade::initLabel();
   facade::initSlider();
   facade::initCheckbox();
+  facade::initTextbox();
 }
 
 void facade::setMouseXY(int x, int y) {

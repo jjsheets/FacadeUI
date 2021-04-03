@@ -57,7 +57,7 @@ UTEST(textbox, defaultRenderer) {
   // Initialization complete
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    auto text = u8"Textbox Content";
+    std::u8string text = u8"Textbox Content";
     int cursorStart = 0;
     int cursorEnd = 0;
     facade::textbox(u8"test", text, cursorStart, cursorEnd);
@@ -70,7 +70,7 @@ UTEST(textbox, textboxRenderer) {
   // Initialization complete
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    auto text = u8"Textbox Content";
+    std::u8string text = u8"Textbox Content";
     int cursorStart = 0;
     int cursorEnd = 0;
     facade::textbox(u8"test", text, cursorStart, cursorEnd,
@@ -86,16 +86,16 @@ UTEST(textbox, textboxRendererParameters) {
   // Initialization complete
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    auto text = u8"Textbox Content";
+    std::u8string text = u8"Textbox Content";
     int cursorStart = 0;
     int cursorEnd = 0;
     facade::textbox(u8"test", text, cursorStart, cursorEnd,
       [&](int x, int y, int w, int h, std::u8string text, int cursorStart, int cursorEnd, facade::display_state displayState) {
         ASSERT_TRUE(text == u8"Textbox Content");
         ASSERT_EQ(10, x);
-        ASSERT_EQ(15, x);
-        ASSERT_EQ(80, x);
-        ASSERT_EQ(20, x);
+        ASSERT_EQ(15, y);
+        ASSERT_EQ(80, w);
+        ASSERT_EQ(20, h);
         ASSERT_EQ(0, cursorStart);
         ASSERT_EQ(0, cursorEnd);
       }
@@ -107,7 +107,7 @@ UTEST(textbox, textboxEnabled) {
   // Initialization complete
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    auto text = u8"Textbox Content";
+    std::u8string text = u8"Textbox Content";
     int cursorStart = 0;
     int cursorEnd = 0;
     facade::textbox(u8"test", text, cursorStart, cursorEnd,
