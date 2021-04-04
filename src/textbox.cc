@@ -40,7 +40,7 @@ void facade::initTextbox() {
   facade::clearFocusItem();
 }
 
-void facade::textbox(std::u8string id, std::u8string &text, int &cursorStart, int &cursorEnd, int w, int h, bool disabled,
+void facade::textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, int w, int h, bool disabled,
     facade::textbox_renderer renderer) {
   int x = 0;
   int y = 0;
@@ -55,7 +55,7 @@ void facade::textbox(std::u8string id, std::u8string &text, int &cursorStart, in
   // render the button
   auto _renderer = renderer ? renderer : state_default_textbox_renderer;
   if (!_renderer) {
-    throw u8"No button renderer provided.";
+    throw "No button renderer provided.";
   }
   if (disabled) {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::disabled);
@@ -66,18 +66,26 @@ void facade::textbox(std::u8string id, std::u8string &text, int &cursorStart, in
   } else {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::enabled);
   }
+  // Deal with keyboard text input
+  if (facade::hasKeyChar()) {
+    text.insert(cursorStart, cursorEnd - cursorStart + 1, facade::getKeyChar());
+    cursorStart = cursorStart + 1;
+    cursorEnd = cursorStart;
+  }
 }
 
-void facade::textbox(std::u8string id, std::u8string &text, int &cursorStart, int &cursorEnd, int w, bool disabled,
+void facade::textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, int w, bool disabled,
     facade::textbox_renderer renderer) {
   facade::textbox(id, text, cursorStart, cursorEnd, w, 0, disabled, renderer);
 }
 
-void facade::textbox(std::u8string id, std::u8string &text, int &cursorStart, int &cursorEnd, bool disabled, facade::textbox_renderer renderer) {
+void facade::textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, bool disabled,
+    facade::textbox_renderer renderer) {
   facade::textbox(id, text, cursorStart, cursorEnd, 0, 0, disabled, renderer);
 }
 
-void facade::textbox(std::u8string id, std::u8string &text, int &cursorStart, int &cursorEnd, facade::textbox_renderer renderer) {
+void facade::textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd,
+    facade::textbox_renderer renderer) {
   facade::textbox(id, text, cursorStart, cursorEnd, 0, 0, false, renderer);
 }
 

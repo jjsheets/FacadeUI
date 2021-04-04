@@ -43,12 +43,12 @@ namespace {
   bool state_mouse_left_down;
   bool state_mouse_middle_down;
   bool state_mouse_right_down;
-  std::u8string state_hover_item;
-  std::u8string state_active_item;
+  std::string state_hover_item;
+  std::string state_active_item;
 
   // Keyboard controlling state
-  std::u8string state_focus_item;
-  std::u8string state_previous_item;
+  std::string state_focus_item;
+  std::string state_previous_item;
   // state for a fully composed unicode codepoint as provided by the OS.
   char32_t state_key_char;
   // the following state is used to keep track of the last cursor control key sent.
@@ -65,8 +65,8 @@ void facade::init(int screenWidth) {
   state_mouse_left_down = false;
   state_mouse_middle_down = false;
   state_mouse_right_down = false;
-  state_hover_item = u8"";
-  state_active_item = u8"";
+  state_hover_item = "";
+  state_active_item = "";
   while (!layout_stack.empty()) layout_stack.pop();
   facade::beginLayout(0, 0, screenWidth);
   facade::initButton();
@@ -120,47 +120,47 @@ bool facade::mouseInRegion(int x, int y, int w, int h) {
            state_mouse_y >= y + h);
 }
 
-bool facade::isHoverItem(std::u8string id) {
+bool facade::isHoverItem(std::string id) {
   return state_hover_item == id;
 }
 
-void facade::setHoverItem(std::u8string id) {
+void facade::setHoverItem(std::string id) {
   state_hover_item = id;
 }
 
 void facade::clearHoverItem() {
-  state_hover_item = u8"";
+  state_hover_item = "";
 }
 
-bool facade::isActiveItem(std::u8string id) {
+bool facade::isActiveItem(std::string id) {
   return state_active_item == id;
 }
 
 bool facade::noActiveItem() {
-  return state_active_item == u8"";
+  return state_active_item == "";
 }
 
 void facade::clearActiveItem() {
-  state_active_item = u8"";
+  state_active_item = "";
 }
 
-void facade::setActiveItem(std::u8string id) {
+void facade::setActiveItem(std::string id) {
   state_active_item = id;
 }
 
-bool facade::isFocusItem(std::u8string id) {
+bool facade::isFocusItem(std::string id) {
   return state_focus_item == id;
 }
 
 bool facade::noFocusItem() {
-  return state_focus_item == u8"";
+  return state_focus_item == "";
 }
 
 void facade::clearFocusItem() {
-  state_focus_item = u8"";
+  state_focus_item = "";
 }
 
-void facade::setFocusItem(std::u8string id) {
+void facade::setFocusItem(std::string id) {
   state_focus_item = id;
 }
 
@@ -168,7 +168,7 @@ void facade::focusPrevItem() {
   state_focus_item = state_previous_item;
 }
 
-void facade::setPreviousItem(std::u8string id) {
+void facade::setPreviousItem(std::string id) {
   state_previous_item = id;
 }
 
@@ -176,6 +176,11 @@ bool facade::noKeyChar() {
   return state_key_char == U'\0';
 }
 
+bool facade::hasKeyChar() {
+  return state_key_char != U'\0';
+}
+
+// TODO: Convert this to output a string of utf8 code units (bytes) representing the currently stored char32_t code point.
 char32_t facade::getKeyChar() {
   return state_key_char;
 }
@@ -184,7 +189,7 @@ void facade::clearKeyChar() {
   state_key_char = U'\0';
 }
 
-void facade::clearKeyChar(char32_t code) {
+void facade::setKeyChar(char32_t code) {
   state_key_char = code;
 }
 
@@ -207,7 +212,7 @@ void facade::postFrame() {
   if (!state_mouse_left_down) {
     clearActiveItem();
   } else if (noActiveItem()) {
-    state_active_item = u8"_unavailable";
+    state_active_item = "_unavailable";
   }
   clearKeyChar();
 }

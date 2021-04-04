@@ -39,7 +39,7 @@ void facade::initSlider() {
   state_default_slider_renderer = nullptr;
 }
 
-double facade::slider(std::u8string id, facade::slider_type type, int w, int l, double min, double max, double val,
+double facade::slider(std::string id, facade::slider_type type, int w, int l, double min, double max, double val,
     facade::slider_renderer renderer) {
   int x = 0;
   int y = 0;
@@ -68,7 +68,7 @@ double facade::slider(std::u8string id, facade::slider_type type, int w, int l, 
   // render the button
   auto _renderer = renderer ? renderer : state_default_slider_renderer;
   if (!_renderer) {
-    throw u8"No slider renderer provided.";
+    throw "No slider renderer provided.";
   }
   if (facade::getLeftMouseButton() && facade::isActiveItem(id)) {
     _renderer(type, x, y, w, l, val, facade::display_state::pressed);
@@ -80,11 +80,11 @@ double facade::slider(std::u8string id, facade::slider_type type, int w, int l, 
   return val;
 }
 
-double facade::slider(std::u8string id, slider_type type, int l, double min, double max, double val, facade::slider_renderer renderer) {
+double facade::slider(std::string id, slider_type type, int l, double min, double max, double val, facade::slider_renderer renderer) {
   return facade::slider(id, type, 0, l, min, max, val, renderer);
 }
 
-double facade::slider(std::u8string id, slider_type type, double min, double max, double val, facade::slider_renderer renderer) {
+double facade::slider(std::string id, slider_type type, double min, double max, double val, facade::slider_renderer renderer) {
   return facade::slider(id, type, 0, 0, min, max, val, renderer);
 }
 

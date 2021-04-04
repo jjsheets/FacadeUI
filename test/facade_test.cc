@@ -31,6 +31,7 @@
 
 #include "utest.h"
 #include "facade.h"
+#include <iostream>
 
 #include "test_layout.h"
 

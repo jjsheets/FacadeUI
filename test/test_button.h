@@ -36,7 +36,7 @@ UTEST(button, noRenderer) {
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     try {
-      facade::button(u8"test", u8"Button Label");
+      facade::button("test", "Button Label");
     } catch (...) {
       exceptionThrown = true;
     }
@@ -47,14 +47,14 @@ UTEST(button, defaultRenderer) {
   facade::init(2560);
   bool rendered = false;
   facade::setDefaultButtonRenderer(
-    [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
+    [&](std::string label, int x, int y, int w, int h, facade::display_state displayState) {
       rendered = true;
     }
   );
   // Initialization complete
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::button(u8"test", u8"Button Label");
+    facade::button("test", "Button Label");
     ASSERT_TRUE(rendered);
 }
 
@@ -64,8 +64,8 @@ UTEST(button, buttonRenderer) {
   // Initialization complete
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::button(u8"test", u8"Button Label",
-      [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
+    facade::button("test", "Button Label",
+      [&](std::string label, int x, int y, int w, int h, facade::display_state displayState) {
         rendered = true;
       }
     );
@@ -77,9 +77,9 @@ UTEST(button, buttonRendererParameters) {
   // Initialization complete
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::button(u8"test", u8"Button Label",
-      [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
-        ASSERT_TRUE(label == u8"Button Label");
+    facade::button("test", "Button Label",
+      [&](std::string label, int x, int y, int w, int h, facade::display_state displayState) {
+        ASSERT_TRUE(label == "Button Label");
         ASSERT_EQ(x, 10);
         ASSERT_EQ(y, 15);
         ASSERT_EQ(w, 80);
@@ -94,8 +94,8 @@ UTEST(button, buttonEnabled) {
   facade::setMouseXY(5, 5);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::button(u8"test", u8"Button Label",
-      [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
+    facade::button("test", "Button Label",
+      [&](std::string label, int x, int y, int w, int h, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::enabled);
       }
     );
@@ -107,8 +107,8 @@ UTEST(button, buttonHover) {
   facade::setMouseXY(15, 20);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::button(u8"test", u8"Button Label",
-      [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
+    facade::button("test", "Button Label",
+      [&](std::string label, int x, int y, int w, int h, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::hovered);
       }
     );
@@ -120,8 +120,8 @@ UTEST(button, buttonPressed) {
   facade::setMouseXY(15, 20);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::button(u8"test", u8"Button Label",
-      [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
+    facade::button("test", "Button Label",
+      [&](std::string label, int x, int y, int w, int h, facade::display_state displayState) {
       }
     );
   facade::endLayout();
@@ -130,8 +130,8 @@ UTEST(button, buttonPressed) {
   facade::setLeftMouseButton(true);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::button(u8"test", u8"Button Label",
-      [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
+    facade::button("test", "Button Label",
+      [&](std::string label, int x, int y, int w, int h, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::pressed);
       }
     );
@@ -142,8 +142,8 @@ UTEST(button, buttonPressed) {
   facade::setMouseXY(5, 5);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::button(u8"test", u8"Button Label",
-      [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
+    facade::button("test", "Button Label",
+      [&](std::string label, int x, int y, int w, int h, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::pressed);
       }
     );
@@ -154,8 +154,8 @@ UTEST(button, buttonDisabled) {
   // Initialization complete
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::button(u8"test", u8"Button Label", true,
-      [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {
+    facade::button("test", "Button Label", true,
+      [&](std::string label, int x, int y, int w, int h, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::disabled);
       }
     );
@@ -164,27 +164,27 @@ UTEST(button, buttonDisabled) {
 UTEST(button, buttonClicked) {
   facade::init(2560);
   facade::setDefaultButtonRenderer(
-    [&](std::u8string label, int x, int y, int w, int h, facade::display_state displayState) {}
+    [&](std::string label, int x, int y, int w, int h, facade::display_state displayState) {}
   );
   // Initialization complete
   facade::setMouseXY(15, 20);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    ASSERT_FALSE(facade::button(u8"test", u8"Button Label"));
+    ASSERT_FALSE(facade::button("test", "Button Label"));
   facade::endLayout();
   facade::postFrame();
 
   facade::setLeftMouseButton(true);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    ASSERT_FALSE(facade::button(u8"test", u8"Button Label"));
+    ASSERT_FALSE(facade::button("test", "Button Label"));
   facade::endLayout();
   facade::postFrame();
 
   facade::setLeftMouseButton(false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    ASSERT_TRUE(facade::button(u8"test", u8"Button Label"));
+    ASSERT_TRUE(facade::button("test", "Button Label"));
 }
 
 #endif // FACADE_TEST_BUTTON_H_INCLUDED
