@@ -40,6 +40,36 @@ void facade::initTextbox() {
   facade::clearFocusItem();
 }
 
+static std::string _to_utf8(const char32_t code, unsigned &l) {
+  std::string s = "";
+  if (code <= 0x7F) {
+    l = 1;
+    s.reserve(l);
+    s.push_back(code);
+  } else if (code <= 0x7FF) {
+    l = 2;
+    s.reserve(l);
+    s.push_back(0xC0 | (code >> 6));
+    s.push_back(0x80 | (code & 0x3F));
+  } else if (code <= 0xFFFF) {
+    l = 3;
+    s.reserve(l);
+    s.push_back(0xE0 | (code >> 12));
+    s.push_back(0x80 | ((code >> 6) & 0x3F));
+    s.push_back(0x80 | (code & 0x3F));
+  } else if (code <= 0x10FFFF) {
+    l = 4;
+    s.reserve(l);
+    s.push_back(0xF0 | (code >> 18));
+    s.push_back(0x80 | ((code >> 12) & 0x3F));
+    s.push_back(0x80 | ((code >> 6) & 0x3F));
+    s.push_back(0x80 | (code & 0x3F));
+  } else {
+    l = 0;
+  }
+  return s;
+}
+
 void facade::textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, int w, int h, bool disabled,
     facade::textbox_renderer renderer) {
   int x = 0;
@@ -68,8 +98,9 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
   }
   // Deal with keyboard text input
   if (facade::hasKeyChar()) {
-    text.insert(cursorStart, cursorEnd - cursorStart + 1, facade::getKeyChar());
-    cursorStart = cursorStart + 1;
+    unsigned l = 0;
+    text.insert(cursorStart, _to_utf8(facade::getKeyChar(), l));
+    cursorStart = cursorStart + l;
     cursorEnd = cursorStart;
   }
 }

@@ -203,7 +203,6 @@ UTEST(textbox, textboxKeyboardInput) {
       facade::textbox("test", text, cursorStart, cursorEnd);
     facade::endLayout();
     facade::postFrame();
-    std::cout << "  " << c << " : " << text << " (" << cursorStart << ", " << cursorEnd << ")" << std::endl;
   }
   ASSERT_TRUE(goal == text);
   ASSERT_EQ(goal.size(), cursorStart);
