@@ -249,7 +249,7 @@ UTEST(textbox, textboxCursorValidity) {
   for (unsigned int t = 0; t < 1000; t++) {
     for (unsigned int i = 0; i < 100; i++) {
       direction = dis(rng);
-      facade::setControlCode(direction ? facade::control_code::left : facade::control_code::right);
+      facade::setControlCode(direction ? facade::control_code::left : facade::control_code::right, false);
       facade::preFrame();
       facade::beginLayout(10, 15, 80);
         facade::textbox("test", text, cursorStart, cursorEnd);

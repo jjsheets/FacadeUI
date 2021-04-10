@@ -94,7 +94,8 @@ namespace facade {
   void clearKeyChar();
   void setKeyChar(char32_t code);
   control_code getControlCode();
-  void setControlCode(control_code code);
+  void setControlCode(control_code code, bool shift);
+  bool getModShift();
   void preFrame();
   void postFrame();
   void beginLayout(int x, int y, int w, int rowHeight = 20, int xSpacing = 4, int ySpacing = 4);

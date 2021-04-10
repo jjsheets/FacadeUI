@@ -117,20 +117,28 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
     // Deal with cursor movement
     switch (facade::getControlCode()) {
       case facade::control_code::home:
-      cursorStart = 0;
-      cursorEnd = cursorStart;
+      cursorEnd = 0;
+      if (!facade::getModShift()) {
+        cursorStart = cursorEnd;
+      }
       break;
       case facade::control_code::end:
-      cursorStart = text.length();
-      cursorEnd = cursorStart;
+      cursorEnd = text.length();
+      if (!facade::getModShift()) {
+        cursorStart = cursorEnd;
+      }
       break;
       case facade::control_code::left:
-      cursorStart -= _utf8_reverse_codepoint_length(text, cursorStart);
-      cursorEnd = cursorStart;
+      cursorEnd -= _utf8_reverse_codepoint_length(text, cursorStart);
+      if (!facade::getModShift()) {
+        cursorStart = cursorEnd;
+      }
       break;
       case facade::control_code::right:
-      cursorStart += _utf8_forward_codepoint_length(text, cursorStart);
-      cursorEnd = cursorStart;
+      cursorEnd += _utf8_forward_codepoint_length(text, cursorStart);
+      if (!facade::getModShift()) {
+        cursorStart = cursorEnd;
+      }
       break;
       default:
       break;
@@ -138,9 +146,15 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
     // Deal with keyboard text input
     if (facade::hasKeyChar()) {
       unsigned l = 0;
-      text.insert(cursorStart, _to_utf8(facade::getKeyChar(), l));
-      cursorStart = cursorStart + l;
-      cursorEnd = cursorStart;
+      if (cursorStart <= cursorEnd) {
+        text.replace(cursorStart, cursorEnd - cursorStart, _to_utf8(facade::getKeyChar(), l));
+        cursorStart = cursorStart + l;
+        cursorEnd = cursorStart;
+      } else {
+        text.replace(cursorEnd, cursorStart - cursorEnd, _to_utf8(facade::getKeyChar(), l));
+        cursorStart = cursorEnd + l;
+        cursorEnd = cursorStart;
+      }
     }
   }
   // render the textbox

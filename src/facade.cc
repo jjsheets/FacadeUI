@@ -53,6 +53,7 @@ namespace {
   char32_t state_key_char;
   // the following state is used to keep track of the last cursor control key sent.
   facade::control_code state_cursor_control;
+  bool state_mod_shift;
 
   // Layout state
   std::stack<_layout*> layout_stack;
@@ -199,8 +200,13 @@ facade::control_code facade::getControlCode() {
   return cc;
 }
 
-void facade::setControlCode(facade::control_code code) {
+void facade::setControlCode(facade::control_code code, bool shift) {
   state_cursor_control = code;
+  state_mod_shift = shift;
+}
+
+bool facade::getModShift() {
+  return state_mod_shift;
 }
 
 // Frame handling functions.
