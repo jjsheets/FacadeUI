@@ -70,6 +70,37 @@ static std::string _to_utf8(const char32_t code, unsigned &l) {
   return s;
 }
 
+static unsigned int _utf8_forward_codepoint_length(const std::string &s, unsigned int cursor) {
+  if (cursor == s.length()) {
+    return 0;
+  }
+  char c = s[cursor];
+  if ((c & 0x80) == 0x00) {
+    return 1;
+  } else if ((c & 0xE0) == 0xC0) {
+    return 2;
+  } else if ((c & 0xF0) == 0xE0) {
+    return 3;
+  } else if ((c & 0xF8) == 0xF0) {
+    return 4;
+  }
+  throw "Invalid initial UTF-8 code unit";
+}
+
+static unsigned int _utf8_reverse_codepoint_length(const std::string &s, unsigned int cursor) {
+  if (cursor == 0) {
+    return 0;
+  }
+  for (auto c = cursor - 1; c >= 0; c--) {
+    if ((s[c] & 0xC0) != 0x80) {
+      return cursor - c;
+    }
+    if (c == 0) {
+      throw "No valid codepoint found";
+    }
+  }
+}
+
 void facade::textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, int w, int h, bool disabled,
     facade::textbox_renderer renderer) {
   int x = 0;
@@ -82,10 +113,40 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
       facade::setActiveItem(id);
     }
   }
-  // render the button
+  if (! disabled) {
+    // Deal with cursor movement
+    switch (facade::getControlCode()) {
+      case facade::control_code::home:
+      cursorStart = 0;
+      cursorEnd = cursorStart;
+      break;
+      case facade::control_code::end:
+      cursorStart = text.length();
+      cursorEnd = cursorStart;
+      break;
+      case facade::control_code::left:
+      cursorStart -= _utf8_reverse_codepoint_length(text, cursorStart);
+      cursorEnd = cursorStart;
+      break;
+      case facade::control_code::right:
+      cursorStart += _utf8_forward_codepoint_length(text, cursorStart);
+      cursorEnd = cursorStart;
+      break;
+      default:
+      break;
+    }
+    // Deal with keyboard text input
+    if (facade::hasKeyChar()) {
+      unsigned l = 0;
+      text.insert(cursorStart, _to_utf8(facade::getKeyChar(), l));
+      cursorStart = cursorStart + l;
+      cursorEnd = cursorStart;
+    }
+  }
+  // render the textbox
   auto _renderer = renderer ? renderer : state_default_textbox_renderer;
   if (!_renderer) {
-    throw "No button renderer provided.";
+    throw "No textbox renderer provided.";
   }
   if (disabled) {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::disabled);
@@ -96,13 +157,7 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
   } else {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::enabled);
   }
-  // Deal with keyboard text input
-  if (facade::hasKeyChar()) {
-    unsigned l = 0;
-    text.insert(cursorStart, _to_utf8(facade::getKeyChar(), l));
-    cursorStart = cursorStart + l;
-    cursorEnd = cursorStart;
-  }
+
 }
 
 void facade::textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, int w, bool disabled,

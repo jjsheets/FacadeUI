@@ -60,7 +60,8 @@ namespace facade {
     down,
     cut,
     copy,
-    paste
+    paste,
+    nop
   };
 
   void init(int screenWidth);

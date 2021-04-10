@@ -246,19 +246,15 @@ UTEST(textbox, textboxCursorValidity) {
   // Initialization complete
   // test this 10 times in a row.
   unsigned int direction;
-  for (unsigned int t = 0; t < 10; t++) {
-    std::cout << text << std::endl;
-    for (unsigned int i = 0; i < 10; i++) {
+  for (unsigned int t = 0; t < 1000; t++) {
+    for (unsigned int i = 0; i < 100; i++) {
       direction = dis(rng);
-      // save the cursor point to be sure the cursor is changing with each step of this loop
-      unsigned int q = cursorStart;
       facade::setControlCode(direction ? facade::control_code::left : facade::control_code::right);
       facade::preFrame();
       facade::beginLayout(10, 15, 80);
         facade::textbox("test", text, cursorStart, cursorEnd);
       facade::endLayout();
       facade::postFrame();
-      ASSERT_NE(q, cursorStart);
       facade::setKeyChar('0');
       facade::preFrame();
       facade::beginLayout(10, 15, 80);
@@ -266,7 +262,6 @@ UTEST(textbox, textboxCursorValidity) {
       facade::endLayout();
       facade::postFrame();
     }
-    std::cout << text << std::endl;
     ASSERT_TRUE(validUtf8(text));
     text = "ði ıntəˈnæʃənəl fəˈnɛtık əsoʊsiˈeıʃn";
     cursorStart = 0;

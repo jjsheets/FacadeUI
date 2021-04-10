@@ -194,7 +194,9 @@ void facade::setKeyChar(char32_t code) {
 }
 
 facade::control_code facade::getControlCode() {
-  return state_cursor_control;
+  auto cc = state_cursor_control;
+  state_cursor_control = facade::control_code::nop;
+  return cc;
 }
 
 void facade::setControlCode(facade::control_code code) {
