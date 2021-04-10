@@ -186,7 +186,6 @@ UTEST(textbox, textboxDisabled) {
     );
 }
 
-// Update this test to be able to correctly handle input of char32_t codepoints, with the output being utf8.
 UTEST(textbox, textboxKeyboardInput) {
   facade::init(2560);
   std::string text = "";
@@ -207,6 +206,72 @@ UTEST(textbox, textboxKeyboardInput) {
   ASSERT_TRUE(goal == text);
   ASSERT_EQ(goal.size(), cursorStart);
   ASSERT_EQ(goal.size(), cursorEnd);
+}
+
+bool validUtf8(std::string &data) {
+  unsigned int count = 0;
+  for (unsigned char c : data) {
+    if (count > 0) {
+      if ((c >> 6) != 0b10) {
+        return false;
+      }
+      count--;
+    } else {
+      if ((c >> 5) == 0b110) {
+        count = 1;
+      } else if ((c >> 4) == 0b1110) {
+        count = 2;
+      } else if ((c >> 3) == 0b11110) {
+        count = 3;
+      } else if ((c >> 7) != 0) {
+        return false;
+      }
+    }
+  }
+  return count == 0;
+}
+
+UTEST(textbox, textboxCursorValidity) {
+  facade::init(2560);
+  std::string text = "ði ıntəˈnæʃənəl fəˈnɛtık əsoʊsiˈeıʃn";
+  unsigned int cursorStart = 0;
+  unsigned int cursorEnd = 0;
+  ASSERT_TRUE(validUtf8(text));
+  // a full merseene twister is overkill for testing this, but what the heck.
+  std::random_device r;
+  std::mt19937 rng(r());
+  std::uniform_int_distribution<> dis(0, 1);
+  facade::setDefaultTextboxRenderer(
+    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {});
+  // Initialization complete
+  // test this 10 times in a row.
+  unsigned int direction;
+  for (unsigned int t = 0; t < 10; t++) {
+    std::cout << text << std::endl;
+    for (unsigned int i = 0; i < 10; i++) {
+      direction = dis(rng);
+      // save the cursor point to be sure the cursor is changing with each step of this loop
+      unsigned int q = cursorStart;
+      facade::setControlCode(direction ? facade::control_code::left : facade::control_code::right);
+      facade::preFrame();
+      facade::beginLayout(10, 15, 80);
+        facade::textbox("test", text, cursorStart, cursorEnd);
+      facade::endLayout();
+      facade::postFrame();
+      ASSERT_NE(q, cursorStart);
+      facade::setKeyChar('0');
+      facade::preFrame();
+      facade::beginLayout(10, 15, 80);
+        facade::textbox("test", text, cursorStart, cursorEnd);
+      facade::endLayout();
+      facade::postFrame();
+    }
+    std::cout << text << std::endl;
+    ASSERT_TRUE(validUtf8(text));
+    text = "ði ıntəˈnæʃənəl fəˈnɛtık əsoʊsiˈeıʃn";
+    cursorStart = 0;
+    cursorEnd = 0;
+  }
 }
 
 #endif // FACADE_TEST_TEXTBOX_H_INCLUDED

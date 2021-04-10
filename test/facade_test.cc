@@ -32,6 +32,8 @@
 #include "utest.h"
 #include "facade.h"
 #include <iostream>
+#include <random>
+#include <bitset>
 
 #include "test_layout.h"
 

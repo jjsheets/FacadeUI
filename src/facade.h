@@ -53,7 +53,14 @@ namespace facade {
     backspace,
     pageup,
     pagedown,
-    enter
+    enter,
+    left,
+    right,
+    up,
+    down,
+    cut,
+    copy,
+    paste
   };
 
   void init(int screenWidth);
