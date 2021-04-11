@@ -40,32 +40,26 @@ void facade::initTextbox() {
   facade::clearFocusItem();
 }
 
-static std::string _to_utf8(const char32_t code, unsigned &l) {
+static std::string _to_utf8(const char32_t code) {
   std::string s = "";
   if (code <= 0x7F) {
-    l = 1;
     s.reserve(l);
     s.push_back(code);
   } else if (code <= 0x7FF) {
-    l = 2;
     s.reserve(l);
     s.push_back(0xC0 | (code >> 6));
     s.push_back(0x80 | (code & 0x3F));
   } else if (code <= 0xFFFF) {
-    l = 3;
     s.reserve(l);
     s.push_back(0xE0 | (code >> 12));
     s.push_back(0x80 | ((code >> 6) & 0x3F));
     s.push_back(0x80 | (code & 0x3F));
   } else if (code <= 0x10FFFF) {
-    l = 4;
     s.reserve(l);
     s.push_back(0xF0 | (code >> 18));
     s.push_back(0x80 | ((code >> 12) & 0x3F));
     s.push_back(0x80 | ((code >> 6) & 0x3F));
     s.push_back(0x80 | (code & 0x3F));
-  } else {
-    l = 0;
   }
   return s;
 }
@@ -137,12 +131,16 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
     // Deal with cursor movement and other control codes
     switch (facade::getControlCode()) {
       case facade::control_code::home:
+      case facade::control_code::pageup:
+      case facade::control_code::up:
       cursorEnd = 0;
       if (!facade::getModShift()) {
         cursorStart = cursorEnd;
       }
       break;
       case facade::control_code::end:
+      case facade::control_code::pagedown:
+      case facade::control_code::down:
       cursorEnd = text.length();
       if (!facade::getModShift()) {
         cursorStart = cursorEnd;
@@ -171,13 +169,12 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
       facade::setClipboardText(_get_text(text, cursorStart, cursorEnd));
       break;
       default:
+      // Deal with keyboard text input
       if (facade::hasKeyChar()) {
-        unsigned l = 0;
-        _edit_text(text, cursorStart, cursorEnd, _to_utf8(facade::getKeyChar(), l));
+        _edit_text(text, cursorStart, cursorEnd, _to_utf8(facade::getKeyChar()));
       }
       break;
     }
-    // Deal with keyboard text input
   }
   // render the textbox
   auto _renderer = renderer ? renderer : state_default_textbox_renderer;
