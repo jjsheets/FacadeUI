@@ -54,6 +54,7 @@ namespace {
   // the following state is used to keep track of the last cursor control key sent.
   facade::control_code state_cursor_control;
   bool state_mod_shift;
+  facade::clipboard_callback state_clipboard_function;
 
   // Layout state
   std::stack<_layout*> layout_stack;
@@ -68,6 +69,7 @@ void facade::init(int screenWidth) {
   state_mouse_right_down = false;
   state_hover_item = "";
   state_active_item = "";
+  state_clipboard_function = nullptr;
   while (!layout_stack.empty()) layout_stack.pop();
   facade::beginLayout(0, 0, screenWidth);
   facade::initButton();
@@ -207,6 +209,17 @@ void facade::setControlCode(facade::control_code code, bool shift) {
 
 bool facade::getModShift() {
   return state_mod_shift;
+}
+
+void facade::setClipboardCallback(facade::clipboard_callback clipboard) {
+  state_clipboard_function = clipboard;
+}
+
+std::string facade::getClipboardText() {
+  if (!state_clipboard_function) {
+    return "";
+  }
+  return state_clipboard_function();
 }
 
 // Frame handling functions.

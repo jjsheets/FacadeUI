@@ -101,6 +101,18 @@ static unsigned int _utf8_reverse_codepoint_length(const std::string &s, unsigne
   }
 }
 
+static void _edit_text(std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, const std::string &replacement) {
+  if (cursorStart <= cursorEnd) {
+    text.replace(cursorStart, cursorEnd - cursorStart, replacement);
+    cursorStart = cursorStart + replacement.length();
+    cursorEnd = cursorStart;
+  } else {
+    text.replace(cursorEnd, cursorStart - cursorEnd, replacement);
+    cursorStart = cursorEnd + replacement.length();
+    cursorEnd = cursorStart;
+  }
+}
+
 void facade::textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, int w, int h, bool disabled,
     facade::textbox_renderer renderer) {
   int x = 0;
@@ -114,7 +126,7 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
     }
   }
   if (! disabled) {
-    // Deal with cursor movement
+    // Deal with cursor movement and other control codes
     switch (facade::getControlCode()) {
       case facade::control_code::home:
       cursorEnd = 0;
@@ -140,22 +152,16 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
         cursorStart = cursorEnd;
       }
       break;
+      case facade::control_code::paste:
+      _edit_text(text, cursorStart, cursorEnd, facade::getClipboardText());
       default:
+      if (facade::hasKeyChar()) {
+        unsigned l = 0;
+        _edit_text(text, cursorStart, cursorEnd, _to_utf8(facade::getKeyChar(), l));
+      }
       break;
     }
     // Deal with keyboard text input
-    if (facade::hasKeyChar()) {
-      unsigned l = 0;
-      if (cursorStart <= cursorEnd) {
-        text.replace(cursorStart, cursorEnd - cursorStart, _to_utf8(facade::getKeyChar(), l));
-        cursorStart = cursorStart + l;
-        cursorEnd = cursorStart;
-      } else {
-        text.replace(cursorEnd, cursorStart - cursorEnd, _to_utf8(facade::getKeyChar(), l));
-        cursorStart = cursorEnd + l;
-        cursorEnd = cursorStart;
-      }
-    }
   }
   // render the textbox
   auto _renderer = renderer ? renderer : state_default_textbox_renderer;

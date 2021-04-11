@@ -269,4 +269,32 @@ UTEST(textbox, textboxCursorValidity) {
   }
 }
 
+UTEST(textbox, textboxClipboard) {
+  facade::init(2560);
+  std::string text = "Hello World!";
+  unsigned int cursorStart = 0;
+  unsigned int cursorEnd = 0;
+  facade::setDefaultTextboxRenderer(
+    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {});
+  facade::setClipboardCallback([&]() -> std::string {
+    return "Goodbye";
+  });
+  // Initialization complete
+  for (unsigned int i = 0; i < 5; i++) {
+    facade::setControlCode(facade::control_code::right, true);
+    facade::preFrame();
+    facade::beginLayout(10, 15, 80);
+      facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::endLayout();
+    facade::postFrame();
+  }
+  facade::setControlCode(facade::control_code::paste, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_TRUE(text == "Goodbye World!");
+}
+
 #endif // FACADE_TEST_TEXTBOX_H_INCLUDED
