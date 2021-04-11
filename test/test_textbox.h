@@ -324,6 +324,44 @@ UTEST(textbox, textboxClipboard) {
   ASSERT_TRUE(clipboard == "Goodbye");
   ASSERT_EQ(0, cursorStart);
   ASSERT_EQ(0, cursorEnd);
+  // Paste it back in...
+  facade::setControlCode(facade::control_code::paste, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  // Select " World!" with shift end
+  // Cut Goodbye
+  facade::setControlCode(facade::control_code::end, true);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  // Copy it
+  facade::setControlCode(facade::control_code::copy, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  // paste it, which should be equivalent to just heading the cursor to the end
+  facade::setControlCode(facade::control_code::paste, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  // Paste again...
+  facade::setControlCode(facade::control_code::paste, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  // Verify results
+  ASSERT_TRUE(text == "Goodbye World! World!");
 }
 
 #endif // FACADE_TEST_TEXTBOX_H_INCLUDED
