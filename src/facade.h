@@ -64,7 +64,8 @@ namespace facade {
     nop
   };
 
-  typedef std::function<std::string ()> clipboard_callback;
+  typedef std::function<std::string ()> get_clipboard_callback;
+  typedef std::function<void (std::string)> set_clipboard_callback;
 
   void init(int screenWidth);
   void setMouseXY(int _x, int _y);
@@ -98,8 +99,9 @@ namespace facade {
   control_code getControlCode();
   void setControlCode(control_code code, bool shift);
   bool getModShift();
-  void setClipboardCallback(clipboard_callback clipboard);
+  void setClipboardCallback(get_clipboard_callback get, set_clipboard_callback set);
   std::string getClipboardText();
+  void setClipboardText(std::string);
   void preFrame();
   void postFrame();
   void beginLayout(int x, int y, int w, int rowHeight = 20, int xSpacing = 4, int ySpacing = 4);

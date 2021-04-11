@@ -54,7 +54,8 @@ namespace {
   // the following state is used to keep track of the last cursor control key sent.
   facade::control_code state_cursor_control;
   bool state_mod_shift;
-  facade::clipboard_callback state_clipboard_function;
+  facade::get_clipboard_callback state_get_clipboard;
+  facade::set_clipboard_callback state_set_clipboard;
 
   // Layout state
   std::stack<_layout*> layout_stack;
@@ -69,7 +70,8 @@ void facade::init(int screenWidth) {
   state_mouse_right_down = false;
   state_hover_item = "";
   state_active_item = "";
-  state_clipboard_function = nullptr;
+  state_get_clipboard = nullptr;
+  state_set_clipboard = nullptr;
   while (!layout_stack.empty()) layout_stack.pop();
   facade::beginLayout(0, 0, screenWidth);
   facade::initButton();
@@ -211,15 +213,22 @@ bool facade::getModShift() {
   return state_mod_shift;
 }
 
-void facade::setClipboardCallback(facade::clipboard_callback clipboard) {
-  state_clipboard_function = clipboard;
+void facade::setClipboardCallback(facade::get_clipboard_callback get, facade::set_clipboard_callback set) {
+  state_get_clipboard = get;
+  state_set_clipboard = set;
 }
 
 std::string facade::getClipboardText() {
-  if (!state_clipboard_function) {
+  if (!state_get_clipboard) {
     return "";
   }
-  return state_clipboard_function();
+  return state_get_clipboard();
+}
+
+void facade::setClipboardText(std::string new_clipboard) {
+  if (state_set_clipboard) {
+    state_set_clipboard(new_clipboard);
+  }
 }
 
 // Frame handling functions.

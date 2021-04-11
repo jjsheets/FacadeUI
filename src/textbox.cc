@@ -101,6 +101,14 @@ static unsigned int _utf8_reverse_codepoint_length(const std::string &s, unsigne
   }
 }
 
+static std::string _get_text(const std::string &text, unsigned int cursorStart, unsigned int cursorEnd) {
+  if (cursorStart <= cursorEnd) {
+    return text.substr(cursorStart, cursorEnd - cursorStart);
+  } else {
+    return text.substr(cursorEnd, cursorStart - cursorEnd);
+  }
+}
+
 static void _edit_text(std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, const std::string &replacement) {
   if (cursorStart <= cursorEnd) {
     text.replace(cursorStart, cursorEnd - cursorStart, replacement);
@@ -154,6 +162,14 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
       break;
       case facade::control_code::paste:
       _edit_text(text, cursorStart, cursorEnd, facade::getClipboardText());
+      break;
+      case facade::control_code::cut:
+      facade::setClipboardText(_get_text(text, cursorStart, cursorEnd));
+      _edit_text(text, cursorStart, cursorEnd, "");
+      break;
+      case facade::control_code::copy:
+      facade::setClipboardText(_get_text(text, cursorStart, cursorEnd));
+      break;
       default:
       if (facade::hasKeyChar()) {
         unsigned l = 0;

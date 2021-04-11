@@ -274,12 +274,18 @@ UTEST(textbox, textboxClipboard) {
   std::string text = "Hello World!";
   unsigned int cursorStart = 0;
   unsigned int cursorEnd = 0;
+  std::string clipboard = "Goodbye";
   facade::setDefaultTextboxRenderer(
     [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {});
-  facade::setClipboardCallback([&]() -> std::string {
-    return "Goodbye";
-  });
+  facade::setClipboardCallback(
+    [&]() -> std::string {
+      return clipboard;
+    },
+    [&](std::string newClipboard) {
+      clipboard = newClipboard;
+    });
   // Initialization complete
+  // Select Hello
   for (unsigned int i = 0; i < 5; i++) {
     facade::setControlCode(facade::control_code::right, true);
     facade::preFrame();
@@ -288,6 +294,7 @@ UTEST(textbox, textboxClipboard) {
     facade::endLayout();
     facade::postFrame();
   }
+  // Paste in Goodbye;
   facade::setControlCode(facade::control_code::paste, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
@@ -295,6 +302,28 @@ UTEST(textbox, textboxClipboard) {
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE(text == "Goodbye World!");
+  ASSERT_EQ(7, cursorStart);
+  ASSERT_EQ(7, cursorEnd);
+  // Clear clipboard externally to test cut operation
+  clipboard = "";
+  // Select Goodbye, this time using the Home control code
+  facade::setControlCode(facade::control_code::home, true);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  // Cut Goodbye
+  facade::setControlCode(facade::control_code::cut, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_TRUE(text == " World!");
+  ASSERT_TRUE(clipboard == "Goodbye");
+  ASSERT_EQ(0, cursorStart);
+  ASSERT_EQ(0, cursorEnd);
 }
 
 #endif // FACADE_TEST_TEXTBOX_H_INCLUDED
