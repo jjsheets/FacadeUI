@@ -104,6 +104,19 @@ UTEST(slider, sliderRendererParameters) {
     );
 }
 
+UTEST(slider, sliderDisabled) {
+  facade::init(2560);
+  // Initialization complete
+  facade::setMouseXY(5, 5);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 160);
+    facade::slider("test", facade::slider_type::horizontal, 0.0, 100.0, 0.0, true,
+      [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+        ASSERT_TRUE(displayState == facade::display_state::disabled);
+      }
+    );
+}
+
 UTEST(slider, sliderEnabled) {
   facade::init(2560);
   // Initialization complete
