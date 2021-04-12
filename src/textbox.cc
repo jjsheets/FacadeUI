@@ -115,6 +115,20 @@ static void _edit_text(std::string &text, unsigned int &cursorStart, unsigned in
   }
 }
 
+static void _move_cursor_to(unsigned int &cursorStart, unsigned int &cursorEnd, unsigned int pos) {
+  cursorEnd = pos;
+  if (!facade::getModShift()) {
+    cursorStart = cursorEnd;
+  }
+}
+
+static void _move_cursor_by(unsigned int &cursorStart, unsigned int &cursorEnd, unsigned int dist) {
+  cursorEnd += dist;
+  if (!facade::getModShift()) {
+    cursorStart = cursorEnd;
+  }
+}
+
 void facade::textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, int w, int h, bool disabled,
     facade::textbox_renderer renderer) {
   int x = 0;
@@ -127,54 +141,68 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
       facade::setActiveItem(id);
     }
   }
-  if (! disabled) {
+  if (facade::noFocusItem()) {
+    facade::setFocusItem(id);
+  }
+  if (facade::isFocusItem(id) && !disabled) {
     // Deal with cursor movement and other control codes
     switch (facade::getControlCode()) {
+      case facade::control_code::tab:
+        if (facade::getModShift()) {
+          facade::clearFocusItem();
+        } else {
+          facade::focusPrevItem();
+        }
+        break;
       case facade::control_code::home:
       case facade::control_code::pageup:
       case facade::control_code::up:
-      cursorEnd = 0;
-      if (!facade::getModShift()) {
-        cursorStart = cursorEnd;
-      }
-      break;
+        _move_cursor_to(cursorStart, cursorEnd, 0);
+        break;
       case facade::control_code::end:
       case facade::control_code::pagedown:
       case facade::control_code::down:
-      cursorEnd = text.length();
-      if (!facade::getModShift()) {
-        cursorStart = cursorEnd;
-      }
-      break;
+        _move_cursor_to(cursorStart, cursorEnd, text.length());
+        break;
+      case facade::control_code::del:
+        if (cursorStart == cursorEnd) {
+          cursorEnd +=_utf8_forward_codepoint_length(text, cursorStart);
+        }
+        _edit_text(text, cursorStart, cursorEnd, "");
+        break;
+      case facade::control_code::backspace:
+        if (cursorStart == cursorEnd) {
+          cursorEnd -=_utf8_reverse_codepoint_length(text, cursorStart);
+        }
+        _edit_text(text, cursorStart, cursorEnd, "");
+        break;
       case facade::control_code::left:
-      cursorEnd -= _utf8_reverse_codepoint_length(text, cursorStart);
-      if (!facade::getModShift()) {
-        cursorStart = cursorEnd;
-      }
-      break;
+        _move_cursor_by(cursorStart, cursorEnd, -_utf8_reverse_codepoint_length(text, cursorStart));
+        break;
       case facade::control_code::right:
-      cursorEnd += _utf8_forward_codepoint_length(text, cursorStart);
-      if (!facade::getModShift()) {
-        cursorStart = cursorEnd;
-      }
-      break;
+        _move_cursor_by(cursorStart, cursorEnd, _utf8_forward_codepoint_length(text, cursorStart));
+        break;
       case facade::control_code::paste:
-      _edit_text(text, cursorStart, cursorEnd, facade::getClipboardText());
-      break;
+        _edit_text(text, cursorStart, cursorEnd, facade::getClipboardText());
+        break;
       case facade::control_code::cut:
-      facade::setClipboardText(_get_text(text, cursorStart, cursorEnd));
-      _edit_text(text, cursorStart, cursorEnd, "");
-      break;
+        facade::setClipboardText(_get_text(text, cursorStart, cursorEnd));
+        _edit_text(text, cursorStart, cursorEnd, "");
+        break;
       case facade::control_code::copy:
-      facade::setClipboardText(_get_text(text, cursorStart, cursorEnd));
-      break;
+        facade::setClipboardText(_get_text(text, cursorStart, cursorEnd));
+        break;
       default:
-      // Deal with keyboard text input
-      if (facade::hasKeyChar()) {
-        _edit_text(text, cursorStart, cursorEnd, _to_utf8(facade::getKeyChar()));
-      }
-      break;
+        // Deal with keyboard text input
+        if (facade::hasKeyChar()) {
+          _edit_text(text, cursorStart, cursorEnd, _to_utf8(facade::getKeyChar()));
+        }
+        break;
     }
+  }
+  // grab focus if this is clicked
+  if (!disabled && !facade::getLeftMouseButton() && facade::isHoverItem(id) && facade::isActiveItem(id)) {
+    facade::setFocusItem(id);
   }
   // render the textbox
   auto _renderer = renderer ? renderer : state_default_textbox_renderer;
@@ -183,14 +211,16 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
   }
   if (disabled) {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::disabled);
-  } else if (facade::getLeftMouseButton() && facade::isActiveItem(id)) {
+  } else if ((facade::getLeftMouseButton() && facade::isActiveItem(id)) || facade::isFocusItem(id)) {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::pressed);
   } else if (facade::isHoverItem(id)) {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::hovered);
   } else {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::enabled);
   }
-
+  if (!disabled) {
+    facade::setPreviousItem(id);
+  }
 }
 
 void facade::textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, int w, bool disabled,

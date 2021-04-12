@@ -112,6 +112,11 @@ UTEST(textbox, textboxEnabled) {
     unsigned int cursorEnd = 0;
     facade::textbox("test", text, cursorStart, cursorEnd,
       [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+        ASSERT_TRUE(displayState == facade::display_state::pressed); // this will be pressed because it will automatically grab the focus.
+      }
+    );
+    facade::textbox("test2", text, cursorStart, cursorEnd,
+      [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::enabled);
       }
     );
@@ -120,13 +125,18 @@ UTEST(textbox, textboxEnabled) {
 UTEST(textbox, textboxHover) {
   facade::init(2560);
   // Initialization complete
-  facade::setMouseXY(15, 20);
+  facade::setMouseXY(15, 50);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     std::string text = "Textbox Content";
     unsigned int cursorStart = 0;
     unsigned int cursorEnd = 0;
     facade::textbox("test", text, cursorStart, cursorEnd,
+      [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+        ASSERT_TRUE(displayState == facade::display_state::pressed); // this will be pressed because it will automatically grab the focus.
+      }
+    );
+    facade::textbox("test2", text, cursorStart, cursorEnd,
       [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::hovered);
       }

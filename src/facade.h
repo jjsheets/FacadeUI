@@ -46,7 +46,6 @@ namespace facade {
   // control codes for text entry
   enum class control_code {
     tab,
-    shift_tab,
     home,
     end,
     del,
