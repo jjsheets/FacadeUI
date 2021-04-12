@@ -364,4 +364,84 @@ UTEST(textbox, textboxClipboard) {
   ASSERT_TRUE(text == "Goodbye World! World!");
 }
 
+UTEST(textbox, textboxCursorMovement) {
+  facade::init(2560);
+  std::string text = "12345";
+  unsigned int cursorStart = 0;
+  unsigned int cursorEnd = 0;
+  facade::setDefaultTextboxRenderer(
+    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {});
+  // Initialization complete
+  facade::setControlCode(facade::control_code::left, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_EQ(0, cursorStart);
+  ASSERT_EQ(0, cursorEnd);
+  facade::setControlCode(facade::control_code::down, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_EQ(5, cursorStart);
+  ASSERT_EQ(5, cursorEnd);
+  facade::setControlCode(facade::control_code::up, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_EQ(0, cursorStart);
+  ASSERT_EQ(0, cursorEnd);
+  facade::setControlCode(facade::control_code::pagedown, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_EQ(5, cursorStart);
+  ASSERT_EQ(5, cursorEnd);
+  facade::setControlCode(facade::control_code::pageup, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_EQ(0, cursorStart);
+  ASSERT_EQ(0, cursorEnd);
+  facade::setControlCode(facade::control_code::end, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_EQ(5, cursorStart);
+  ASSERT_EQ(5, cursorEnd);
+  facade::setControlCode(facade::control_code::home, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_EQ(0, cursorStart);
+  ASSERT_EQ(0, cursorEnd);
+  facade::setControlCode(facade::control_code::end, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  facade::setControlCode(facade::control_code::right, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_EQ(5, cursorStart);
+  ASSERT_EQ(5, cursorEnd);
+}
+
 #endif // FACADE_TEST_TEXTBOX_H_INCLUDED

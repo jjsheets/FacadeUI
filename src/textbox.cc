@@ -43,19 +43,19 @@ void facade::initTextbox() {
 static std::string _to_utf8(const char32_t code) {
   std::string s = "";
   if (code <= 0x7F) {
-    s.reserve(l);
+    s.reserve(1);
     s.push_back(code);
   } else if (code <= 0x7FF) {
-    s.reserve(l);
+    s.reserve(2);
     s.push_back(0xC0 | (code >> 6));
     s.push_back(0x80 | (code & 0x3F));
   } else if (code <= 0xFFFF) {
-    s.reserve(l);
+    s.reserve(3);
     s.push_back(0xE0 | (code >> 12));
     s.push_back(0x80 | ((code >> 6) & 0x3F));
     s.push_back(0x80 | (code & 0x3F));
   } else if (code <= 0x10FFFF) {
-    s.reserve(l);
+    s.reserve(4);
     s.push_back(0xF0 | (code >> 18));
     s.push_back(0x80 | ((code >> 12) & 0x3F));
     s.push_back(0x80 | ((code >> 6) & 0x3F));
