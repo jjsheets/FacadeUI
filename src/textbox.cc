@@ -149,9 +149,9 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
     switch (facade::getControlCode()) {
       case facade::control_code::tab:
         if (facade::getModShift()) {
-          facade::clearFocusItem();
-        } else {
           facade::focusPrevItem();
+        } else {
+          facade::clearFocusItem();
         }
         break;
       case facade::control_code::home:
