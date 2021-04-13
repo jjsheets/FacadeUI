@@ -36,7 +36,7 @@ UTEST(slider, noRenderer) {
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
     try {
-      facade::slider("test", facade::slider_type::horizontal, 0.0, 100.0, 0.0);
+      facade::slider("test", facade::orientation::horizontal, 0.0, 100.0, 0.0);
     } catch (...) {
       exceptionThrown = true;
     }
@@ -47,14 +47,14 @@ UTEST(slider, defaultRenderer) {
   facade::init(2560);
   bool rendered = false;
   facade::setDefaultSliderRenderer(
-    [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+    [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {
       rendered = true;
     }
   );
   // Initialization complete
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    facade::slider("test", facade::slider_type::horizontal, 0.0, 100.0, 0.0);
+    facade::slider("test", facade::orientation::horizontal, 0.0, 100.0, 0.0);
     ASSERT_TRUE(rendered);
 }
 
@@ -64,8 +64,8 @@ UTEST(slider, sliderRenderer) {
   // Initialization complete
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    facade::slider("test", facade::slider_type::horizontal, 0.0, 100.0, 0.0,
-      [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+    facade::slider("test", facade::orientation::horizontal, 0.0, 100.0, 0.0,
+      [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {
         rendered = true;
       }
     );
@@ -77,9 +77,9 @@ UTEST(slider, sliderRendererParameters) {
   // Initialization complete
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    facade::slider("test", facade::slider_type::horizontal, 0.0, 100.0, 0.0,
-      [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
-        ASSERT_TRUE(type == facade::slider_type::horizontal);
+    facade::slider("test", facade::orientation::horizontal, 0.0, 100.0, 0.0,
+      [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+        ASSERT_TRUE(type == facade::orientation::horizontal);
         ASSERT_EQ(x, 10);
         ASSERT_EQ(y, 15);
         ASSERT_EQ(w, 20);
@@ -92,9 +92,9 @@ UTEST(slider, sliderRendererParameters) {
 
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    facade::slider("test", facade::slider_type::vertical, 0.0, 100.0, 0.0,
-      [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
-        ASSERT_TRUE(type == facade::slider_type::vertical);
+    facade::slider("test", facade::orientation::vertical, 0.0, 100.0, 0.0,
+      [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+        ASSERT_TRUE(type == facade::orientation::vertical);
         ASSERT_EQ(x, 10);
         ASSERT_EQ(y, 15);
         ASSERT_EQ(w, 20);
@@ -110,8 +110,8 @@ UTEST(slider, sliderDisabled) {
   facade::setMouseXY(5, 5);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    facade::slider("test", facade::slider_type::horizontal, 0.0, 100.0, 0.0, true,
-      [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+    facade::slider("test", facade::orientation::horizontal, 0.0, 100.0, 0.0, true,
+      [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::disabled);
       }
     );
@@ -123,8 +123,8 @@ UTEST(slider, sliderEnabled) {
   facade::setMouseXY(5, 5);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    facade::slider("test", facade::slider_type::horizontal, 0.0, 100.0, 0.0,
-      [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+    facade::slider("test", facade::orientation::horizontal, 0.0, 100.0, 0.0,
+      [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::enabled);
       }
     );
@@ -136,8 +136,8 @@ UTEST(slider, sliderHovered) {
   facade::setMouseXY(80, 25);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    facade::slider("test", facade::slider_type::horizontal, 0.0, 100.0, 0.0,
-      [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+    facade::slider("test", facade::orientation::horizontal, 0.0, 100.0, 0.0,
+      [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::hovered);
       }
     );
@@ -146,8 +146,8 @@ UTEST(slider, sliderHovered) {
 
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    facade::slider("test", facade::slider_type::vertical, 0.0, 100.0, 0.0,
-      [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+    facade::slider("test", facade::orientation::vertical, 0.0, 100.0, 0.0,
+      [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {
         ASSERT_FALSE(displayState == facade::display_state::hovered);
       }
     );
@@ -157,8 +157,8 @@ UTEST(slider, sliderHovered) {
   facade::setMouseXY(20, 85);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    facade::slider("test", facade::slider_type::horizontal, 0.0, 100.0, 0.0,
-      [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+    facade::slider("test", facade::orientation::horizontal, 0.0, 100.0, 0.0,
+      [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {
         ASSERT_FALSE(displayState == facade::display_state::hovered);
       }
     );
@@ -167,8 +167,8 @@ UTEST(slider, sliderHovered) {
 
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    facade::slider("test", facade::slider_type::vertical, 0.0, 100.0, 0.0,
-      [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+    facade::slider("test", facade::orientation::vertical, 0.0, 100.0, 0.0,
+      [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::hovered);
       }
     );
@@ -180,8 +180,8 @@ UTEST(slider, sliderPressed) {
   facade::setMouseXY(80, 25);
   facade::preFrame();
     facade::beginLayout(10, 15, 160);
-    facade::slider("test", facade::slider_type::horizontal, 0.0, 100.0, 0.0,
-      [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+    facade::slider("test", facade::orientation::horizontal, 0.0, 100.0, 0.0,
+      [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {
       }
     );
   facade::endLayout();
@@ -190,8 +190,8 @@ UTEST(slider, sliderPressed) {
   facade::setLeftMouseButton(true);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    facade::slider("test", facade::slider_type::horizontal, 0.0, 100.0, 0.0,
-      [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+    facade::slider("test", facade::orientation::horizontal, 0.0, 100.0, 0.0,
+      [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::pressed);
       }
     );
@@ -201,8 +201,8 @@ UTEST(slider, sliderPressed) {
   facade::setMouseXY(20, 85);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    facade::slider("test", facade::slider_type::horizontal, 0.0, 100.0, 0.0,
-      [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {
+    facade::slider("test", facade::orientation::horizontal, 0.0, 100.0, 0.0,
+      [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::pressed);
       }
     );
@@ -211,12 +211,12 @@ UTEST(slider, sliderPressed) {
 UTEST(slider, sliderFunctionality) {
   facade::init(2560);
   auto val = 50.0;
-  auto renderer = [&](facade::slider_type type, int x, int y, int w, int l, double val, facade::display_state displayState) {};
+  auto renderer = [&](facade::orientation type, int x, int y, int w, int l, double val, facade::display_state displayState) {};
   // Initialization complete
   facade::setMouseXY(5, 25);
   facade::preFrame();
     facade::beginLayout(10, 15, 160);
-    val = facade::slider("test", facade::slider_type::horizontal, 50.0, 100.0, val, renderer);
+    val = facade::slider("test", facade::orientation::horizontal, 50.0, 100.0, val, renderer);
     ASSERT_EQ(50.0, val);
   facade::endLayout();
   facade::postFrame();
@@ -224,7 +224,7 @@ UTEST(slider, sliderFunctionality) {
   facade::setMouseXY(90, 25);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    val = facade::slider("test", facade::slider_type::horizontal, 50.0, 100.0, val, renderer);
+    val = facade::slider("test", facade::orientation::horizontal, 50.0, 100.0, val, renderer);
     ASSERT_EQ(50.0, val);
   facade::endLayout();
   facade::postFrame();
@@ -232,7 +232,7 @@ UTEST(slider, sliderFunctionality) {
   facade::setLeftMouseButton(true);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    val = facade::slider("test", facade::slider_type::horizontal, 50.0, 100.0, val, renderer);
+    val = facade::slider("test", facade::orientation::horizontal, 50.0, 100.0, val, renderer);
     ASSERT_EQ(75.0, val);
   facade::endLayout();
   facade::postFrame();
@@ -240,7 +240,7 @@ UTEST(slider, sliderFunctionality) {
   facade::setMouseXY(5, 25);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    val = facade::slider("test", facade::slider_type::horizontal, 50.0, 100.0, val, renderer);
+    val = facade::slider("test", facade::orientation::horizontal, 50.0, 100.0, val, renderer);
     ASSERT_EQ(50.0, val);
   facade::endLayout();
   facade::postFrame();
@@ -248,7 +248,7 @@ UTEST(slider, sliderFunctionality) {
   facade::setMouseXY(500, 25);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    val = facade::slider("test", facade::slider_type::horizontal, 50.0, 100.0, val, renderer);
+    val = facade::slider("test", facade::orientation::horizontal, 50.0, 100.0, val, renderer);
     ASSERT_EQ(100.0, val);
   facade::endLayout();
   facade::postFrame();
@@ -256,7 +256,7 @@ UTEST(slider, sliderFunctionality) {
   facade::setMouseXY(20, 25);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    val = facade::slider("test", facade::slider_type::horizontal, 50.0, 100.0, val, renderer);
+    val = facade::slider("test", facade::orientation::horizontal, 50.0, 100.0, val, renderer);
     ASSERT_EQ(50.0, val);
   facade::endLayout();
   facade::postFrame();
@@ -264,7 +264,7 @@ UTEST(slider, sliderFunctionality) {
   facade::setMouseXY(21, 25);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    val = facade::slider("test", facade::slider_type::horizontal, 50.0, 100.0, val, renderer);
+    val = facade::slider("test", facade::orientation::horizontal, 50.0, 100.0, val, renderer);
     ASSERT_EQ(50.0 + 0.5 / 1.4, val);
   facade::endLayout();
   facade::postFrame();
@@ -272,7 +272,7 @@ UTEST(slider, sliderFunctionality) {
   facade::setMouseXY(159, 25);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    val = facade::slider("test", facade::slider_type::horizontal, 50.0, 100.0, val, renderer);
+    val = facade::slider("test", facade::orientation::horizontal, 50.0, 100.0, val, renderer);
     ASSERT_EQ(100.0 - 0.5 / 1.4, val);
   facade::endLayout();
   facade::postFrame();
@@ -280,7 +280,7 @@ UTEST(slider, sliderFunctionality) {
   facade::setMouseXY(160, 25);
   facade::preFrame();
   facade::beginLayout(10, 15, 160);
-    val = facade::slider("test", facade::slider_type::horizontal, 50.0, 100.0, val, renderer);
+    val = facade::slider("test", facade::orientation::horizontal, 50.0, 100.0, val, renderer);
     ASSERT_EQ(100.0, val);
 }
 

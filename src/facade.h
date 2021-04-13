@@ -42,6 +42,10 @@ namespace facade {
     pressed,
     disabled
   };
+  enum class orientation {
+    horizontal,
+    vertical
+  };
 
   // control codes for text entry
   enum class control_code {

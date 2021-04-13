@@ -32,20 +32,13 @@
 
 namespace facade {
 
-  // Buttons can have four display states: enabled, hovered, pressed, and disabled.
-  // States for input focusing and draggable buttons are currently not planned.
-  enum class slider_type {
-    horizontal,
-    vertical
-  };
-  // Buttons also support a rendering function, which allows for custom rendering of buttons
-  typedef std::function<void (slider_type, int, int, int, int, double, display_state)> slider_renderer;
+  typedef std::function<void (orientation, int, int, int, int, double, display_state)> slider_renderer;
 
   void initSlider();
-  double slider(std::string id, slider_type type, int w, int l, double min, double max, double val, bool disabled, slider_renderer renderer = nullptr);
-  double slider(std::string id, slider_type type, int l, double min, double max, double val, bool disabled, slider_renderer renderer = nullptr);
-  double slider(std::string id, slider_type type, double min, double max, double val, bool disabled, slider_renderer renderer = nullptr);
-  double slider(std::string id, slider_type type, double min, double max, double val, slider_renderer renderer = nullptr);
+  double slider(std::string id, orientation type, int w, int l, double min, double max, double val, bool disabled, slider_renderer renderer = nullptr);
+  double slider(std::string id, orientation type, int l, double min, double max, double val, bool disabled, slider_renderer renderer = nullptr);
+  double slider(std::string id, orientation type, double min, double max, double val, bool disabled, slider_renderer renderer = nullptr);
+  double slider(std::string id, orientation type, double min, double max, double val, slider_renderer renderer = nullptr);
   void setDefaultSliderRenderer(slider_renderer renderer);
 
 }
