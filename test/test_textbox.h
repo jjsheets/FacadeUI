@@ -317,8 +317,8 @@ UTEST(textbox, textboxClipboard) {
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE(text == "Goodbye World!");
-  ASSERT_EQ(7, cursorStart);
-  ASSERT_EQ(7, cursorEnd);
+  ASSERT_EQ(7u, cursorStart);
+  ASSERT_EQ(7u, cursorEnd);
   // Clear clipboard externally to test cut operation
   clipboard = "";
   // Select Goodbye, this time using the Home control code
@@ -337,8 +337,8 @@ UTEST(textbox, textboxClipboard) {
   facade::postFrame();
   ASSERT_TRUE(text == " World!");
   ASSERT_TRUE(clipboard == "Goodbye");
-  ASSERT_EQ(0, cursorStart);
-  ASSERT_EQ(0, cursorEnd);
+  ASSERT_EQ(0u, cursorStart);
+  ASSERT_EQ(0u, cursorEnd);
   // Paste it back in...
   facade::setControlCode(facade::control_code::paste, false);
   facade::preFrame();
@@ -393,56 +393,56 @@ UTEST(textbox, textboxCursorMovement) {
     facade::textbox("test", text, cursorStart, cursorEnd);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(0, cursorStart);
-  ASSERT_EQ(0, cursorEnd);
+  ASSERT_EQ(0u, cursorStart);
+  ASSERT_EQ(0u, cursorEnd);
   facade::setControlCode(facade::control_code::down, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     facade::textbox("test", text, cursorStart, cursorEnd);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(5, cursorStart);
-  ASSERT_EQ(5, cursorEnd);
+  ASSERT_EQ(5u, cursorStart);
+  ASSERT_EQ(5u, cursorEnd);
   facade::setControlCode(facade::control_code::up, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     facade::textbox("test", text, cursorStart, cursorEnd);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(0, cursorStart);
-  ASSERT_EQ(0, cursorEnd);
+  ASSERT_EQ(0u, cursorStart);
+  ASSERT_EQ(0u, cursorEnd);
   facade::setControlCode(facade::control_code::pagedown, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     facade::textbox("test", text, cursorStart, cursorEnd);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(5, cursorStart);
-  ASSERT_EQ(5, cursorEnd);
+  ASSERT_EQ(5u, cursorStart);
+  ASSERT_EQ(5u, cursorEnd);
   facade::setControlCode(facade::control_code::pageup, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     facade::textbox("test", text, cursorStart, cursorEnd);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(0, cursorStart);
-  ASSERT_EQ(0, cursorEnd);
+  ASSERT_EQ(0u, cursorStart);
+  ASSERT_EQ(0u, cursorEnd);
   facade::setControlCode(facade::control_code::end, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     facade::textbox("test", text, cursorStart, cursorEnd);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(5, cursorStart);
-  ASSERT_EQ(5, cursorEnd);
+  ASSERT_EQ(5u, cursorStart);
+  ASSERT_EQ(5u, cursorEnd);
   facade::setControlCode(facade::control_code::home, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     facade::textbox("test", text, cursorStart, cursorEnd);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(0, cursorStart);
-  ASSERT_EQ(0, cursorEnd);
+  ASSERT_EQ(0u, cursorStart);
+  ASSERT_EQ(0u, cursorEnd);
   facade::setControlCode(facade::control_code::end, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
@@ -455,8 +455,8 @@ UTEST(textbox, textboxCursorMovement) {
     facade::textbox("test", text, cursorStart, cursorEnd);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(5, cursorStart);
-  ASSERT_EQ(5, cursorEnd);
+  ASSERT_EQ(5u, cursorStart);
+  ASSERT_EQ(5u, cursorEnd);
 }
 
 UTEST(textbox, textboxTab) {
