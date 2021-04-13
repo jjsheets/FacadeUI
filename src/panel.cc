@@ -26,25 +26,41 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_TEST_CC_INCLUDED
-#define FACADE_FACADE_TEST_CC_INCLUDED
+#ifndef FACADE_PANEL_CC_INCLUDED
+#define FACADE_PANEL_CC_INCLUDED
 
-#include "utest.h"
 #include "facade.h"
-#include <iostream>
-#include <random>
-#include <bitset>
 
-#include "test_layout.h"
+namespace {
+  facade::panel_renderer state_default_panel_renderer;
+}
 
-#include "test_state.h"
-#include "test_button.h"
-#include "test_label.h"
-#include "test_slider.h"
-#include "test_checkbox.h"
-#include "test_textbox.h"
-#include "test_panel.h"
+void facade::initPanel() {
+  state_default_panel_renderer = nullptr;
+}
 
-UTEST_MAIN();
+void facade::panel(int w, int h, facade::panel_renderer renderer) {
+  int x = 0;
+  int y = 0;
+  facade::updateLayout(x, y, w, h, w == 0);
+  // render the panel
+  facade::panel_renderer _renderer = renderer ? renderer : state_default_panel_renderer;
+  if (!_renderer) {
+    throw "No panel renderer provided.";
+  }
+  _renderer(x, y, w, h);
+}
 
-#endif // FACADE_FACADE_TEST_CC_INCLUDED
+void facade::panel(int w, facade::panel_renderer renderer) {
+  facade::panel(w, 0, renderer);
+}
+
+void facade::panel(facade::panel_renderer renderer) {
+  facade::panel(0, 0, renderer);
+}
+
+void facade::setDefaultPanelRenderer(facade::panel_renderer renderer) {
+  state_default_panel_renderer = renderer;
+}
+
+#endif // FACADE_PANEL_CC_INCLUDED

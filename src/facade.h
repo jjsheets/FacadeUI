@@ -119,6 +119,7 @@ namespace facade {
 #include "checkbox.h"
 #include "textbox.h" // single line text entry
 //#include "editbox.h" // multi-line text entry
+#include "panel.h"
 //#include "colorwheel.h"
 
 // Include complex widgets

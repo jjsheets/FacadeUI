@@ -26,25 +26,20 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_TEST_CC_INCLUDED
-#define FACADE_FACADE_TEST_CC_INCLUDED
+#ifndef FACADE_PANEL_H_INCLUDED
+#define FACADE_PANEL_H_INCLUDED
 
-#include "utest.h"
-#include "facade.h"
-#include <iostream>
-#include <random>
-#include <bitset>
+namespace facade {
 
-#include "test_layout.h"
+  // Panels are just simple rectangular areas for a renderer to do stuff in.
+  typedef std::function<void (int, int, int, int)> panel_renderer;
 
-#include "test_state.h"
-#include "test_button.h"
-#include "test_label.h"
-#include "test_slider.h"
-#include "test_checkbox.h"
-#include "test_textbox.h"
-#include "test_panel.h"
+  void initPanel();
+  void panel(int w, int h, panel_renderer renderer = nullptr);
+  void panel(int w, panel_renderer renderer = nullptr);
+  void panel(panel_renderer renderer = nullptr);
+  void setDefaultPanelRenderer(panel_renderer renderer);
 
-UTEST_MAIN();
+}
 
-#endif // FACADE_FACADE_TEST_CC_INCLUDED
+#endif // FACADE_PANEL_H_INCLUDED

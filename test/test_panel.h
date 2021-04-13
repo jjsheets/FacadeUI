@@ -26,25 +26,49 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_TEST_CC_INCLUDED
-#define FACADE_FACADE_TEST_CC_INCLUDED
+#ifndef FACADE_TEST_PANEL_H_INCLUDED
+#define FACADE_TEST_PANEL_H_INCLUDED
 
-#include "utest.h"
-#include "facade.h"
-#include <iostream>
-#include <random>
-#include <bitset>
+UTEST(panel, defaultRenderer) {
+  facade::init(2560);
+  bool rendered = false;
+  // Initialization complete
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::setDefaultPanelRenderer(
+      [&](int x, int y, int w, int h) {
+        rendered = true;
+      }
+    );
+    facade::panel();
+    ASSERT_TRUE(rendered);
+}
 
-#include "test_layout.h"
+UTEST(panel, panelRenderer) {
+  facade::init(2560);
+  bool rendered = false;
+  // Initialization complete
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::panel([&](int x, int y, int w, int h) {
+        rendered = true;
+      }
+    );
+    ASSERT_TRUE(rendered);
+}
 
-#include "test_state.h"
-#include "test_button.h"
-#include "test_label.h"
-#include "test_slider.h"
-#include "test_checkbox.h"
-#include "test_textbox.h"
-#include "test_panel.h"
+UTEST(panel, panelRendererParameters) {
+  facade::init(2560);
+  // Initialization complete
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::panel([&](int x, int y, int w, int h) {
+        ASSERT_EQ(x, 10);
+        ASSERT_EQ(y, 15);
+        ASSERT_EQ(w, 80);
+        ASSERT_EQ(h, 20);
+      }
+    );
+}
 
-UTEST_MAIN();
-
-#endif // FACADE_FACADE_TEST_CC_INCLUDED
+#endif // FACADE_TEST_PANEL_H_INCLUDED
