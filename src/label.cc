@@ -43,7 +43,7 @@ void facade::label(std::string label, int w, int h, facade::label_renderer rende
   int x = 0;
   int y = 0;
   facade::updateLayout(x, y, w, h, w == 0);
-  // render the button
+  // render the label
   facade::label_renderer _renderer = renderer ? renderer : state_default_label_renderer;
   if (!_renderer) {
     throw "No label renderer provided.";
@@ -51,11 +51,11 @@ void facade::label(std::string label, int w, int h, facade::label_renderer rende
   _renderer(label, x, y, w, h);
 }
 
-void facade::label(std::string label, int w, label_renderer renderer) {
+void facade::label(std::string label, int w, facade::label_renderer renderer) {
   facade::label(label, w, 0, renderer);
 }
 
-void facade::label(std::string label, label_renderer renderer) {
+void facade::label(std::string label, facade::label_renderer renderer) {
   facade::label(label, 0, 0, renderer);
 }
 
