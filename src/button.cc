@@ -44,12 +44,7 @@ bool facade::button(std::string id, std::string label, int w, int h, bool disabl
   int y = 0;
   facade::updateLayout(x, y, w, h, w == 0);
   // check/update hover and active.
-  if (!disabled && facade::mouseInRegion(x, y, w, h)) {
-    facade::setHoverItem(id);
-    if (facade::noActiveItem() && facade::getLeftMouseButton()) {
-      facade::setActiveItem(id);
-    }
-  }
+  facade::updateControlState(id, x, y, w, h, disabled);
   // render the button
   auto _renderer = renderer ? renderer : state_default_button_renderer;
   if (!_renderer) {

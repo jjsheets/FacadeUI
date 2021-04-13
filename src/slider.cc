@@ -53,12 +53,7 @@ double facade::slider(std::string id, facade::slider_type type, int w, int l, do
   // check/update hover and active.
   const int regionW = type == facade::slider_type::horizontal ? l : w;
   const int regionH = type == facade::slider_type::horizontal ? w : l;
-  if (facade::mouseInRegion(x, y, regionW, regionH)) {
-    facade::setHoverItem(id);
-    if (facade::noActiveItem() && facade::getLeftMouseButton()) {
-      facade::setActiveItem(id);
-    }
-  }
+  facade::updateControlState(id, x, y, regionW, regionH, disabled);
   // update as needed
   if (!disabled && facade::isActiveItem(id)) {
     int mouseOffset = (type == facade::slider_type::horizontal ? facade::getMouseX() - x : facade::getMouseY() - y) - w / 2;

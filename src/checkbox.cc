@@ -44,12 +44,7 @@ bool facade::checkbox(std::string id, std::string label, int w, int h, bool val,
   int y = 0;
   facade::updateLayout(x, y, w, h, w == 0);
   // check/update hover and active.
-  if (!disabled && facade::mouseInRegion(x, y, w, h)) {
-    facade::setHoverItem(id);
-    if (facade::noActiveItem() && facade::getLeftMouseButton()) {
-      facade::setActiveItem(id);
-    }
-  }
+  facade::updateControlState(id, x, y, w, h, disabled);
   // return true if the button is clicked
   if (!disabled && !facade::getLeftMouseButton() && facade::isHoverItem(id) && facade::isActiveItem(id)) {
     val = !val;
