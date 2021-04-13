@@ -134,16 +134,8 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
   int x = 0;
   int y = 0;
   facade::updateLayout(x, y, w, h, w == 0);
-  // check/update hover and active.
-  if (!disabled && facade::mouseInRegion(x, y, w, h)) {
-    facade::setHoverItem(id);
-    if (facade::noActiveItem() && facade::getLeftMouseButton()) {
-      facade::setActiveItem(id);
-    }
-  }
-  if (facade::noFocusItem() && !disabled) {
-    facade::setFocusItem(id);
-  }
+  // check/update hover, active, and focus.
+  facade::updateControlState(id, x, y, w, h, disabled, true);
   if (facade::isFocusItem(id) && !disabled) {
     // Deal with cursor movement and other control codes
     switch (facade::getControlCode()) {

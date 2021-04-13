@@ -107,6 +107,7 @@ namespace facade {
   void endLayout();
   void indent(int w);
   void updateLayout(int& x, int& y, int& w, int& h, bool resizeW = true);
+  void updateControlState(const std::string &id, int x, int y, int w, int h, bool disabled, bool focusAwareControl);
 
 }
 

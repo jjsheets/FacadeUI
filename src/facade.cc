@@ -322,4 +322,16 @@ void facade::updateLayout(int& x, int& y, int& w, int& h, bool resizeW) {
   }
 }
 
+void facade::updateControlState(const std::string &id, int x, int y, int w, int h, bool disabled, bool focusAwareControl) {
+  if (!disabled && facade::mouseInRegion(x, y, w, h)) {
+    facade::setHoverItem(id);
+    if (facade::noActiveItem() && facade::getLeftMouseButton()) {
+      facade::setActiveItem(id);
+    }
+  }
+  if (focusAwareControl && facade::noFocusItem() && !disabled) {
+    facade::setFocusItem(id);
+  }
+}
+
 #endif // FACADE_FACADE_CC_INCLUDED
