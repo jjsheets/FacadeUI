@@ -141,7 +141,7 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
       facade::setActiveItem(id);
     }
   }
-  if (facade::noFocusItem()) {
+  if (facade::noFocusItem() && !disabled) {
     facade::setFocusItem(id);
   }
   if (facade::isFocusItem(id) && !disabled) {

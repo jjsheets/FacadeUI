@@ -169,7 +169,6 @@ UTEST(textbox, textboxPressed) {
     );
   facade::endLayout();
   facade::postFrame();
-
   // Make sure the button stays pressed even after moving the mouse out of the button boundary
   facade::setMouseXY(5, 5);
   facade::preFrame();
@@ -183,17 +182,23 @@ UTEST(textbox, textboxPressed) {
 
 UTEST(textbox, textboxDisabled) {
   facade::init(2560);
+  std::string text = "Textbox Content";
+  unsigned int cursorStart = 0;
+  unsigned int cursorEnd = 0;
+  facade::setDefaultTextboxRenderer(
+    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+      ASSERT_TRUE(displayState == facade::display_state::disabled);
+    });
   // Initialization complete
+  // This should not change the text at all.
+  facade::setKeyChar('0');
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    std::string text = "Textbox Content";
-    unsigned int cursorStart = 0;
-    unsigned int cursorEnd = 0;
-    facade::textbox("test", text, cursorStart, cursorEnd, true,
-      [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
-        ASSERT_TRUE(displayState == facade::display_state::disabled);
-      }
-    );
+    facade::textbox("test", text, cursorStart, cursorEnd, true);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_TRUE("Textbox Content" == text);
+  ASSERT_TRUE(facade::noFocusItem());
 }
 
 UTEST(textbox, textboxKeyboardInput) {
@@ -452,6 +457,144 @@ UTEST(textbox, textboxCursorMovement) {
   facade::postFrame();
   ASSERT_EQ(5, cursorStart);
   ASSERT_EQ(5, cursorEnd);
+}
+
+UTEST(textbox, textboxTab) {
+  facade::init(2560);
+  std::string text = "";
+  unsigned int cursorStart = 0;
+  unsigned int cursorEnd = 0;
+  facade::setDefaultTextboxRenderer(
+    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {});
+  // Initialization complete
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test1", text, cursorStart, cursorEnd);
+    facade::textbox("test2", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_TRUE(facade::isFocusItem("test1"));
+  facade::setControlCode(facade::control_code::tab, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test1", text, cursorStart, cursorEnd);
+    facade::textbox("test2", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_TRUE(facade::isFocusItem("test2"));
+  facade::setControlCode(facade::control_code::tab, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test1", text, cursorStart, cursorEnd);
+    facade::textbox("test2", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  // there should be no focus item now, which means the first focus aware control in the next frame will grab focus.
+  ASSERT_TRUE(facade::noFocusItem());
+  facade::setControlCode(facade::control_code::tab, true);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test1", text, cursorStart, cursorEnd);
+    facade::textbox("test2", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  // here the shift-tab should have picked up the previous frame's last focus aware control and focus on it.
+  ASSERT_TRUE(facade::isFocusItem("test2"));
+  facade::setControlCode(facade::control_code::tab, true);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test1", text, cursorStart, cursorEnd);
+    facade::textbox("test2", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_TRUE(facade::isFocusItem("test1"));
+}
+
+UTEST(textbox, textboxDeletion) {
+  facade::init(2560);
+  std::string text = "JUNKJust This.JUNK";
+  unsigned int cursorStart = 0;
+  unsigned int cursorEnd = 0;
+  facade::setDefaultTextboxRenderer(
+    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {});
+  // Initialization complete
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  facade::setControlCode(facade::control_code::del, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_TRUE("UNKJust This.JUNK" == text);
+  // shift select the first three characters...
+  for (int i = 0; i < 3; i++) {
+    facade::setControlCode(facade::control_code::right, true);
+    facade::preFrame();
+    facade::beginLayout(10, 15, 80);
+      facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::endLayout();
+    facade::postFrame();
+  }
+  // then delete.
+  facade::setControlCode(facade::control_code::del, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_TRUE("Just This.JUNK" == text);
+  // a backspace at the beginning should do nothing.
+  facade::setControlCode(facade::control_code::backspace, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_TRUE("Just This.JUNK" == text);
+  // Head to the end
+  facade::setControlCode(facade::control_code::end, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  // a delete at the end should also do nothing.
+  facade::setControlCode(facade::control_code::del, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_TRUE("Just This.JUNK" == text);
+  // a backspace should work though
+  facade::setControlCode(facade::control_code::backspace, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_TRUE("Just This.JUN" == text);
+  // shift select the last three characters...
+  for (int i = 0; i < 3; i++) {
+    facade::setControlCode(facade::control_code::left, true);
+    facade::preFrame();
+    facade::beginLayout(10, 15, 80);
+      facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::endLayout();
+    facade::postFrame();
+  }
+  // then backspace.
+  facade::setControlCode(facade::control_code::backspace, false);
+  facade::preFrame();
+  facade::beginLayout(10, 15, 80);
+    facade::textbox("test", text, cursorStart, cursorEnd);
+  facade::endLayout();
+  facade::postFrame();
+  ASSERT_TRUE("Just This." == text);
 }
 
 #endif // FACADE_TEST_TEXTBOX_H_INCLUDED
