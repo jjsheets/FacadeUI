@@ -77,15 +77,16 @@ double facade::slider(std::string id, facade::orientation type, int w, int l, do
   return val;
 }
 
-double facade::slider(std::string id, orientation type, int l, double min, double max, double val, bool disabled, facade::slider_renderer renderer) {
+double facade::slider(std::string id, facade::orientation type, int l, double min, double max, double val, bool disabled,
+    facade::slider_renderer renderer) {
   return facade::slider(id, type, 0, l, min, max, val, disabled, renderer);
 }
 
-double facade::slider(std::string id, orientation type, double min, double max, double val, bool disabled, facade::slider_renderer renderer) {
+double facade::slider(std::string id, facade::orientation type, double min, double max, double val, bool disabled, facade::slider_renderer renderer) {
   return facade::slider(id, type, 0, 0, min, max, val, disabled, renderer);
 }
 
-double facade::slider(std::string id, orientation type, double min, double max, double val, slider_renderer renderer) {
+double facade::slider(std::string id, facade::orientation type, double min, double max, double val, facade::slider_renderer renderer) {
   return facade::slider(id, type, 0, 0, min, max, val, false, renderer);
 }
 
