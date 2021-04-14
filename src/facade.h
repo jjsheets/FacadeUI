@@ -120,6 +120,7 @@ namespace facade {
 #include "button.h"
 #include "label.h"
 #include "slider.h"
+#include "progress.h"
 #include "checkbox.h"
 #include "textbox.h" // single line text entry
 //#include "editbox.h" // multi-line text entry

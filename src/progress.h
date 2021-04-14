@@ -26,26 +26,20 @@
 //
 // For more information, please refer to <http://unlicense.org/>
 
-#ifndef FACADE_FACADE_TEST_CC_INCLUDED
-#define FACADE_FACADE_TEST_CC_INCLUDED
+#ifndef FACADE_PROGRESS_H_INCLUDED
+#define FACADE_PROGRESS_H_INCLUDED
 
-#include "utest.h"
-#include "facade.h"
-#include <iostream>
-#include <random>
-#include <bitset>
 
-#include "test_layout.h"
+namespace facade {
 
-#include "test_state.h"
-#include "test_button.h"
-#include "test_label.h"
-#include "test_slider.h"
-#include "test_checkbox.h"
-#include "test_textbox.h"
-#include "test_panel.h"
-#include "test_progress.h"
+  typedef std::function<void (std::string, orientation, int, int, int, int, double)> progress_renderer;
 
-UTEST_MAIN();
+  void initProgress();
+  double progress(std::string label, orientation type, int w, int l, double min, double max, double val, progress_renderer renderer = nullptr);
+  double progress(std::string label, orientation type, int l, double min, double max, double val, progress_renderer renderer = nullptr);
+  double progress(std::string label, orientation type, double min, double max, double val, progress_renderer renderer = nullptr);
+  void setDefaultProgressRenderer(progress_renderer renderer);
 
-#endif // FACADE_FACADE_TEST_CC_INCLUDED
+}
+
+#endif // FACADE_PROGRESS_H_INCLUDED

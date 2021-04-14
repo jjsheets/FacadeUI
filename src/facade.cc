@@ -76,7 +76,9 @@ void facade::init(int screenWidth) {
   facade::beginLayout(0, 0, screenWidth);
   facade::initButton();
   facade::initLabel();
+  facade::initPanel();
   facade::initSlider();
+  facade::initProgress();
   facade::initCheckbox();
   facade::initTextbox();
 }
