@@ -414,7 +414,7 @@ namespace {
   void _layout::adjustX(
     int _w)
   {
-    curLayout->x += _w + curLayout->xSpacing;
+    x += _w + xSpacing;
   }
 }
 
