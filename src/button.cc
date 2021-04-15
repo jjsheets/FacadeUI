@@ -53,9 +53,6 @@ bool facade::button(
   facade::updateLayout(x, y, w, h, w == 0);
   facade::updateControlState(id, x, y, w, h, disabled);
   auto _renderer = renderer ? renderer : state_default_button_renderer;
-  if (!_renderer) {
-    throw "No button renderer provided.";
-  }
   _renderer(label, x, y, w, h, facade::displayState(id, disabled));
   return (
     !disabled &&

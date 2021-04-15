@@ -51,9 +51,6 @@ double facade::progress(std::string label, facade::orientation type, int w, int 
     facade::updateLayout(x, y, w, l, w == 0);
   }
   auto _renderer = renderer ? renderer : state_default_progress_renderer;
-  if (!_renderer) {
-    throw "No progress renderer provided.";
-  }
   _renderer(label, type, x, y, w, l, val);
   return val;
 }

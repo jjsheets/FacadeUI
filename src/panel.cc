@@ -43,11 +43,7 @@ void facade::panel(int w, int h, facade::panel_renderer renderer) {
   int x = 0;
   int y = 0;
   facade::updateLayout(x, y, w, h, w == 0);
-  // render the panel
   facade::panel_renderer _renderer = renderer ? renderer : state_default_panel_renderer;
-  if (!_renderer) {
-    throw "No panel renderer provided.";
-  }
   _renderer(x, y, w, h);
 }
 

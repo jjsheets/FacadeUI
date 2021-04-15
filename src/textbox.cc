@@ -198,9 +198,6 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
   }
   // render the textbox
   auto _renderer = renderer ? renderer : state_default_textbox_renderer;
-  if (!_renderer) {
-    throw "No textbox renderer provided.";
-  }
   if (disabled) {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::disabled);
   } else if ((facade::getLeftMouseButton() && facade::isActiveItem(id)) || facade::isFocusItem(id)) {

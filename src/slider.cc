@@ -62,9 +62,6 @@ double facade::slider(std::string id, facade::orientation type, int w, int l, do
   }
   // render the button
   auto _renderer = renderer ? renderer : state_default_slider_renderer;
-  if (!_renderer) {
-    throw "No slider renderer provided.";
-  }
   if (disabled) {
     _renderer(type, x, y, w, l, val, facade::display_state::disabled);
   } else if (facade::getLeftMouseButton() && facade::isActiveItem(id)) {

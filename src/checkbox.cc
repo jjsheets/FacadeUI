@@ -51,9 +51,6 @@ bool facade::checkbox(std::string id, std::string label, int w, int h, bool val,
   }
   // render the button
   auto _renderer = renderer ? renderer : state_default_checkbox_renderer;
-  if (!_renderer) {
-    throw "No checkbox renderer provided.";
-  }
   if (disabled) {
     _renderer(label, x, y, w, h, val, facade::display_state::disabled);
   } else if (facade::getLeftMouseButton() && facade::isActiveItem(id)) {

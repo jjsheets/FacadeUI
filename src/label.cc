@@ -43,11 +43,7 @@ void facade::label(std::string label, int w, int h, facade::label_renderer rende
   int x = 0;
   int y = 0;
   facade::updateLayout(x, y, w, h, w == 0);
-  // render the label
   facade::label_renderer _renderer = renderer ? renderer : state_default_label_renderer;
-  if (!_renderer) {
-    throw "No label renderer provided.";
-  }
   _renderer(label, x, y, w, h);
 }
 
