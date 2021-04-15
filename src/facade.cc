@@ -122,7 +122,7 @@ void facade::setRightMouseButton(
   state_mouse_right_down = down;
 }
 
-bool facade::getLeftMouseButton()
+bool facade::leftMouseDown()
 {
   return state_mouse_left_down;
 }
@@ -314,7 +314,7 @@ facade::display_state facade::displayState(
 {
   if (disabled) {
     return facade::display_state::disabled;
-  } else if (facade::getLeftMouseButton() && facade::isActiveItem(id)) {
+  } else if (facade::leftMouseDown() && facade::isActiveItem(id)) {
     return facade::display_state::pressed;
   } else if (facade::isHoverItem(id)) {
     return facade::display_state::hovered;
@@ -446,7 +446,7 @@ void facade::indent(
   curLayout->indent(w);
 }
 
-void facade::updateLayout(
+void facade::controlBounds(
   int &x,
   int &y,
   int &w,
@@ -482,7 +482,7 @@ void facade::updateControlState(
 {
   if (!disabled && facade::mouseInRegion(x, y, w, h)) {
     facade::setHoverItem(id);
-    if (facade::noActiveItem() && facade::getLeftMouseButton()) {
+    if (facade::noActiveItem() && facade::leftMouseDown()) {
       facade::setActiveItem(id);
     }
   }

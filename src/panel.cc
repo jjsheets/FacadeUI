@@ -42,7 +42,7 @@ void facade::initPanel() {
 void facade::panel(int w, int h, facade::panel_renderer renderer) {
   int x = 0;
   int y = 0;
-  facade::updateLayout(x, y, w, h, w == 0);
+  facade::controlBounds(x, y, w, h, w == 0);
   facade::panel_renderer _renderer = renderer ? renderer : state_default_panel_renderer;
   _renderer(x, y, w, h);
 }

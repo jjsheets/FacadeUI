@@ -133,7 +133,7 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
     facade::textbox_renderer renderer) {
   int x = 0;
   int y = 0;
-  facade::updateLayout(x, y, w, h, w == 0);
+  facade::controlBounds(x, y, w, h, w == 0);
   // check/update hover, active, and focus.
   facade::updateControlState(id, x, y, w, h, disabled, true);
   if (facade::isFocusItem(id) && !disabled) {
@@ -193,14 +193,14 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
     }
   }
   // grab focus if this is clicked
-  if (!disabled && !facade::getLeftMouseButton() && facade::isHoverItem(id) && facade::isActiveItem(id)) {
+  if (!disabled && !facade::leftMouseDown() && facade::isHoverItem(id) && facade::isActiveItem(id)) {
     facade::setFocusItem(id);
   }
   // render the textbox
   auto _renderer = renderer ? renderer : state_default_textbox_renderer;
   if (disabled) {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::disabled);
-  } else if ((facade::getLeftMouseButton() && facade::isActiveItem(id)) || facade::isFocusItem(id)) {
+  } else if ((facade::leftMouseDown() && facade::isActiveItem(id)) || facade::isFocusItem(id)) {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::pressed);
   } else if (facade::isHoverItem(id)) {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::hovered);

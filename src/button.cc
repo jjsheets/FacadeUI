@@ -40,6 +40,12 @@ void facade::initButton()
   state_default_button_renderer = nullptr;
 }
 
+void facade::setDefaultButtonRenderer(
+  facade::button_renderer renderer)
+{
+  state_default_button_renderer = renderer;
+}
+
 bool facade::button(
   const std::string &id,
   const std::string &label,
@@ -50,16 +56,18 @@ bool facade::button(
 {
   int x = 0;
   int y = 0;
-  facade::updateLayout(x, y, w, h, w == 0);
+  facade::controlBounds(x, y, w, h, w == 0);
   facade::updateControlState(id, x, y, w, h, disabled);
-  auto _renderer = renderer ? renderer : state_default_button_renderer;
-  _renderer(label, x, y, w, h, facade::displayState(id, disabled));
+  auto _render = renderer ? renderer : state_default_button_renderer;
+  _render(label, x, y, w, h, facade::displayState(id, disabled));
   return (
     !disabled &&
-    !facade::getLeftMouseButton() &&
+    !facade::leftMouseDown() &&
     facade::isHoverItem(id) &&
     facade::isActiveItem(id));
 }
+
+// Overloads
 
 bool facade::button(
   const std::string &id,
@@ -94,12 +102,6 @@ bool facade::button(
   int w)
 {
   return facade::button(id, label, w, 0, false, nullptr);
-}
-
-void facade::setDefaultButtonRenderer(
-  facade::button_renderer renderer)
-{
-  state_default_button_renderer = renderer;
 }
 
 #endif // FACADE_Button_CC_INCLUDED

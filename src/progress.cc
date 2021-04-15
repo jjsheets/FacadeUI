@@ -45,10 +45,10 @@ double facade::progress(std::string label, facade::orientation type, int w, int 
   int y = 0;
   w = w > 0 ? w : 20;
   if (type == facade::orientation::horizontal) {
-    facade::updateLayout(x, y, l, w, l == 0);
+    facade::controlBounds(x, y, l, w, l == 0);
   } else {
     l = l > 0 ? l : 160;
-    facade::updateLayout(x, y, w, l, w == 0);
+    facade::controlBounds(x, y, w, l, w == 0);
   }
   auto _renderer = renderer ? renderer : state_default_progress_renderer;
   _renderer(label, type, x, y, w, l, val);

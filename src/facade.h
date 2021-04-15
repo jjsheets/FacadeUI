@@ -81,7 +81,7 @@ namespace facade {
     bool _down);
   void setRightMouseButton(
     bool _down);
-  bool getLeftMouseButton();
+  bool leftMouseDown();
   bool getMiddleMouseButton();
   bool getRightMouseButton();
   bool mouseInRegion(
@@ -141,7 +141,7 @@ namespace facade {
   void endLayout();
   void indent(
     int w);
-  void updateLayout(
+  void controlBounds(
     int& x,
     int& y,
     int& w,

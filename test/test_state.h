@@ -33,7 +33,7 @@ UTEST(state, init) {
   facade::init(2560);
   ASSERT_EQ(facade::getMouseX(), 0);
   ASSERT_EQ(facade::getMouseY(), 0);
-  ASSERT_FALSE(facade::getLeftMouseButton());
+  ASSERT_FALSE(facade::leftMouseDown());
   ASSERT_FALSE(facade::getMiddleMouseButton());
   ASSERT_FALSE(facade::getRightMouseButton());
   ASSERT_TRUE(facade::isHoverItem(""));
@@ -50,9 +50,9 @@ UTEST(state, setMouseXY) {
 UTEST(state, setLeftMouseButton) {
   facade::init(2560);
   facade::setLeftMouseButton(true);
-  ASSERT_TRUE(facade::getLeftMouseButton());
+  ASSERT_TRUE(facade::leftMouseDown());
   facade::setLeftMouseButton(false);
-  ASSERT_FALSE(facade::getLeftMouseButton());
+  ASSERT_FALSE(facade::leftMouseDown());
 }
 
 UTEST(state, setMiddleMouseButton) {

@@ -42,7 +42,7 @@ void facade::initLabel() {
 void facade::label(std::string label, int w, int h, facade::label_renderer renderer) {
   int x = 0;
   int y = 0;
-  facade::updateLayout(x, y, w, h, w == 0);
+  facade::controlBounds(x, y, w, h, w == 0);
   facade::label_renderer _renderer = renderer ? renderer : state_default_label_renderer;
   _renderer(label, x, y, w, h);
 }

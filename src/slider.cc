@@ -45,10 +45,10 @@ double facade::slider(std::string id, facade::orientation type, int w, int l, do
   int y = 0;
   w = w > 0 ? w : 20;
   if (type == facade::orientation::horizontal) {
-    facade::updateLayout(x, y, l, w, l == 0);
+    facade::controlBounds(x, y, l, w, l == 0);
   } else {
     l = l > 0 ? l : 160;
-    facade::updateLayout(x, y, w, l, w == 0);
+    facade::controlBounds(x, y, w, l, w == 0);
   }
   // check/update hover and active.
   const int regionW = type == facade::orientation::horizontal ? l : w;
@@ -64,7 +64,7 @@ double facade::slider(std::string id, facade::orientation type, int w, int l, do
   auto _renderer = renderer ? renderer : state_default_slider_renderer;
   if (disabled) {
     _renderer(type, x, y, w, l, val, facade::display_state::disabled);
-  } else if (facade::getLeftMouseButton() && facade::isActiveItem(id)) {
+  } else if (facade::leftMouseDown() && facade::isActiveItem(id)) {
     _renderer(type, x, y, w, l, val, facade::display_state::pressed);
   } else if (facade::isHoverItem(id)) {
     _renderer(type, x, y, w, l, val, facade::display_state::hovered);

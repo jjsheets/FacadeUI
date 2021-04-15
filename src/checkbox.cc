@@ -42,18 +42,18 @@ void facade::initCheckbox() {
 bool facade::checkbox(std::string id, std::string label, int w, int h, bool val, bool disabled, facade::checkbox_renderer renderer) {
   int x = 0;
   int y = 0;
-  facade::updateLayout(x, y, w, h, w == 0);
+  facade::controlBounds(x, y, w, h, w == 0);
   // check/update hover and active.
   facade::updateControlState(id, x, y, w, h, disabled);
   // return true if the button is clicked
-  if (!disabled && !facade::getLeftMouseButton() && facade::isHoverItem(id) && facade::isActiveItem(id)) {
+  if (!disabled && !facade::leftMouseDown() && facade::isHoverItem(id) && facade::isActiveItem(id)) {
     val = !val;
   }
   // render the button
   auto _renderer = renderer ? renderer : state_default_checkbox_renderer;
   if (disabled) {
     _renderer(label, x, y, w, h, val, facade::display_state::disabled);
-  } else if (facade::getLeftMouseButton() && facade::isActiveItem(id)) {
+  } else if (facade::leftMouseDown() && facade::isActiveItem(id)) {
     _renderer(label, x, y, w, h, val, facade::display_state::pressed);
   } else if (facade::isHoverItem(id)) {
     _renderer(label, x, y, w, h, val, facade::display_state::hovered);
