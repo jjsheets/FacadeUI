@@ -34,20 +34,18 @@
 
 namespace facade {
 
-  // Widgets can have four display states: enabled, hovered, pressed, and disabled.
-  // States for input focusing and draggable buttons are currently not planned.
   enum class display_state {
     enabled,
     hovered,
     pressed,
     disabled
   };
+
   enum class orientation {
     horizontal,
     vertical
   };
 
-  // control codes for text entry
   enum class control_code {
     tab,
     home,
@@ -70,48 +68,93 @@ namespace facade {
   typedef std::function<std::string ()> get_clipboard_callback;
   typedef std::function<void (std::string)> set_clipboard_callback;
 
-  void init(int screenWidth);
-  void setMouseXY(int _x, int _y);
+  void init(
+    int screenWidth);
+  void setMouseXY(
+    int _x,
+    int _y);
   int getMouseX();
   int getMouseY();
-  void setLeftMouseButton(bool _down);
-  void setMiddleMouseButton(bool _down);
-  void setRightMouseButton(bool _down);
+  void setLeftMouseButton(
+    bool _down);
+  void setMiddleMouseButton(
+    bool _down);
+  void setRightMouseButton(
+    bool _down);
   bool getLeftMouseButton();
   bool getMiddleMouseButton();
   bool getRightMouseButton();
-  bool mouseInRegion(int x, int y, int w, int h);
-  bool isHoverItem(std::string id);
-  void setHoverItem(std::string id);
+  bool mouseInRegion(
+    int x,
+    int y,
+    int w,
+    int h);
+  bool isHoverItem(
+    const std::string &id);
+  void setHoverItem(
+    const std::string &id);
   void clearHoverItem();
-  bool isActiveItem(std::string id);
+  bool isActiveItem(
+    const std::string &id);
   bool noActiveItem();
-  void setActiveItem(std::string id);
+  void setActiveItem(
+    const std::string &id);
   void clearActiveItem();
-  bool isFocusItem(std::string id);
+  bool isFocusItem(
+    const std::string &id);
   bool noFocusItem();
   void clearFocusItem();
-  void setFocusItem(std::string id);
+  void setFocusItem(
+    const std::string &id);
   void focusPrevItem();
-  void setPreviousItem(std::string id);
+  void setPreviousItem(
+    const std::string &id);
   bool noKeyChar();
   bool hasKeyChar();
   char32_t getKeyChar();
   void clearKeyChar();
-  void setKeyChar(char32_t code);
+  void setKeyChar(
+    char32_t code);
   control_code getControlCode();
-  void setControlCode(control_code code, bool shift);
+  void setControlCode(
+    control_code code,
+    bool shift);
   bool getModShift();
-  void setClipboardCallback(get_clipboard_callback get, set_clipboard_callback set);
+  void setClipboardCallback(
+    get_clipboard_callback get,
+    set_clipboard_callback set);
   std::string getClipboardText();
-  void setClipboardText(std::string);
+  void setClipboardText(
+    std::string);
   void preFrame();
   void postFrame();
-  void beginLayout(int x, int y, int w, int rowHeight = 20, int xSpacing = 4, int ySpacing = 4);
+  display_state displayState(
+    const std::string &id,
+    bool disabled);
+  void beginLayout(
+    int x,
+    int y,
+    int w,
+    int rowHeight = 20,
+    int xSpacing = 4,
+    int ySpacing = 4);
   void endLayout();
-  void indent(int w);
-  void updateLayout(int& x, int& y, int& w, int& h, bool resizeW = true);
-  void updateControlState(const std::string &id, int x, int y, int w, int h, bool disabled, bool focusAwareControl = false);
+  void indent(
+    int w);
+  void updateLayout(
+    int& x,
+    int& y,
+    int& w,
+    int& h,
+    bool resizeW = true);
+  void updateControlState(
+    const std::string &id,
+    int x,
+    int y,
+    int w,
+    int h,
+    bool disabled,
+    bool focusAwareControl = false);
 
 }
 

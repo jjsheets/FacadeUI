@@ -32,16 +32,44 @@
 namespace facade {
 
   // Buttons also support a rendering function, which allows for custom rendering of buttons
-  typedef std::function<void (std::string, int, int, int, int, display_state)> button_renderer;
+  typedef std::function<void (
+    const std::string &, // label text
+    int, // x coordinate
+    int, // y coordinate
+    int, // width
+    int, // height
+    display_state // display state of the button (hover, pressed, enabled, disabled)
+  )> button_renderer;
 
   void initButton();
-  bool button(std::string id, std::string label, int w, int h, bool disabled = false, button_renderer renderer = nullptr);
-  bool button(std::string id, std::string label, int w, bool disabled, button_renderer renderer = nullptr);
-  bool button(std::string id, std::string label, bool disabled, button_renderer renderer = nullptr);
-  bool button(std::string id, std::string label, button_renderer renderer);
-  bool button(std::string id, std::string label, int w);
-  bool button(std::string id, std::string label);
-  void setDefaultButtonRenderer(button_renderer renderer);
+  bool button(
+    const std::string &id,
+    const std::string &label,
+    int w,
+    int h,
+    bool disabled = false,
+    button_renderer renderer = nullptr);
+  bool button(
+    const std::string &id,
+    const std::string &label,
+    int w,
+    bool disabled,
+    button_renderer renderer = nullptr);
+  bool button(
+    const std::string &id,
+    const std::string &label,
+    bool disabled,
+    button_renderer renderer = nullptr);
+  bool button(
+    const std::string &id,
+    const std::string &label,
+    button_renderer renderer = nullptr);
+  bool button(
+    const std::string &id,
+    const std::string &label,
+    int w);
+  void setDefaultButtonRenderer(
+    button_renderer renderer);
 
 }
 

@@ -35,56 +35,73 @@ namespace {
   facade::button_renderer state_default_button_renderer;
 }
 
-void facade::initButton() {
+void facade::initButton()
+{
   state_default_button_renderer = nullptr;
 }
 
-bool facade::button(std::string id, std::string label, int w, int h, bool disabled, facade::button_renderer renderer) {
+bool facade::button(
+  const std::string &id,
+  const std::string &label,
+  int w,
+  int h,
+  bool disabled,
+  facade::button_renderer renderer)
+{
   int x = 0;
   int y = 0;
   facade::updateLayout(x, y, w, h, w == 0);
-  // check/update hover and active.
   facade::updateControlState(id, x, y, w, h, disabled);
-  // render the button
   auto _renderer = renderer ? renderer : state_default_button_renderer;
   if (!_renderer) {
     throw "No button renderer provided.";
   }
-  if (disabled) {
-    _renderer(label, x, y, w, h, facade::display_state::disabled);
-  } else if (facade::getLeftMouseButton() && facade::isActiveItem(id)) {
-    _renderer(label, x, y, w, h, facade::display_state::pressed);
-  } else if (facade::isHoverItem(id)) {
-    _renderer(label, x, y, w, h, facade::display_state::hovered);
-  } else {
-    _renderer(label, x, y, w, h, facade::display_state::enabled);
-  }
-  // return true if the button is clicked
-  return (!disabled && !facade::getLeftMouseButton() && facade::isHoverItem(id) && facade::isActiveItem(id));
+  _renderer(label, x, y, w, h, facade::displayState(id, disabled));
+  return (
+    !disabled &&
+    !facade::getLeftMouseButton() &&
+    facade::isHoverItem(id) &&
+    facade::isActiveItem(id));
 }
 
-bool facade::button(std::string id, std::string label, int w, bool disabled, facade::button_renderer renderer) {
+bool facade::button(
+  const std::string &id,
+  const std::string &label,
+  int w,
+  bool disabled,
+  facade::button_renderer renderer)
+{
   return facade::button(id, label, w, 0, disabled, renderer);
 }
 
-bool facade::button(std::string id, std::string label, bool disabled, facade::button_renderer renderer) {
+bool facade::button(
+  const std::string &id,
+  const std::string &label,
+  bool disabled,
+  facade::button_renderer renderer)
+{
   return facade::button(id, label, 0, 0, disabled, renderer);
 }
 
-bool facade::button(std::string id, std::string label, facade::button_renderer renderer) {
+bool facade::button(
+  const std::string &id,
+  const std::string &label,
+  facade::button_renderer renderer)
+{
   return facade::button(id, label, 0, 0, false, renderer);
 }
 
-bool facade::button(std::string id, std::string label, int w) {
+bool facade::button(
+  const std::string &id,
+  const std::string &label,
+  int w)
+{
   return facade::button(id, label, w, 0, false, nullptr);
 }
 
-bool facade::button(std::string id, std::string label) {
-  return facade::button(id, label, 0, 0, false, nullptr);
-}
-
-
-void facade::setDefaultButtonRenderer(facade::button_renderer renderer) {
+void facade::setDefaultButtonRenderer(
+  facade::button_renderer renderer)
+{
   state_default_button_renderer = renderer;
 }
 
