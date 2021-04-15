@@ -336,7 +336,7 @@ namespace {
     int xSpacing;
     int ySpacing;
     // variables that update during use
-    int indent;
+    int indentation;
     int x;
     int y;
     int h;
@@ -349,10 +349,18 @@ namespace {
       int _xSpacing,
       int _ySpacing);
 
-    void _indent(
+    void indent(
       int w);
 
-    void print();
+    void newRow();
+    int availableWidth();
+    void updateXY(
+      int &_x,
+      int &_y);
+    void updateHeight(
+      int &_h);
+    void adjustX(
+      int _w);
   };
 
   _layout::_layout(
@@ -363,14 +371,51 @@ namespace {
     int _xSpacing,
     int _ySpacing):
   baseX(_x), baseY(_y), baseW(_w), rowHeight(_rowHeight), xSpacing(_xSpacing),
-  ySpacing(_ySpacing), indent(0), x(0), y(0), h(0)
+  ySpacing(_ySpacing), indentation(0), x(0), y(0), h(0)
   {};
 
-  void _layout::_indent(
-    int w)
+  void _layout::indent(
+    int _w)
   {
-    indent = std::clamp(indent + w, 0, baseW / 2);
+    indentation = std::clamp(indentation + _w, 0, baseW / 2);
   };
+
+  void _layout::newRow()
+  {
+    x = 0;
+    y += ySpacing + h;
+    h = 0;
+  }
+
+  int _layout::availableWidth()
+  {
+    return baseW - x - indentation;
+  }
+
+  void _layout::updateXY(
+    int &_x,
+    int &_y)
+  {
+    _x = baseX + x + indentation;
+    _y = baseY + y;
+  }
+
+  void _layout::updateHeight(
+    int &_h)
+  {
+    if (_h == 0) {
+      _h = rowHeight;
+    }
+    if (h < _h) {
+      h = _h;
+    }
+  }
+
+  void _layout::adjustX(
+    int _w)
+  {
+    curLayout->x += _w + curLayout->xSpacing;
+  }
 }
 
 void facade::beginLayout(
@@ -398,27 +443,7 @@ void facade::endLayout() {
 void facade::indent(
   int w)
 {
-  curLayout->_indent(w);
-}
-
-static void _newRow()
-{
-  curLayout->x = 0;
-  curLayout->y += curLayout->ySpacing + curLayout->h;
-  curLayout->h = 0;
-}
-
-static int _availableWidth()
-{
-  return curLayout->baseW - curLayout->x - curLayout->indent;
-}
-
-static void _updateXY(
-  int &x,
-  int &y)
-{
-  x = curLayout->baseX + curLayout->x + curLayout->indent;
-  y = curLayout->baseY + curLayout->y;
+  curLayout->indent(w);
 }
 
 void facade::updateLayout(
@@ -428,26 +453,21 @@ void facade::updateLayout(
   int &h,
   bool resizeW)
 {
-  _updateXY(x, y);
-  if (h == 0) {
-    h = curLayout->rowHeight;
-  }
-  if (curLayout->h < h) {
-    curLayout->h = h;
-  }
+  curLayout->updateXY(x, y);
+  curLayout->updateHeight(h);
   if (resizeW) {
-    w = _availableWidth();
-    _newRow();
+    w = curLayout->availableWidth();
+    curLayout->newRow();
   } else {
-    if (w > _availableWidth()) {
-      _newRow();
-      _updateXY(x, y);
+    if (w > curLayout->availableWidth()) {
+      curLayout->newRow();
+      curLayout->updateXY(x, y);
     }
     // the above can change the return value of availableWidth() so test again
-    if (w > _availableWidth()) {
-      w = _availableWidth();
+    if (w > curLayout->availableWidth()) {
+      w = curLayout->availableWidth();
     }
-    curLayout->x += w + curLayout->xSpacing;
+    curLayout->adjustX(w);
   }
 }
 
