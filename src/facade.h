@@ -82,19 +82,19 @@ namespace facade {
   void setRightMouseButton(
     bool _down);
   bool leftMouseDown();
-  bool getMiddleMouseButton();
-  bool getRightMouseButton();
+  bool middleMouseDown();
+  bool rightMouseDown();
   bool mouseInRegion(
     int x,
     int y,
     int w,
     int h);
-  bool isHoverItem(
+  bool isHovered(
     const std::string &id);
   void setHoverItem(
     const std::string &id);
   void clearHoverItem();
-  bool isActiveItem(
+  bool isActive(
     const std::string &id);
   bool noActiveItem();
   void setActiveItem(

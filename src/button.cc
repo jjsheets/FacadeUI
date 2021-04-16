@@ -63,8 +63,8 @@ bool facade::button(
   return (
     !disabled &&
     !facade::leftMouseDown() &&
-    facade::isHoverItem(id) &&
-    facade::isActiveItem(id));
+    facade::isHovered(id) &&
+    facade::isActive(id));
 }
 
 // Overloads

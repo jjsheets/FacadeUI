@@ -34,10 +34,10 @@ UTEST(state, init) {
   ASSERT_EQ(facade::getMouseX(), 0);
   ASSERT_EQ(facade::getMouseY(), 0);
   ASSERT_FALSE(facade::leftMouseDown());
-  ASSERT_FALSE(facade::getMiddleMouseButton());
-  ASSERT_FALSE(facade::getRightMouseButton());
-  ASSERT_TRUE(facade::isHoverItem(""));
-  ASSERT_TRUE(facade::isActiveItem(""));
+  ASSERT_FALSE(facade::middleMouseDown());
+  ASSERT_FALSE(facade::rightMouseDown());
+  ASSERT_TRUE(facade::isHovered(""));
+  ASSERT_TRUE(facade::isActive(""));
 }
 
 UTEST(state, setMouseXY) {
@@ -58,17 +58,17 @@ UTEST(state, setLeftMouseButton) {
 UTEST(state, setMiddleMouseButton) {
   facade::init(2560);
   facade::setMiddleMouseButton(true);
-  ASSERT_TRUE(facade::getMiddleMouseButton());
+  ASSERT_TRUE(facade::middleMouseDown());
   facade::setMiddleMouseButton(false);
-  ASSERT_FALSE(facade::getMiddleMouseButton());
+  ASSERT_FALSE(facade::middleMouseDown());
 }
 
 UTEST(state, setRightMouseButton) {
   facade::init(2560);
   facade::setRightMouseButton(true);
-  ASSERT_TRUE(facade::getRightMouseButton());
+  ASSERT_TRUE(facade::rightMouseDown());
   facade::setRightMouseButton(false);
-  ASSERT_FALSE(facade::getRightMouseButton());
+  ASSERT_FALSE(facade::rightMouseDown());
 }
 
 UTEST(state, mouseInRegion) {

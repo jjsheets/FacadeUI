@@ -46,16 +46,16 @@ bool facade::checkbox(std::string id, std::string label, int w, int h, bool val,
   // check/update hover and active.
   facade::updateControlState(id, x, y, w, h, disabled);
   // return true if the button is clicked
-  if (!disabled && !facade::leftMouseDown() && facade::isHoverItem(id) && facade::isActiveItem(id)) {
+  if (!disabled && !facade::leftMouseDown() && facade::isHovered(id) && facade::isActive(id)) {
     val = !val;
   }
   // render the button
   auto _renderer = renderer ? renderer : state_default_checkbox_renderer;
   if (disabled) {
     _renderer(label, x, y, w, h, val, facade::display_state::disabled);
-  } else if (facade::leftMouseDown() && facade::isActiveItem(id)) {
+  } else if (facade::leftMouseDown() && facade::isActive(id)) {
     _renderer(label, x, y, w, h, val, facade::display_state::pressed);
-  } else if (facade::isHoverItem(id)) {
+  } else if (facade::isHovered(id)) {
     _renderer(label, x, y, w, h, val, facade::display_state::hovered);
   } else {
     _renderer(label, x, y, w, h, val, facade::display_state::enabled);

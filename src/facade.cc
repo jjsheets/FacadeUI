@@ -127,12 +127,12 @@ bool facade::leftMouseDown()
   return state_mouse_left_down;
 }
 
-bool facade::getMiddleMouseButton()
+bool facade::middleMouseDown()
 {
   return state_mouse_middle_down;
 }
 
-bool facade::getRightMouseButton()
+bool facade::rightMouseDown()
 {
   return state_mouse_right_down;
 }
@@ -149,7 +149,7 @@ bool facade::mouseInRegion(
            state_mouse_y >= y + h);
 }
 
-bool facade::isHoverItem(
+bool facade::isHovered(
   const std::string &id)
 {
   return state_hover_item == id;
@@ -166,7 +166,7 @@ void facade::clearHoverItem()
   state_hover_item = "";
 }
 
-bool facade::isActiveItem(
+bool facade::isActive(
   const std::string &id)
 {
   return state_active_item == id;
@@ -314,9 +314,9 @@ facade::display_state facade::displayState(
 {
   if (disabled) {
     return facade::display_state::disabled;
-  } else if (facade::leftMouseDown() && facade::isActiveItem(id)) {
+  } else if (facade::leftMouseDown() && facade::isActive(id)) {
     return facade::display_state::pressed;
-  } else if (facade::isHoverItem(id)) {
+  } else if (facade::isHovered(id)) {
     return facade::display_state::hovered;
   } else {
     return facade::display_state::enabled;

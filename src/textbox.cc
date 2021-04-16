@@ -193,16 +193,16 @@ void facade::textbox(std::string id, std::string &text, unsigned int &cursorStar
     }
   }
   // grab focus if this is clicked
-  if (!disabled && !facade::leftMouseDown() && facade::isHoverItem(id) && facade::isActiveItem(id)) {
+  if (!disabled && !facade::leftMouseDown() && facade::isHovered(id) && facade::isActive(id)) {
     facade::setFocusItem(id);
   }
   // render the textbox
   auto _renderer = renderer ? renderer : state_default_textbox_renderer;
   if (disabled) {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::disabled);
-  } else if ((facade::leftMouseDown() && facade::isActiveItem(id)) || facade::isFocusItem(id)) {
+  } else if ((facade::leftMouseDown() && facade::isActive(id)) || facade::isFocusItem(id)) {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::pressed);
-  } else if (facade::isHoverItem(id)) {
+  } else if (facade::isHovered(id)) {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::hovered);
   } else {
     _renderer(x, y, w, h, text, cursorStart, cursorEnd, facade::display_state::enabled);
