@@ -575,7 +575,8 @@ facade::display_state facade::displayState(
 {
   if (disabled) {
     return facade::display_state::disabled;
-  } else if ((facade::leftMouseDown() && facade::isActive(id)) || facade::isFocused(id)) {
+  } else if ((facade::leftMouseDown() && facade::isActive(id))
+           || facade::isFocused(id)) {
     return facade::display_state::pressed;
   } else if (facade::isHovered(id)) {
     return facade::display_state::hovered;
