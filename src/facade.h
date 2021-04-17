@@ -46,27 +46,9 @@ namespace facade {
     vertical
   };
 
-  enum class control_code {
-    tab,
-    home,
-    end,
-    del,
-    backspace,
-    pageup,
-    pagedown,
-    enter,
-    left,
-    right,
-    up,
-    down,
-    cut,
-    copy,
-    paste,
-    nop
-  };
-
   typedef std::function<std::string ()> get_clipboard_callback;
   typedef std::function<void (std::string)> set_clipboard_callback;
+  typedef std::function<void (std::string &, unsigned int &, unsigned int &)> control_op;
 
   void init(
     int screenWidth);
@@ -102,11 +84,11 @@ namespace facade {
   void clearActiveItem();
   bool clicked(
     const std::string &id);
-  bool isFocusItem(
+  bool isFocused(
     const std::string &id);
   bool noFocusItem();
   void clearFocusItem();
-  void setFocusItem(
+  void focus(
     const std::string &id);
   void focusPrevItem();
   void setPreviousItem(
@@ -117,9 +99,8 @@ namespace facade {
   void clearKeyChar();
   void setKeyChar(
     char32_t code);
-  control_code getControlCode();
   void setControlCode(
-    control_code code,
+    control_op code,
     bool shift);
   bool getModShift();
   void setClipboardCallback(
@@ -128,6 +109,66 @@ namespace facade {
   std::string getClipboardText();
   void setClipboardText(
     std::string);
+  void tab(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void home(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void pageup(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void up(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void end(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void pagedown(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void down(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void del(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void backspace(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void left(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void right(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void paste(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void cut(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void copy(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+  void handleKeyboardEditing(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
   void preFrame();
   void postFrame();
   display_state displayState(

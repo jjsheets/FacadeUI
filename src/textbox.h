@@ -31,18 +31,41 @@
 
 namespace facade {
 
-  // Buttons also support a rendering function, which allows for custom rendering of buttons
-  typedef std::function<void (int, int, int, int, std::string, int, int, display_state)> textbox_renderer;
+  typedef std::function<void (int, int, int, int, const std::string &, int, int, display_state)> textbox_renderer;
 
   void initTextbox();
-  void textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, int w, int h, bool disabled = false,
+  void setDefaultTextboxRenderer(
+    textbox_renderer renderer);
+  void textbox(
+    const std::string &id,
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd,
+    int w,
+    int h,
+    bool disabled = false,
     textbox_renderer renderer = nullptr);
-  void textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, int w, bool disabled = false,
+  void textbox(
+    const std::string &id,
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd,
+    int w,
+    bool disabled = false,
     textbox_renderer renderer = nullptr);
-  void textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, bool disabled = false,
+  void textbox(
+    const std::string &id,
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd,
+    bool disabled = false,
     textbox_renderer renderer = nullptr);
-  void textbox(std::string id, std::string &text, unsigned int &cursorStart, unsigned int &cursorEnd, textbox_renderer renderer);
-  void setDefaultTextboxRenderer(textbox_renderer renderer);
+  void textbox(
+    const std::string &id,
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd,
+    textbox_renderer renderer);
 
 }
 

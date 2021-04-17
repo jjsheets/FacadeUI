@@ -49,7 +49,7 @@ namespace {
   std::string state_focus_item;
   std::string state_previous_item;
   char32_t state_key_char;
-  facade::control_code state_cursor_control;
+  facade::control_op state_control_op;
   bool state_mod_shift;
 
   // Clipboard callbacks
@@ -71,6 +71,7 @@ void facade::init(
   state_mouse_right_down = false;
   state_hover_item = "";
   state_active_item = "";
+  state_focus_item = "";
   state_get_clipboard = nullptr;
   state_set_clipboard = nullptr;
   while (!layout_stack.empty()) {
@@ -185,7 +186,10 @@ void facade::clearActiveItem()
 bool facade::clicked(
   const std::string &id)
 {
-  return !facade::leftMouseDown() && facade::isHovered(id) && facade::isActive(id);
+  return
+    !facade::leftMouseDown()
+    && facade::isHovered(id)
+    && facade::isActive(id);
 }
 
 void facade::setActiveItem(
@@ -194,7 +198,7 @@ void facade::setActiveItem(
   state_active_item = id;
 }
 
-bool facade::isFocusItem(
+bool facade::isFocused(
   const std::string &id)
 {
   return state_focus_item == id;
@@ -207,10 +211,10 @@ bool facade::noFocusItem()
 
 void facade::clearFocusItem()
 {
-  state_focus_item = "";
+  facade::focus("");
 }
 
-void facade::setFocusItem(
+void facade::focus(
   const std::string &id)
 {
   state_focus_item = id;
@@ -218,7 +222,7 @@ void facade::setFocusItem(
 
 void facade::focusPrevItem()
 {
-  state_focus_item = state_previous_item;
+  facade::focus(state_previous_item);
 }
 
 void facade::setPreviousItem(
@@ -253,18 +257,11 @@ void facade::setKeyChar(
   state_key_char = code;
 }
 
-facade::control_code facade::getControlCode()
-{
-  auto cc = state_cursor_control;
-  state_cursor_control = facade::control_code::nop;
-  return cc;
-}
-
 void facade::setControlCode(
-  facade::control_code code,
+  facade::control_op code,
   bool shift)
 {
-  state_cursor_control = code;
+  state_control_op = code;
   state_mod_shift = shift;
 }
 
@@ -297,6 +294,264 @@ void facade::setClipboardText(
   }
 }
 
+static std::string _to_utf8(
+  const char32_t code)
+{
+  std::string s = "";
+  if (code <= 0x7F) {
+    s.reserve(1);
+    s.push_back(code);
+  } else if (code <= 0x7FF) {
+    s.reserve(2);
+    s.push_back(0xC0 | (code >> 6));
+    s.push_back(0x80 | (code & 0x3F));
+  } else if (code <= 0xFFFF) {
+    s.reserve(3);
+    s.push_back(0xE0 | (code >> 12));
+    s.push_back(0x80 | ((code >> 6) & 0x3F));
+    s.push_back(0x80 | (code & 0x3F));
+  } else if (code <= 0x10FFFF) {
+    s.reserve(4);
+    s.push_back(0xF0 | (code >> 18));
+    s.push_back(0x80 | ((code >> 12) & 0x3F));
+    s.push_back(0x80 | ((code >> 6) & 0x3F));
+    s.push_back(0x80 | (code & 0x3F));
+  }
+  return s;
+}
+
+static unsigned int _utf8_forward_codepoint_length(
+  const std::string &s,
+  unsigned int cursor)
+{
+  if (cursor == s.length()) {
+    return 0;
+  }
+  char c = s[cursor];
+  if ((c & 0x80) == 0x00) {
+    return 1;
+  } else if ((c & 0xE0) == 0xC0) {
+    return 2;
+  } else if ((c & 0xF0) == 0xE0) {
+    return 3;
+  } else if ((c & 0xF8) == 0xF0) {
+    return 4;
+  }
+  throw "Invalid initial UTF-8 code unit";
+}
+
+static unsigned int _utf8_reverse_codepoint_length(
+  const std::string &s,
+  unsigned int cursor)
+{
+  if (cursor == 0) {
+    return 0;
+  }
+  for (auto c = cursor - 1; c >= 0; c--) {
+    if ((s[c] & 0xC0) != 0x80) {
+      return cursor - c;
+    }
+    if (c == 0) {
+      throw "No valid codepoint found";
+    }
+  }
+}
+
+static std::string _get_text(
+  const std::string &text,
+  unsigned int cursorStart,
+  unsigned int cursorEnd)
+{
+  if (cursorStart <= cursorEnd) {
+    return text.substr(cursorStart, cursorEnd - cursorStart);
+  } else {
+    return text.substr(cursorEnd, cursorStart - cursorEnd);
+  }
+}
+
+static void _edit_text(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd,
+  const std::string &replacement)
+{
+  if (cursorStart <= cursorEnd) {
+    text.replace(cursorStart, cursorEnd - cursorStart, replacement);
+    cursorStart = cursorStart + replacement.length();
+    cursorEnd = cursorStart;
+  } else {
+    text.replace(cursorEnd, cursorStart - cursorEnd, replacement);
+    cursorStart = cursorEnd + replacement.length();
+    cursorEnd = cursorStart;
+  }
+}
+
+static void _move_cursor_to(
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd,
+  unsigned int pos)
+{
+  cursorEnd = pos;
+  if (!facade::getModShift()) {
+    cursorStart = cursorEnd;
+  }
+}
+
+static void _move_cursor_by(
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd,
+  unsigned int dist)
+{
+  cursorEnd += dist;
+  if (!facade::getModShift()) {
+    cursorStart = cursorEnd;
+  }
+}
+
+void facade::tab(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  if (facade::getModShift()) {
+    facade::focusPrevItem();
+  } else {
+    facade::clearFocusItem();
+  }
+}
+
+void facade::home(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  _move_cursor_to(cursorStart, cursorEnd, 0);
+}
+
+void facade::pageup(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  // TODO: When coding the multiline, adjust this so it does an actual pageup
+  _move_cursor_to(cursorStart, cursorEnd, 0);
+}
+
+void facade::up(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  // TODO: When coding the multiline, adjust this so it does an actual up
+  _move_cursor_to(cursorStart, cursorEnd, 0);
+}
+
+void facade::end(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  _move_cursor_to(cursorStart, cursorEnd, text.length());
+}
+
+void facade::pagedown(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  // TODO: When coding the multiline, adjust this so it does an actual pagedown
+  _move_cursor_to(cursorStart, cursorEnd, text.length());
+}
+
+void facade::down(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  // TODO: When coding the multiline, adjust this so it does an actual down
+  _move_cursor_to(cursorStart, cursorEnd, text.length());
+}
+
+void facade::del(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  if (cursorStart == cursorEnd) {
+    cursorEnd +=_utf8_forward_codepoint_length(text, cursorStart);
+  }
+  _edit_text(text, cursorStart, cursorEnd, "");
+}
+
+void facade::backspace(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  if (cursorStart == cursorEnd) {
+    cursorEnd -=_utf8_reverse_codepoint_length(text, cursorStart);
+  }
+  _edit_text(text, cursorStart, cursorEnd, "");
+}
+
+void facade::left(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  _move_cursor_by(cursorStart, cursorEnd,
+    -_utf8_reverse_codepoint_length(text, cursorStart));
+}
+
+void facade::right(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  _move_cursor_by(cursorStart, cursorEnd,
+    _utf8_forward_codepoint_length(text, cursorStart));
+}
+
+void facade::paste(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  _edit_text(text, cursorStart, cursorEnd, facade::getClipboardText());
+}
+
+void facade::cut(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  facade::setClipboardText(_get_text(text, cursorStart, cursorEnd));
+  _edit_text(text, cursorStart, cursorEnd, "");
+}
+
+void facade::copy(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  facade::setClipboardText(_get_text(text, cursorStart, cursorEnd));
+}
+
+void facade::handleKeyboardEditing(
+  std::string &text,
+  unsigned int &cursorStart,
+  unsigned int &cursorEnd)
+{
+  if (state_control_op) {
+    state_control_op(text, cursorStart, cursorEnd);
+    state_control_op = nullptr;
+  } else {
+    if (facade::hasKeyChar()) {
+      _edit_text(text, cursorStart, cursorEnd, _to_utf8(facade::getKeyChar()));
+    }
+  }
+}
+
 // Frame handling functions.
 
 void facade::preFrame()
@@ -320,7 +575,7 @@ facade::display_state facade::displayState(
 {
   if (disabled) {
     return facade::display_state::disabled;
-  } else if (facade::leftMouseDown() && facade::isActive(id)) {
+  } else if ((facade::leftMouseDown() && facade::isActive(id)) || facade::isFocused(id)) {
     return facade::display_state::pressed;
   } else if (facade::isHovered(id)) {
     return facade::display_state::hovered;
@@ -334,14 +589,13 @@ facade::display_state facade::displayState(
 // make sure this isn't exposed outside this file.
 namespace {
   struct _layout {
-    // base layout values that don't change after being initialized in beginLayout()
     int baseX;
     int baseY;
     int baseW;
     int rowHeight;
     int xSpacing;
     int ySpacing;
-    // variables that update during use
+    // variables that update during use follow
     int indentation;
     int x;
     int y;
@@ -493,7 +747,7 @@ void facade::updateControlState(
     }
   }
   if (focusAwareControl && facade::noFocusItem() && !disabled) {
-    facade::setFocusItem(id);
+    facade::focus(id);
   }
 }
 
