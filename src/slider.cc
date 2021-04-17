@@ -35,12 +35,28 @@ namespace {
   facade::slider_renderer state_default_slider_renderer;
 }
 
-void facade::initSlider() {
-  state_default_slider_renderer = nullptr;
+void facade::initSlider()
+{
+  facade::setDefaultSliderRenderer(nullptr);
 }
 
-double facade::slider(std::string id, facade::orientation type, int w, int l, double min, double max, double val, bool disabled,
-    facade::slider_renderer renderer) {
+void facade::setDefaultSliderRenderer(
+  facade::slider_renderer renderer)
+{
+  state_default_slider_renderer = renderer;
+}
+
+double facade::slider(
+  const std::string &id,
+  facade::orientation type,
+  int w,
+  int l,
+  double min,
+  double max,
+  double val,
+  bool disabled,
+  facade::slider_renderer renderer)
+{
   int x = 0;
   int y = 0;
   w = w > 0 ? w : 20;
@@ -50,45 +66,59 @@ double facade::slider(std::string id, facade::orientation type, int w, int l, do
     l = l > 0 ? l : 160;
     facade::controlBounds(x, y, w, l, w == 0);
   }
-  // check/update hover and active.
   const int regionW = type == facade::orientation::horizontal ? l : w;
   const int regionH = type == facade::orientation::horizontal ? w : l;
   facade::updateControlState(id, x, y, regionW, regionH, disabled);
-  // update as needed
   if (!disabled && facade::isActive(id)) {
-    int mouseOffset = (type == facade::orientation::horizontal ? facade::getMouseX() - x : facade::getMouseY() - y) - w / 2;
-    mouseOffset = mouseOffset < 0 ? 0 : (mouseOffset > l - w ? l - w : mouseOffset);
+    int mouseOffset;
+    if (type == facade::orientation::horizontal) {
+      mouseOffset = std::clamp(facade::getMouseX() - x - w / 2, 0, l - w);
+    } else {
+      mouseOffset = std::clamp(facade::getMouseY() - y - w / 2, 0, l - w);
+    }
     val = min + (mouseOffset * (max - min)) / (l - w);
   }
-  // render the button
   auto _renderer = renderer ? renderer : state_default_slider_renderer;
-  if (disabled) {
-    _renderer(type, x, y, w, l, val, facade::display_state::disabled);
-  } else if (facade::leftMouseDown() && facade::isActive(id)) {
-    _renderer(type, x, y, w, l, val, facade::display_state::pressed);
-  } else if (facade::isHovered(id)) {
-    _renderer(type, x, y, w, l, val, facade::display_state::hovered);
-  } else {
-    _renderer(type, x, y, w, l, val, facade::display_state::enabled);
-  }
+  _renderer(type, x, y, w, l, val, facade::displayState(id, disabled));
   return val;
 }
 
-double facade::slider(std::string id, facade::orientation type, int l, double min, double max, double val, bool disabled,
-    facade::slider_renderer renderer) {
+// Overloads
+
+double facade::slider(
+  const std::string &id,
+  facade::orientation type,
+  int l,
+  double min,
+  double max,
+  double val,
+  bool disabled,
+  facade::slider_renderer renderer)
+{
   return facade::slider(id, type, 0, l, min, max, val, disabled, renderer);
 }
 
-double facade::slider(std::string id, facade::orientation type, double min, double max, double val, bool disabled, facade::slider_renderer renderer) {
+double facade::slider(
+  const std::string &id,
+  facade::orientation type,
+  double min,
+  double max,
+  double val,
+  bool disabled,
+  facade::slider_renderer renderer)
+{
   return facade::slider(id, type, 0, 0, min, max, val, disabled, renderer);
 }
 
-double facade::slider(std::string id, facade::orientation type, double min, double max, double val, facade::slider_renderer renderer) {
+double facade::slider(
+  const std::string &id,
+  facade::orientation type,
+  double min,
+  double max,
+  double val,
+  facade::slider_renderer renderer)
+{
   return facade::slider(id, type, 0, 0, min, max, val, false, renderer);
-}
-
-void facade::setDefaultSliderRenderer(facade::slider_renderer renderer) {
-  state_default_slider_renderer = renderer;
 }
 
 #endif // FACADE_SLIDER_CC_INCLUDED

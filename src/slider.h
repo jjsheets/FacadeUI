@@ -35,11 +35,42 @@ namespace facade {
   typedef std::function<void (orientation, int, int, int, int, double, display_state)> slider_renderer;
 
   void initSlider();
-  double slider(std::string id, orientation type, int w, int l, double min, double max, double val, bool disabled, slider_renderer renderer = nullptr);
-  double slider(std::string id, orientation type, int l, double min, double max, double val, bool disabled, slider_renderer renderer = nullptr);
-  double slider(std::string id, orientation type, double min, double max, double val, bool disabled, slider_renderer renderer = nullptr);
-  double slider(std::string id, orientation type, double min, double max, double val, slider_renderer renderer = nullptr);
-  void setDefaultSliderRenderer(slider_renderer renderer);
+  void setDefaultSliderRenderer(
+    slider_renderer renderer);
+  double slider(
+    const std::string &id,
+    orientation type,
+    int w,
+    int l,
+    double min,
+    double max,
+    double val,
+    bool disabled,
+    slider_renderer renderer = nullptr);
+  double slider(
+    const std::string &id,
+    orientation type,
+    int l,
+    double min,
+    double max,
+    double val,
+    bool disabled,
+    slider_renderer renderer = nullptr);
+  double slider(
+    const std::string &id,
+    orientation type,
+    double min,
+    double max,
+    double val,
+    bool disabled,
+    slider_renderer renderer = nullptr);
+  double slider(
+    const std::string &id,
+    orientation type,
+    double min,
+    double max,
+    double val,
+    slider_renderer renderer = nullptr);
 
 }
 

@@ -35,10 +35,17 @@ namespace facade {
   typedef std::function<void (int, int, int, int)> panel_renderer;
 
   void initPanel();
-  void panel(int w, int h, panel_renderer renderer = nullptr);
-  void panel(int w, panel_renderer renderer = nullptr);
-  void panel(panel_renderer renderer = nullptr);
-  void setDefaultPanelRenderer(panel_renderer renderer);
+  void setDefaultPanelRenderer(
+    panel_renderer renderer);
+  void panel(
+    int w,
+    int h,
+    panel_renderer renderer = nullptr);
+  void panel(
+    int w,
+    panel_renderer renderer = nullptr);
+  void panel(
+    panel_renderer renderer = nullptr);
 
 }
 

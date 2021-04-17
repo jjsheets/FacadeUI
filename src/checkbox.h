@@ -32,14 +32,37 @@
 namespace facade {
 
   // Buttons also support a rendering function, which allows for custom rendering of buttons
-  typedef std::function<void (std::string, int, int, int, int, bool, display_state)> checkbox_renderer;
+  typedef std::function<void (const std::string &, int, int, int, int, bool, display_state)> checkbox_renderer;
 
   void initCheckbox();
-  bool checkbox(std::string id, std::string label, int w, int h, bool val, bool disabled = false, checkbox_renderer renderer = nullptr);
-  bool checkbox(std::string id, std::string label, int w, bool val, bool disabled = false, checkbox_renderer renderer = nullptr);
-  bool checkbox(std::string id, std::string label, bool val, bool disabled, checkbox_renderer renderer = nullptr);
-  bool checkbox(std::string id, std::string label, bool val, checkbox_renderer renderer = nullptr);
-  void setDefaultCheckboxRenderer(checkbox_renderer renderer);
+  void setDefaultCheckboxRenderer(
+    checkbox_renderer renderer);
+  bool checkbox(
+    const std::string &id,
+    const std::string &label,
+    int w,
+    int h,
+    bool val,
+    bool disabled = false,
+    checkbox_renderer renderer = nullptr);
+  bool checkbox(
+    const std::string &id,
+    const std::string &label,
+    int w,
+    bool val,
+    bool disabled = false,
+    checkbox_renderer renderer = nullptr);
+  bool checkbox(
+    const std::string &id,
+    const std::string &label,
+    bool val,
+    bool disabled,
+    checkbox_renderer renderer = nullptr);
+  bool checkbox(
+    const std::string &id,
+    const std::string &label,
+    bool val,
+    checkbox_renderer renderer = nullptr);
 
 }
 

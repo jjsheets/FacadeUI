@@ -35,48 +35,68 @@ namespace {
   facade::checkbox_renderer state_default_checkbox_renderer;
 }
 
-void facade::initCheckbox() {
-  state_default_checkbox_renderer = nullptr;
+void facade::initCheckbox()
+{
+  facade::setDefaultCheckboxRenderer(nullptr);
 }
 
-bool facade::checkbox(std::string id, std::string label, int w, int h, bool val, bool disabled, facade::checkbox_renderer renderer) {
+void facade::setDefaultCheckboxRenderer(
+  facade::checkbox_renderer renderer)
+{
+  state_default_checkbox_renderer = renderer;
+}
+
+bool facade::checkbox(
+  const std::string &id,
+  const std::string &label,
+  int w,
+  int h,
+  bool val,
+  bool disabled,
+  facade::checkbox_renderer renderer)
+{
   int x = 0;
   int y = 0;
   facade::controlBounds(x, y, w, h, w == 0);
-  // check/update hover and active.
   facade::updateControlState(id, x, y, w, h, disabled);
-  // return true if the button is clicked
-  if (!disabled && !facade::leftMouseDown() && facade::isHovered(id) && facade::isActive(id)) {
+  if (!disabled && facade::clicked(id)) {
     val = !val;
   }
-  // render the button
   auto _renderer = renderer ? renderer : state_default_checkbox_renderer;
-  if (disabled) {
-    _renderer(label, x, y, w, h, val, facade::display_state::disabled);
-  } else if (facade::leftMouseDown() && facade::isActive(id)) {
-    _renderer(label, x, y, w, h, val, facade::display_state::pressed);
-  } else if (facade::isHovered(id)) {
-    _renderer(label, x, y, w, h, val, facade::display_state::hovered);
-  } else {
-    _renderer(label, x, y, w, h, val, facade::display_state::enabled);
-  }
+  _renderer(label, x, y, w, h, val, facade::displayState(id, disabled));
   return val;
 }
 
-bool facade::checkbox(std::string id, std::string label, int w, bool val, bool disabled, checkbox_renderer renderer) {
+// Overloads
+
+bool facade::checkbox(
+  const std::string &id,
+  const std::string &label,
+  int w,
+  bool val,
+  bool disabled,
+  checkbox_renderer renderer)
+{
   return facade::checkbox(id, label, w, 0, val, disabled, renderer);
 }
 
-bool facade::checkbox(std::string id, std::string label, bool val, bool disabled, checkbox_renderer renderer) {
+bool facade::checkbox(
+  const std::string &id,
+  const std::string &label,
+  bool val,
+  bool disabled,
+  checkbox_renderer renderer)
+{
   return facade::checkbox(id, label, 0, 0, val, disabled, renderer);
 }
 
-bool facade::checkbox(std::string id, std::string label, bool val, checkbox_renderer renderer) {
+bool facade::checkbox(
+  const std::string &id,
+  const std::string &label,
+  bool val,
+  checkbox_renderer renderer)
+{
   return facade::checkbox(id, label, 0, 0, val, false, renderer);
-}
-
-void facade::setDefaultCheckboxRenderer(facade::checkbox_renderer renderer) {
-  state_default_checkbox_renderer = renderer;
 }
 
 #endif // FACADE_CHECKBOX_CC_INCLUDED

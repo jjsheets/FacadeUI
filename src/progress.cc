@@ -35,12 +35,26 @@ namespace {
   facade::progress_renderer state_default_progress_renderer;
 }
 
-void facade::initProgress() {
+void facade::initProgress()
+{
   state_default_progress_renderer = nullptr;
 }
 
-double facade::progress(std::string label, facade::orientation type, int w, int l, double min, double max, double val,
-    facade::progress_renderer renderer) {
+void facade::setDefaultProgressRenderer(facade::progress_renderer renderer)
+{
+  state_default_progress_renderer = renderer;
+}
+
+double facade::progress(
+  const std::string &label,
+  facade::orientation type,
+  int w,
+  int l,
+  double min,
+  double max,
+  double val,
+  facade::progress_renderer renderer)
+{
   int x = 0;
   int y = 0;
   w = w > 0 ? w : 20;
@@ -55,16 +69,29 @@ double facade::progress(std::string label, facade::orientation type, int w, int 
   return val;
 }
 
-double facade::progress(std::string label, facade::orientation type, int l, double min, double max, double val, facade::progress_renderer renderer) {
+// Overloads
+
+double facade::progress(
+  const std::string &label,
+  facade::orientation type,
+  int l,
+  double min,
+  double max,
+  double val,
+  facade::progress_renderer renderer)
+{
   return facade::progress(label, type, 0, l, min, max, val, renderer);
 }
 
-double facade::progress(std::string label, facade::orientation type, double min, double max, double val, facade::progress_renderer renderer) {
+double facade::progress(
+  const std::string &label,
+  facade::orientation type,
+  double min,
+  double max,
+  double val,
+  facade::progress_renderer renderer)
+{
   return facade::progress(label, type, 0, 0, min, max, val, renderer);
-}
-
-void facade::setDefaultProgressRenderer(facade::progress_renderer renderer) {
-  state_default_progress_renderer = renderer;
 }
 
 #endif // FACADE_SLIDER_CC_INCLUDED

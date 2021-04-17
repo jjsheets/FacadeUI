@@ -32,13 +32,35 @@
 
 namespace facade {
 
-  typedef std::function<void (std::string, orientation, int, int, int, int, double)> progress_renderer;
+  typedef std::function<void (const std::string &, orientation, int, int, int, int, double)> progress_renderer;
 
   void initProgress();
-  double progress(std::string label, orientation type, int w, int l, double min, double max, double val, progress_renderer renderer = nullptr);
-  double progress(std::string label, orientation type, int l, double min, double max, double val, progress_renderer renderer = nullptr);
-  double progress(std::string label, orientation type, double min, double max, double val, progress_renderer renderer = nullptr);
-  void setDefaultProgressRenderer(progress_renderer renderer);
+  void setDefaultProgressRenderer(
+    progress_renderer renderer);
+  double progress(
+    const std::string &label,
+    orientation type,
+    int w,
+    int l,
+    double min,
+    double max,
+    double val,
+    progress_renderer renderer = nullptr);
+  double progress(
+    const std::string &label,
+    orientation type,
+    int l,
+    double min,
+    double max,
+    double val,
+    progress_renderer renderer = nullptr);
+  double progress(
+    const std::string &label,
+    orientation type,
+    double min,
+    double max,
+    double val,
+    progress_renderer renderer = nullptr);
 
 }
 

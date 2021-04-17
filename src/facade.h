@@ -100,6 +100,8 @@ namespace facade {
   void setActiveItem(
     const std::string &id);
   void clearActiveItem();
+  bool clicked(
+    const std::string &id);
   bool isFocusItem(
     const std::string &id);
   bool noFocusItem();

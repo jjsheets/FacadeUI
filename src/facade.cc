@@ -182,6 +182,12 @@ void facade::clearActiveItem()
   state_active_item = "";
 }
 
+bool facade::clicked(
+  const std::string &id)
+{
+  return !facade::leftMouseDown() && facade::isHovered(id) && facade::isActive(id);
+}
+
 void facade::setActiveItem(
   const std::string &id)
 {

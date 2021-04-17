@@ -32,13 +32,23 @@
 namespace facade {
 
   // Labels support a rendering function, which allows for custom rendering of labels
-  typedef std::function<void (std::string, int, int, int, int)> label_renderer;
+  typedef std::function<void (const std::string &, int, int, int, int)> label_renderer;
 
   void initLabel();
-  void label(std::string label, int w, int h, label_renderer renderer = nullptr);
-  void label(std::string label, int w, label_renderer renderer = nullptr);
-  void label(std::string label, label_renderer renderer = nullptr);
-  void setDefaultLabelRenderer(label_renderer renderer);
+  void setDefaultLabelRenderer(
+    label_renderer renderer);
+  void label(
+    const std::string &label,
+    int w,
+    int h,
+    label_renderer renderer = nullptr);
+  void label(
+    const std::string &label,
+    int w,
+    label_renderer renderer = nullptr);
+  void label(
+    const std::string &label,
+    label_renderer renderer = nullptr);
 
 }
 
