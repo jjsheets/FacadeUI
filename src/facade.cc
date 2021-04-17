@@ -53,8 +53,8 @@ namespace {
   bool state_mod_shift;
 
   // Clipboard callbacks
-  facade::get_clipboard_callback state_get_clipboard;
-  facade::set_clipboard_callback state_set_clipboard;
+  facade::clipboard_content_callack state_clipboard_content;
+  facade::clip_content_callack state_clip_content;
 
   // Layout state
   std::stack<_layout*> layout_stack;
@@ -72,8 +72,8 @@ void facade::init(
   state_hover_item = "";
   state_active_item = "";
   state_focus_item = "";
-  state_get_clipboard = nullptr;
-  state_set_clipboard = nullptr;
+  state_clipboard_content = nullptr;
+  state_clip_content = nullptr;
   while (!layout_stack.empty()) {
     layout_stack.pop();
   }
@@ -271,26 +271,26 @@ bool facade::getModShift()
 }
 
 void facade::setClipboardCallback(
-  facade::get_clipboard_callback get,
-  facade::set_clipboard_callback set)
+  facade::clipboard_content_callack get,
+  facade::clip_content_callack set)
 {
-  state_get_clipboard = get;
-  state_set_clipboard = set;
+  state_clipboard_content = get;
+  state_clip_content = set;
 }
 
-std::string facade::getClipboardText()
+std::string facade::clipboardText()
 {
-  if (!state_get_clipboard) {
+  if (!state_clipboard_content) {
     return "";
   }
-  return state_get_clipboard();
+  return state_clipboard_content();
 }
 
-void facade::setClipboardText(
+void facade::clipboardText(
   std::string new_clipboard)
 {
-  if (state_set_clipboard) {
-    state_set_clipboard(new_clipboard);
+  if (state_clip_content) {
+    state_clip_content(new_clipboard);
   }
 }
 
@@ -517,7 +517,7 @@ void facade::paste(
   unsigned int &cursorStart,
   unsigned int &cursorEnd)
 {
-  _edit_text(text, cursorStart, cursorEnd, facade::getClipboardText());
+  _edit_text(text, cursorStart, cursorEnd, facade::clipboardText());
 }
 
 void facade::cut(
@@ -525,7 +525,7 @@ void facade::cut(
   unsigned int &cursorStart,
   unsigned int &cursorEnd)
 {
-  facade::setClipboardText(_get_text(text, cursorStart, cursorEnd));
+  facade::clipboardText(_get_text(text, cursorStart, cursorEnd));
   _edit_text(text, cursorStart, cursorEnd, "");
 }
 
@@ -534,7 +534,7 @@ void facade::copy(
   unsigned int &cursorStart,
   unsigned int &cursorEnd)
 {
-  facade::setClipboardText(_get_text(text, cursorStart, cursorEnd));
+  facade::clipboardText(_get_text(text, cursorStart, cursorEnd));
 }
 
 void facade::handleKeyboardEditing(

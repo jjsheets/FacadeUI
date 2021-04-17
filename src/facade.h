@@ -1,5 +1,258 @@
 // The latest version of this library is available on GitHub;
 // https://github.com/jjsheets/FacadeUI
+// License text can be found at the end of this file.
+
+#ifndef FACADE_FACADE_H_INCLUDED
+#define FACADE_FACADE_H_INCLUDED
+
+#include <functional>
+#include <string>
+
+namespace facade {
+
+  typedef std::function<std::string ()> clipboard_content_callack;
+
+  typedef std::function<void (
+    std::string
+  )> clip_content_callack;
+
+  typedef std::function<void (
+    std::string &,
+    unsigned int &,
+    unsigned int &
+  )> control_op;
+
+  void init(
+    int screenWidth);
+
+  void setMouseXY(
+    int _x,
+    int _y);
+
+  int getMouseX();
+
+  int getMouseY();
+
+  void setLeftMouseButton(
+    bool _down);
+
+  void setMiddleMouseButton(
+    bool _down);
+
+  void setRightMouseButton(
+    bool _down);
+
+  bool leftMouseDown();
+
+  bool middleMouseDown();
+
+  bool rightMouseDown();
+
+  bool mouseInRegion(
+    int x,
+    int y,
+    int w,
+    int h);
+
+  bool isHovered(
+    const std::string &id);
+
+  void setHoverItem(
+    const std::string &id);
+
+  void clearHoverItem();
+
+  bool isActive(
+    const std::string &id);
+
+  bool noActiveItem();
+
+  void setActiveItem(
+    const std::string &id);
+
+  void clearActiveItem();
+
+  bool clicked(
+    const std::string &id);
+
+  bool isFocused(
+    const std::string &id);
+
+  bool noFocusItem();
+
+  void clearFocusItem();
+
+  void focus(
+    const std::string &id);
+
+  void focusPrevItem();
+
+  void setPreviousItem(
+    const std::string &id);
+
+  bool noKeyChar();
+
+  bool hasKeyChar();
+
+  char32_t getKeyChar();
+
+  void clearKeyChar();
+
+  void setKeyChar(
+    char32_t code);
+
+  void setControlCode(
+    control_op code,
+    bool shift);
+
+  bool getModShift();
+
+  void setClipboardCallback(
+    clipboard_content_callack get,
+    clip_content_callack set);
+
+  std::string clipboardText();
+
+  void clipboardText(
+    std::string);
+
+  void tab(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void home(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void pageup(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void up(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void end(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void pagedown(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void down(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void del(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void backspace(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void left(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void right(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void paste(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void cut(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void copy(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void handleKeyboardEditing(
+    std::string &text,
+    unsigned int &cursorStart,
+    unsigned int &cursorEnd);
+
+  void preFrame();
+
+  void postFrame();
+
+  enum class display_state {
+    enabled,
+    hovered,
+    pressed,
+    disabled
+  };
+
+  display_state displayState(
+    const std::string &id,
+    bool disabled);
+
+  void beginLayout(
+    int x,
+    int y,
+    int w,
+    int rowHeight = 20,
+    int xSpacing = 4,
+    int ySpacing = 4);
+
+  void endLayout();
+
+  void indent(
+    int w);
+
+  void controlBounds(
+    int& x,
+    int& y,
+    int& w,
+    int& h,
+    bool resizeW = true);
+
+  void updateControlState(
+    const std::string &id,
+    int x,
+    int y,
+    int w,
+    int h,
+    bool disabled,
+    bool focusAwareControl = false);
+
+  enum class orientation {
+    horizontal,
+    vertical
+  };
+
+}
+
+// Include standard widget headers
+
+#include "button.h"
+#include "label.h"
+#include "slider.h"
+#include "progress.h"
+#include "checkbox.h"
+#include "textbox.h"
+#include "panel.h"
+
+#endif // FACADE_FACADE_H_INCLUDED
 
 // This is free and unencumbered software released into the public domain.
 //
@@ -25,201 +278,3 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 //
 // For more information, please refer to <http://unlicense.org/>
-
-#ifndef FACADE_FACADE_H_INCLUDED
-#define FACADE_FACADE_H_INCLUDED
-
-#include <functional>
-#include <string>
-
-namespace facade {
-
-  enum class display_state {
-    enabled,
-    hovered,
-    pressed,
-    disabled
-  };
-
-  enum class orientation {
-    horizontal,
-    vertical
-  };
-
-  typedef std::function<std::string ()> get_clipboard_callback;
-  typedef std::function<void (std::string)> set_clipboard_callback;
-  typedef std::function<void (std::string &, unsigned int &, unsigned int &)> control_op;
-
-  void init(
-    int screenWidth);
-  void setMouseXY(
-    int _x,
-    int _y);
-  int getMouseX();
-  int getMouseY();
-  void setLeftMouseButton(
-    bool _down);
-  void setMiddleMouseButton(
-    bool _down);
-  void setRightMouseButton(
-    bool _down);
-  bool leftMouseDown();
-  bool middleMouseDown();
-  bool rightMouseDown();
-  bool mouseInRegion(
-    int x,
-    int y,
-    int w,
-    int h);
-  bool isHovered(
-    const std::string &id);
-  void setHoverItem(
-    const std::string &id);
-  void clearHoverItem();
-  bool isActive(
-    const std::string &id);
-  bool noActiveItem();
-  void setActiveItem(
-    const std::string &id);
-  void clearActiveItem();
-  bool clicked(
-    const std::string &id);
-  bool isFocused(
-    const std::string &id);
-  bool noFocusItem();
-  void clearFocusItem();
-  void focus(
-    const std::string &id);
-  void focusPrevItem();
-  void setPreviousItem(
-    const std::string &id);
-  bool noKeyChar();
-  bool hasKeyChar();
-  char32_t getKeyChar();
-  void clearKeyChar();
-  void setKeyChar(
-    char32_t code);
-  void setControlCode(
-    control_op code,
-    bool shift);
-  bool getModShift();
-  void setClipboardCallback(
-    get_clipboard_callback get,
-    set_clipboard_callback set);
-  std::string getClipboardText();
-  void setClipboardText(
-    std::string);
-  void tab(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void home(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void pageup(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void up(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void end(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void pagedown(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void down(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void del(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void backspace(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void left(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void right(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void paste(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void cut(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void copy(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void handleKeyboardEditing(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
-  void preFrame();
-  void postFrame();
-  display_state displayState(
-    const std::string &id,
-    bool disabled);
-  void beginLayout(
-    int x,
-    int y,
-    int w,
-    int rowHeight = 20,
-    int xSpacing = 4,
-    int ySpacing = 4);
-  void endLayout();
-  void indent(
-    int w);
-  void controlBounds(
-    int& x,
-    int& y,
-    int& w,
-    int& h,
-    bool resizeW = true);
-  void updateControlState(
-    const std::string &id,
-    int x,
-    int y,
-    int w,
-    int h,
-    bool disabled,
-    bool focusAwareControl = false);
-
-}
-
-// Include widget headers
-
-#include "button.h"
-#include "label.h"
-#include "slider.h"
-#include "progress.h"
-#include "checkbox.h"
-#include "textbox.h" // single line text entry
-//#include "editbox.h" // multi-line text entry
-#include "panel.h"
-//#include "colorwheel.h"
-
-// Include complex widgets
-
-//#include "uiconsole.h" // a traditional console system for a game, with layout of text sourced from a log (ideally with the capacity to scroll up) as well as a spot to enter debug/cheat commands
-
-// Include rendering primitives
-
-//#include "renderprims.h" // basic rendering primitives which can be used by custom renderers to achieve a desired styling to widgets
-//#include "defaultrenderers.h" // default renderers which provide reasonable default rendering of all implemented widgets.
-
-#endif // FACADE_FACADE_H_INCLUDED

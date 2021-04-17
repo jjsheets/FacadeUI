@@ -1,5 +1,62 @@
 // The latest version of this library is available on GitHub;
 // https://github.com/jjsheets/FacadeUI
+// License text can be found at the end of this file.
+
+#ifndef FACADE_CHECKBOX_H_INCLUDED
+#define FACADE_CHECKBOX_H_INCLUDED
+
+namespace facade {
+
+  typedef std::function<void (
+    const std::string &, // label text
+    int, // x coordinate
+    int, // y coordinate
+    int, // width
+    int, // height
+    bool, // value (true = checked)
+    display_state // display state of the checkbox
+  )> checkbox_renderer;
+
+  void initCheckbox();
+
+  void setDefaultCheckboxRenderer(
+    checkbox_renderer renderer);
+
+  bool checkbox(
+    const std::string &id,
+    const std::string &label,
+    int w,
+    int h,
+    bool val,
+    bool disabled = false,
+    checkbox_renderer renderer = nullptr);
+
+  // Overloads
+
+  bool checkbox(
+    const std::string &id,
+    const std::string &label,
+    int w,
+    bool val,
+    bool disabled = false,
+    checkbox_renderer renderer = nullptr);
+
+  bool checkbox(
+    const std::string &id,
+    const std::string &label,
+    bool val,
+    bool disabled,
+    checkbox_renderer renderer = nullptr);
+
+  bool checkbox(
+    const std::string &id,
+    const std::string &label,
+    bool val,
+    checkbox_renderer renderer = nullptr);
+
+}
+
+#endif // FACADE_CHECKBOX_H_INCLUDED
 
 // This is free and unencumbered software released into the public domain.
 //
@@ -25,45 +82,3 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 //
 // For more information, please refer to <http://unlicense.org/>
-
-#ifndef FACADE_CHECKBOX_H_INCLUDED
-#define FACADE_CHECKBOX_H_INCLUDED
-
-namespace facade {
-
-  // Buttons also support a rendering function, which allows for custom rendering of buttons
-  typedef std::function<void (const std::string &, int, int, int, int, bool, display_state)> checkbox_renderer;
-
-  void initCheckbox();
-  void setDefaultCheckboxRenderer(
-    checkbox_renderer renderer);
-  bool checkbox(
-    const std::string &id,
-    const std::string &label,
-    int w,
-    int h,
-    bool val,
-    bool disabled = false,
-    checkbox_renderer renderer = nullptr);
-  bool checkbox(
-    const std::string &id,
-    const std::string &label,
-    int w,
-    bool val,
-    bool disabled = false,
-    checkbox_renderer renderer = nullptr);
-  bool checkbox(
-    const std::string &id,
-    const std::string &label,
-    bool val,
-    bool disabled,
-    checkbox_renderer renderer = nullptr);
-  bool checkbox(
-    const std::string &id,
-    const std::string &label,
-    bool val,
-    checkbox_renderer renderer = nullptr);
-
-}
-
-#endif // FACADE_CHECKBOX_H_INCLUDED

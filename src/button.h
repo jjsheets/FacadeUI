@@ -1,5 +1,62 @@
 // The latest version of this library is available on GitHub;
 // https://github.com/jjsheets/FacadeUI
+// License text can be found at the end of this file.
+
+#ifndef FACADE_BUTTON_H_INCLUDED
+#define FACADE_BUTTON_H_INCLUDED
+
+namespace facade {
+
+  typedef std::function<void (
+    const std::string &, // label text
+    int, // x coordinate
+    int, // y coordinate
+    int, // width
+    int, // height
+    display_state // display state of the button
+  )> button_renderer;
+
+  void initButton();
+
+  void setDefaultButtonRenderer(
+    button_renderer renderer);
+
+  bool button(
+    const std::string &id,
+    const std::string &label,
+    int w,
+    int h,
+    bool disabled = false,
+    button_renderer renderer = nullptr);
+
+  // Overloads
+
+  bool button(
+    const std::string &id,
+    const std::string &label,
+    int w,
+    bool disabled,
+    button_renderer renderer = nullptr);
+
+  bool button(
+    const std::string &id,
+    const std::string &label,
+    bool disabled,
+    button_renderer renderer = nullptr);
+
+  bool button(
+    const std::string &id,
+    const std::string &label,
+    button_renderer renderer = nullptr);
+
+  bool button(
+    const std::string &id,
+    const std::string &label,
+    int w);
+
+}
+
+#endif // FACADE_BUTTON_H_INCLUDED
 
 // This is free and unencumbered software released into the public domain.
 //
@@ -25,52 +82,3 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 //
 // For more information, please refer to <http://unlicense.org/>
-
-#ifndef FACADE_BUTTON_H_INCLUDED
-#define FACADE_BUTTON_H_INCLUDED
-
-namespace facade {
-
-  // Buttons also support a rendering function, which allows for custom rendering of buttons
-  typedef std::function<void (
-    const std::string &, // label text
-    int, // x coordinate
-    int, // y coordinate
-    int, // width
-    int, // height
-    display_state // display state of the button (hover, pressed, enabled, disabled)
-  )> button_renderer;
-
-  void initButton();
-  bool button(
-    const std::string &id,
-    const std::string &label,
-    int w,
-    int h,
-    bool disabled = false,
-    button_renderer renderer = nullptr);
-  bool button(
-    const std::string &id,
-    const std::string &label,
-    int w,
-    bool disabled,
-    button_renderer renderer = nullptr);
-  bool button(
-    const std::string &id,
-    const std::string &label,
-    bool disabled,
-    button_renderer renderer = nullptr);
-  bool button(
-    const std::string &id,
-    const std::string &label,
-    button_renderer renderer = nullptr);
-  bool button(
-    const std::string &id,
-    const std::string &label,
-    int w);
-  void setDefaultButtonRenderer(
-    button_renderer renderer);
-
-}
-
-#endif // FACADE_BUTTON_H_INCLUDED
