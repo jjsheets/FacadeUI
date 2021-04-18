@@ -7,11 +7,22 @@
 
 namespace facade {
 
-  typedef std::function<void (int, int, int, int, const std::string &, int, int, display_state)> textbox_renderer;
+  typedef std::function<void (
+    int, // x coordinate
+    int, // y coordinate
+    int, // width
+    int, // height
+    const std::string &, // text
+    int, // cursor/selection start
+    int, // cursor/selection end
+    display_state // display state of the control
+  )> textbox_renderer;
 
   void initTextbox();
+
   void setDefaultTextboxRenderer(
     textbox_renderer renderer);
+
   void textbox(
     const std::string &id,
     std::string &text,
@@ -21,6 +32,9 @@ namespace facade {
     int h,
     bool disabled = false,
     textbox_renderer renderer = nullptr);
+
+// Overloads
+
   void textbox(
     const std::string &id,
     std::string &text,
@@ -29,6 +43,7 @@ namespace facade {
     int w,
     bool disabled = false,
     textbox_renderer renderer = nullptr);
+
   void textbox(
     const std::string &id,
     std::string &text,
@@ -36,6 +51,7 @@ namespace facade {
     unsigned int &cursorEnd,
     bool disabled = false,
     textbox_renderer renderer = nullptr);
+
   void textbox(
     const std::string &id,
     std::string &text,

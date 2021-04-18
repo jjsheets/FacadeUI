@@ -7,11 +7,21 @@
 
 namespace facade {
 
-  typedef std::function<void (orientation, int, int, int, int, double, display_state)> slider_renderer;
+  typedef std::function<void (
+    orientation, // either facade::horizontal or facade::vertical
+    int, // x coordinate
+    int, // y coordinate
+    int, // width
+    int, // height
+    double, // slider value
+    display_state // display state
+  )> slider_renderer;
 
   void initSlider();
+
   void setDefaultSliderRenderer(
     slider_renderer renderer);
+
   double slider(
     const std::string &id,
     orientation type,
@@ -22,6 +32,9 @@ namespace facade {
     double val,
     bool disabled,
     slider_renderer renderer = nullptr);
+
+// Overloads
+
   double slider(
     const std::string &id,
     orientation type,
@@ -31,6 +44,7 @@ namespace facade {
     double val,
     bool disabled,
     slider_renderer renderer = nullptr);
+
   double slider(
     const std::string &id,
     orientation type,
@@ -39,6 +53,7 @@ namespace facade {
     double val,
     bool disabled,
     slider_renderer renderer = nullptr);
+
   double slider(
     const std::string &id,
     orientation type,

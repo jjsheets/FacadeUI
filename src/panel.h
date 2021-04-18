@@ -8,18 +8,29 @@
 namespace facade {
 
   // Panels are just simple rectangular areas for a renderer to do stuff in.
-  typedef std::function<void (int, int, int, int)> panel_renderer;
+  typedef std::function<void (
+    int, // x coordinates
+    int, // y coordinates
+    int, // width
+    int  // height
+  )> panel_renderer;
 
   void initPanel();
+
   void setDefaultPanelRenderer(
     panel_renderer renderer);
+
   void panel(
     int w,
     int h,
     panel_renderer renderer = nullptr);
+
+// Overloads
+
   void panel(
     int w,
     panel_renderer renderer = nullptr);
+
   void panel(
     panel_renderer renderer = nullptr);
 
