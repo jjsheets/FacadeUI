@@ -1,0 +1,22 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install tup build system
+        run: |
+          sudo apt-add-repository 'deb http://ppa.launchpad.net/anatol/tup/ubuntu precise main'
+          sudo apt-get update
+          sudo apt-get install tup
+
+      - name: Run tup to build
+        run: tup
+        
+      - name: Run tests
+        run: test/facade_test
