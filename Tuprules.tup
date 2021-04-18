@@ -1,7 +1,7 @@
 CFLAGS += -Wall
 CFLAGS += -O2
 CFLAGS += -I../src
-CFLAGS += -std=c++20
+CFLAGS += -std=c++17
 
 !cc = |> gcc $(CFLAGS) -c %f -o %o |> %B.o
 !ar = |> ar crs %o %f |>
