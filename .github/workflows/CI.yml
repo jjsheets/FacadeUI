@@ -18,6 +18,11 @@ jobs:
           ./bootstrap.sh
           cd ../FacadeUI
 
+      - name: Update submodules
+        run: |
+          git submodule init
+          git submodule update
+
       - name: Run tup to build
         run: ../tup/tup
         
