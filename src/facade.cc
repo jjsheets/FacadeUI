@@ -53,8 +53,8 @@ namespace {
   bool state_mod_shift;
 
   // Clipboard callbacks
-  facade::clipboard_content_callack state_clipboard_content;
-  facade::clip_content_callack state_clip_content;
+  facade::clipboard_content_callback state_clipboard_content;
+  facade::clip_content_callback state_clip_content;
 
   // Layout state
   std::stack<_layout*> layout_stack;
@@ -271,8 +271,8 @@ bool facade::getModShift()
 }
 
 void facade::setClipboardCallback(
-  facade::clipboard_content_callack get,
-  facade::clip_content_callack set)
+  facade::clipboard_content_callback get,
+  facade::clip_content_callback set)
 {
   state_clipboard_content = get;
   state_clip_content = set;
@@ -294,7 +294,7 @@ void facade::clipboardText(
   }
 }
 
-static std::string _to_utf8(
+static std::string _utf8(
   const char32_t code)
 {
   std::string s = "";
@@ -320,7 +320,7 @@ static std::string _to_utf8(
   return s;
 }
 
-static unsigned int _utf8_forward_codepoint_length(
+static unsigned int _utf8RightCodepointLength(
   const std::string &s,
   unsigned int cursor)
 {
@@ -340,7 +340,7 @@ static unsigned int _utf8_forward_codepoint_length(
   throw "Invalid initial UTF-8 code unit";
 }
 
-static unsigned int _utf8_reverse_codepoint_length(
+static unsigned int _utf8LeftCodepointLength(
   const std::string &s,
   unsigned int cursor)
 {
@@ -357,7 +357,7 @@ static unsigned int _utf8_reverse_codepoint_length(
   }
 }
 
-static std::string _get_text(
+static std::string _editTextState(
   const std::string &text,
   unsigned int cursorStart,
   unsigned int cursorEnd)
@@ -369,7 +369,7 @@ static std::string _get_text(
   }
 }
 
-static void _edit_text(
+static void _editTextState(
   std::string &text,
   unsigned int &cursorStart,
   unsigned int &cursorEnd,
@@ -386,7 +386,7 @@ static void _edit_text(
   }
 }
 
-static void _move_cursor_to(
+static void _moveCursorTo(
   unsigned int &cursorStart,
   unsigned int &cursorEnd,
   unsigned int pos)
@@ -397,7 +397,7 @@ static void _move_cursor_to(
   }
 }
 
-static void _move_cursor_by(
+static void _moveCursorBy(
   unsigned int &cursorStart,
   unsigned int &cursorEnd,
   unsigned int dist)
@@ -425,7 +425,7 @@ void facade::home(
   unsigned int &cursorStart,
   unsigned int &cursorEnd)
 {
-  _move_cursor_to(cursorStart, cursorEnd, 0);
+  _moveCursorTo(cursorStart, cursorEnd, 0);
 }
 
 void facade::pageup(
@@ -434,7 +434,7 @@ void facade::pageup(
   unsigned int &cursorEnd)
 {
   // TODO: When coding the multiline, adjust this so it does an actual pageup
-  _move_cursor_to(cursorStart, cursorEnd, 0);
+  _moveCursorTo(cursorStart, cursorEnd, 0);
 }
 
 void facade::up(
@@ -443,7 +443,7 @@ void facade::up(
   unsigned int &cursorEnd)
 {
   // TODO: When coding the multiline, adjust this so it does an actual up
-  _move_cursor_to(cursorStart, cursorEnd, 0);
+  _moveCursorTo(cursorStart, cursorEnd, 0);
 }
 
 void facade::end(
@@ -451,7 +451,7 @@ void facade::end(
   unsigned int &cursorStart,
   unsigned int &cursorEnd)
 {
-  _move_cursor_to(cursorStart, cursorEnd, text.length());
+  _moveCursorTo(cursorStart, cursorEnd, text.length());
 }
 
 void facade::pagedown(
@@ -460,7 +460,7 @@ void facade::pagedown(
   unsigned int &cursorEnd)
 {
   // TODO: When coding the multiline, adjust this so it does an actual pagedown
-  _move_cursor_to(cursorStart, cursorEnd, text.length());
+  _moveCursorTo(cursorStart, cursorEnd, text.length());
 }
 
 void facade::down(
@@ -469,7 +469,7 @@ void facade::down(
   unsigned int &cursorEnd)
 {
   // TODO: When coding the multiline, adjust this so it does an actual down
-  _move_cursor_to(cursorStart, cursorEnd, text.length());
+  _moveCursorTo(cursorStart, cursorEnd, text.length());
 }
 
 void facade::del(
@@ -478,9 +478,9 @@ void facade::del(
   unsigned int &cursorEnd)
 {
   if (cursorStart == cursorEnd) {
-    cursorEnd +=_utf8_forward_codepoint_length(text, cursorStart);
+    cursorEnd +=_utf8RightCodepointLength(text, cursorStart);
   }
-  _edit_text(text, cursorStart, cursorEnd, "");
+  _editTextState(text, cursorStart, cursorEnd, "");
 }
 
 void facade::backspace(
@@ -489,9 +489,9 @@ void facade::backspace(
   unsigned int &cursorEnd)
 {
   if (cursorStart == cursorEnd) {
-    cursorEnd -=_utf8_reverse_codepoint_length(text, cursorStart);
+    cursorEnd -=_utf8LeftCodepointLength(text, cursorStart);
   }
-  _edit_text(text, cursorStart, cursorEnd, "");
+  _editTextState(text, cursorStart, cursorEnd, "");
 }
 
 void facade::left(
@@ -499,8 +499,8 @@ void facade::left(
   unsigned int &cursorStart,
   unsigned int &cursorEnd)
 {
-  _move_cursor_by(cursorStart, cursorEnd,
-    -_utf8_reverse_codepoint_length(text, cursorStart));
+  _moveCursorBy(cursorStart, cursorEnd,
+    -_utf8LeftCodepointLength(text, cursorStart));
 }
 
 void facade::right(
@@ -508,8 +508,8 @@ void facade::right(
   unsigned int &cursorStart,
   unsigned int &cursorEnd)
 {
-  _move_cursor_by(cursorStart, cursorEnd,
-    _utf8_forward_codepoint_length(text, cursorStart));
+  _moveCursorBy(cursorStart, cursorEnd,
+    _utf8RightCodepointLength(text, cursorStart));
 }
 
 void facade::paste(
@@ -517,7 +517,7 @@ void facade::paste(
   unsigned int &cursorStart,
   unsigned int &cursorEnd)
 {
-  _edit_text(text, cursorStart, cursorEnd, facade::clipboardText());
+  _editTextState(text, cursorStart, cursorEnd, facade::clipboardText());
 }
 
 void facade::cut(
@@ -525,8 +525,8 @@ void facade::cut(
   unsigned int &cursorStart,
   unsigned int &cursorEnd)
 {
-  facade::clipboardText(_get_text(text, cursorStart, cursorEnd));
-  _edit_text(text, cursorStart, cursorEnd, "");
+  facade::clipboardText(_editTextState(text, cursorStart, cursorEnd));
+  _editTextState(text, cursorStart, cursorEnd, "");
 }
 
 void facade::copy(
@@ -534,7 +534,7 @@ void facade::copy(
   unsigned int &cursorStart,
   unsigned int &cursorEnd)
 {
-  facade::clipboardText(_get_text(text, cursorStart, cursorEnd));
+  facade::clipboardText(_editTextState(text, cursorStart, cursorEnd));
 }
 
 void facade::handleKeyboardEditing(
@@ -547,7 +547,7 @@ void facade::handleKeyboardEditing(
     state_control_op = nullptr;
   } else {
     if (facade::hasKeyChar()) {
-      _edit_text(text, cursorStart, cursorEnd, _to_utf8(facade::getKeyChar()));
+      _editTextState(text, cursorStart, cursorEnd, _utf8(facade::getKeyChar()));
     }
   }
 }

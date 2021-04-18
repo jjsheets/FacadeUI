@@ -10,11 +10,11 @@
 
 namespace facade {
 
-  typedef std::function<std::string ()> clipboard_content_callack;
+  typedef std::function<std::string ()> clipboard_content_callback;
 
   typedef std::function<void (
     std::string
-  )> clip_content_callack;
+  )> clip_content_callback;
 
   typedef std::function<void (
     std::string &,
@@ -108,8 +108,8 @@ namespace facade {
   bool getModShift();
 
   void setClipboardCallback(
-    clipboard_content_callack get,
-    clip_content_callack set);
+    clipboard_content_callback get,
+    clip_content_callback set);
 
   std::string clipboardText();
 
