@@ -34,6 +34,7 @@
 #include <iostream>
 #include <random>
 #include <bitset>
+#include <exception>
 
 #include "test_layout.h"
 

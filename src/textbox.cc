@@ -25,8 +25,6 @@ void facade::setDefaultTextboxRenderer(
 void facade::textbox(
   const std::string &id,
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd,
   int w,
   int h,
   bool disabled,
@@ -40,10 +38,10 @@ void facade::textbox(
     facade::focus(id);
   }
   if (facade::isFocused(id) && !disabled) {
-    facade::handleKeyboardEditing(text, cursorStart, cursorEnd);
+    facade::handleKeyboardEditing(text);
   }
   auto _renderer = renderer ? renderer : state_default_textbox_renderer;
-  _renderer(x, y, w, h, text, cursorStart, cursorEnd,
+  _renderer(x, y, w, h, text, facade::cursorStart(), facade::cursorEnd(),
     facade::displayState(id, disabled));
   if (!disabled) {
     facade::setPreviousItem(id);
@@ -55,34 +53,28 @@ void facade::textbox(
 void facade::textbox(
   const std::string &id,
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd,
   int w,
   bool disabled,
   facade::textbox_renderer renderer)
 {
-  facade::textbox(id, text, cursorStart, cursorEnd, w, 0, disabled, renderer);
+  facade::textbox(id, text, w, 0, disabled, renderer);
 }
 
 void facade::textbox(
   const std::string &id,
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd,
   bool disabled,
   facade::textbox_renderer renderer)
 {
-  facade::textbox(id, text, cursorStart, cursorEnd, 0, 0, disabled, renderer);
+  facade::textbox(id, text, 0, 0, disabled, renderer);
 }
 
 void facade::textbox(
   const std::string &id,
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd,
   facade::textbox_renderer renderer)
 {
-  facade::textbox(id, text, cursorStart, cursorEnd, 0, 0, false, renderer);
+  facade::textbox(id, text, 0, 0, false, renderer);
 }
 
 #endif // FACADE_Button_CC_INCLUDED

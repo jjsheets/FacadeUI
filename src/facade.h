@@ -118,78 +118,80 @@ namespace facade {
 
   void tab(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void home(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void pageup(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void up(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void end(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void pagedown(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void down(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void del(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void backspace(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void left(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void right(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void paste(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void cut(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void copy(
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    unsigned int &_cursorStart,
+    unsigned int &_cursorEnd);
 
   void handleKeyboardEditing(
-    std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd);
+    std::string &text);
+
+  unsigned int cursorStart();
+
+  unsigned int cursorEnd();
 
   void preFrame();
 

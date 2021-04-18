@@ -27,6 +27,8 @@ namespace {
   char32_t state_key_char;
   facade::control_op state_control_op;
   bool state_mod_shift;
+  unsigned int state_cursorStart;
+  unsigned int state_cursorEnd;
 
   // Clipboard callbacks
   facade::clipboard_content_callback state_clipboard_content;
@@ -194,6 +196,8 @@ void facade::focus(
   const std::string &id)
 {
   state_focus_item = id;
+  state_cursorStart = 0;
+  state_cursorEnd = 0;
 }
 
 void facade::focusPrevItem()
@@ -335,59 +339,59 @@ static unsigned int _utf8LeftCodepointLength(
 
 static std::string _editTextState(
   const std::string &text,
-  unsigned int cursorStart,
-  unsigned int cursorEnd)
+  unsigned int _cursorStart,
+  unsigned int _cursorEnd)
 {
-  if (cursorStart <= cursorEnd) {
-    return text.substr(cursorStart, cursorEnd - cursorStart);
+  if (_cursorStart <= _cursorEnd) {
+    return text.substr(_cursorStart, _cursorEnd - _cursorStart);
   } else {
-    return text.substr(cursorEnd, cursorStart - cursorEnd);
+    return text.substr(_cursorEnd, _cursorStart - _cursorEnd);
   }
 }
 
 static void _editTextState(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd,
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd,
   const std::string &replacement)
 {
-  if (cursorStart <= cursorEnd) {
-    text.replace(cursorStart, cursorEnd - cursorStart, replacement);
-    cursorStart = cursorStart + replacement.length();
-    cursorEnd = cursorStart;
+  if (_cursorStart <= _cursorEnd) {
+    text.replace(_cursorStart, _cursorEnd - _cursorStart, replacement);
+    _cursorStart = _cursorStart + replacement.length();
+    _cursorEnd = _cursorStart;
   } else {
-    text.replace(cursorEnd, cursorStart - cursorEnd, replacement);
-    cursorStart = cursorEnd + replacement.length();
-    cursorEnd = cursorStart;
+    text.replace(_cursorEnd, _cursorStart - _cursorEnd, replacement);
+    _cursorStart = _cursorEnd + replacement.length();
+    _cursorEnd = _cursorStart;
   }
 }
 
 static void _moveCursorTo(
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd,
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd,
   unsigned int pos)
 {
-  cursorEnd = pos;
+  _cursorEnd = pos;
   if (!facade::getModShift()) {
-    cursorStart = cursorEnd;
+    _cursorStart = _cursorEnd;
   }
 }
 
 static void _moveCursorBy(
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd,
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd,
   unsigned int dist)
 {
-  cursorEnd += dist;
+  _cursorEnd += dist;
   if (!facade::getModShift()) {
-    cursorStart = cursorEnd;
+    _cursorStart = _cursorEnd;
   }
 }
 
 void facade::tab(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
   if (facade::getModShift()) {
     facade::focusPrevItem();
@@ -398,134 +402,142 @@ void facade::tab(
 
 void facade::home(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
-  _moveCursorTo(cursorStart, cursorEnd, 0);
+  _moveCursorTo(_cursorStart, _cursorEnd, 0);
 }
 
 void facade::pageup(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
   // TODO: When coding the multiline, adjust this so it does an actual pageup
-  _moveCursorTo(cursorStart, cursorEnd, 0);
+  _moveCursorTo(_cursorStart, _cursorEnd, 0);
 }
 
 void facade::up(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
   // TODO: When coding the multiline, adjust this so it does an actual up
-  _moveCursorTo(cursorStart, cursorEnd, 0);
+  _moveCursorTo(_cursorStart, _cursorEnd, 0);
 }
 
 void facade::end(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
-  _moveCursorTo(cursorStart, cursorEnd, text.length());
+  _moveCursorTo(_cursorStart, _cursorEnd, text.length());
 }
 
 void facade::pagedown(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
   // TODO: When coding the multiline, adjust this so it does an actual pagedown
-  _moveCursorTo(cursorStart, cursorEnd, text.length());
+  _moveCursorTo(_cursorStart, _cursorEnd, text.length());
 }
 
 void facade::down(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
   // TODO: When coding the multiline, adjust this so it does an actual down
-  _moveCursorTo(cursorStart, cursorEnd, text.length());
+  _moveCursorTo(_cursorStart, _cursorEnd, text.length());
 }
 
 void facade::del(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
-  if (cursorStart == cursorEnd) {
-    cursorEnd +=_utf8RightCodepointLength(text, cursorStart);
+  if (_cursorStart == _cursorEnd) {
+    _cursorEnd +=_utf8RightCodepointLength(text, _cursorStart);
   }
-  _editTextState(text, cursorStart, cursorEnd, "");
+  _editTextState(text, _cursorStart, _cursorEnd, "");
 }
 
 void facade::backspace(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
-  if (cursorStart == cursorEnd) {
-    cursorEnd -=_utf8LeftCodepointLength(text, cursorStart);
+  if (_cursorStart == _cursorEnd) {
+    _cursorEnd -=_utf8LeftCodepointLength(text, _cursorStart);
   }
-  _editTextState(text, cursorStart, cursorEnd, "");
+  _editTextState(text, _cursorStart, _cursorEnd, "");
 }
 
 void facade::left(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
-  _moveCursorBy(cursorStart, cursorEnd,
-    -_utf8LeftCodepointLength(text, cursorStart));
+  _moveCursorBy(_cursorStart, _cursorEnd,
+    -_utf8LeftCodepointLength(text, _cursorStart));
 }
 
 void facade::right(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
-  _moveCursorBy(cursorStart, cursorEnd,
-    _utf8RightCodepointLength(text, cursorStart));
+  _moveCursorBy(_cursorStart, _cursorEnd,
+    _utf8RightCodepointLength(text, _cursorStart));
 }
 
 void facade::paste(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
-  _editTextState(text, cursorStart, cursorEnd, facade::clipboardText());
+  _editTextState(text, _cursorStart, _cursorEnd, facade::clipboardText());
 }
 
 void facade::cut(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
-  facade::clipboardText(_editTextState(text, cursorStart, cursorEnd));
-  _editTextState(text, cursorStart, cursorEnd, "");
+  facade::clipboardText(_editTextState(text, _cursorStart, _cursorEnd));
+  _editTextState(text, _cursorStart, _cursorEnd, "");
 }
 
 void facade::copy(
   std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  unsigned int &_cursorStart,
+  unsigned int &_cursorEnd)
 {
-  facade::clipboardText(_editTextState(text, cursorStart, cursorEnd));
+  facade::clipboardText(_editTextState(text, _cursorStart, _cursorEnd));
 }
 
 void facade::handleKeyboardEditing(
-  std::string &text,
-  unsigned int &cursorStart,
-  unsigned int &cursorEnd)
+  std::string &text)
 {
   if (state_control_op) {
-    state_control_op(text, cursorStart, cursorEnd);
+    state_control_op(text, state_cursorStart, state_cursorEnd);
     state_control_op = nullptr;
   } else {
     if (facade::hasKeyChar()) {
-      _editTextState(text, cursorStart, cursorEnd, _utf8(facade::getKeyChar()));
+      _editTextState(text, state_cursorStart, state_cursorEnd, _utf8(facade::getKeyChar()));
     }
   }
+}
+
+unsigned int facade::cursorStart()
+{
+  return state_cursorStart;
+}
+
+unsigned int facade::cursorEnd()
+{
+  return state_cursorEnd;
 }
 
 // Frame handling functions.

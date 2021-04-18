@@ -36,10 +36,8 @@ UTEST(textbox, noRenderer) {
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     std::string text = "Textbox Content";
-    unsigned int cursorStart = 0;
-    unsigned int cursorEnd = 0;
     try {
-      facade::textbox("test", text, cursorStart, cursorEnd);
+      facade::textbox("test", text);
     } catch (...) {
       exceptionThrown = true;
     }
@@ -50,7 +48,7 @@ UTEST(textbox, defaultRenderer) {
   facade::init(2560);
   bool rendered = false;
   facade::setDefaultTextboxRenderer(
-    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+    [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {
       rendered = true;
     }
   );
@@ -58,9 +56,7 @@ UTEST(textbox, defaultRenderer) {
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     std::string text = "Textbox Content";
-    unsigned int cursorStart = 0;
-    unsigned int cursorEnd = 0;
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
     ASSERT_TRUE(rendered);
 }
 
@@ -71,10 +67,8 @@ UTEST(textbox, textboxRenderer) {
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     std::string text = "Textbox Content";
-    unsigned int cursorStart = 0;
-    unsigned int cursorEnd = 0;
-    facade::textbox("test", text, cursorStart, cursorEnd,
-      [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+    facade::textbox("test", text,
+      [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {
         rendered = true;
       }
     );
@@ -87,17 +81,15 @@ UTEST(textbox, textboxRendererParameters) {
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     std::string text = "Textbox Content";
-    unsigned int cursorStart = 0;
-    unsigned int cursorEnd = 0;
-    facade::textbox("test", text, cursorStart, cursorEnd,
-      [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+    facade::textbox("test", text,
+      [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {
         ASSERT_TRUE(text == "Textbox Content");
         ASSERT_EQ(10, x);
         ASSERT_EQ(15, y);
         ASSERT_EQ(80, w);
         ASSERT_EQ(20, h);
-        ASSERT_EQ(0u, cursorStart);
-        ASSERT_EQ(0u, cursorEnd);
+        ASSERT_EQ(0u, _cursorStart);
+        ASSERT_EQ(0u, _cursorEnd);
       }
     );
 }
@@ -108,15 +100,13 @@ UTEST(textbox, textboxEnabled) {
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     std::string text = "Textbox Content";
-    unsigned int cursorStart = 0;
-    unsigned int cursorEnd = 0;
-    facade::textbox("test", text, cursorStart, cursorEnd,
-      [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+    facade::textbox("test", text,
+      [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::pressed); // this will be pressed because it will automatically grab the focus.
       }
     );
-    facade::textbox("test2", text, cursorStart, cursorEnd,
-      [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+    facade::textbox("test2", text,
+      [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::enabled);
       }
     );
@@ -129,15 +119,13 @@ UTEST(textbox, textboxHover) {
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     std::string text = "Textbox Content";
-    unsigned int cursorStart = 0;
-    unsigned int cursorEnd = 0;
-    facade::textbox("test", text, cursorStart, cursorEnd,
-      [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+    facade::textbox("test", text,
+      [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::pressed); // this will be pressed because it will automatically grab the focus.
       }
     );
-    facade::textbox("test2", text, cursorStart, cursorEnd,
-      [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+    facade::textbox("test2", text,
+      [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::hovered);
       }
     );
@@ -150,10 +138,8 @@ UTEST(textbox, textboxPressed) {
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
     std::string text = "Textbox Content";
-    unsigned int cursorStart = 0;
-    unsigned int cursorEnd = 0;
-    facade::textbox("test", text, cursorStart, cursorEnd,
-      [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+    facade::textbox("test", text,
+      [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {
       }
     );
   facade::endLayout();
@@ -162,8 +148,8 @@ UTEST(textbox, textboxPressed) {
   facade::setLeftMouseButton(true);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd,
-      [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+    facade::textbox("test", text,
+      [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::pressed);
       }
     );
@@ -173,8 +159,8 @@ UTEST(textbox, textboxPressed) {
   facade::setMouseXY(5, 5);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd,
-      [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+    facade::textbox("test", text,
+      [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {
         ASSERT_TRUE(displayState == facade::display_state::pressed);
       }
     );
@@ -183,10 +169,8 @@ UTEST(textbox, textboxPressed) {
 UTEST(textbox, textboxDisabled) {
   facade::init(2560);
   std::string text = "Textbox Content";
-  unsigned int cursorStart = 0;
-  unsigned int cursorEnd = 0;
   facade::setDefaultTextboxRenderer(
-    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {
+    [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {
       ASSERT_TRUE(displayState == facade::display_state::disabled);
     });
   // Initialization complete
@@ -194,7 +178,7 @@ UTEST(textbox, textboxDisabled) {
   facade::setKeyChar('0');
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd, true);
+    facade::textbox("test", text, true);
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE("Textbox Content" == text);
@@ -204,23 +188,19 @@ UTEST(textbox, textboxDisabled) {
 UTEST(textbox, textboxKeyboardInput) {
   facade::init(2560);
   std::string text = "";
-  unsigned int cursorStart = 0;
-  unsigned int cursorEnd = 0;
   facade::setDefaultTextboxRenderer(
-    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {});
+    [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {});
   // Initialization complete
   std::string goal = "Hello World!";
   for (auto &c : goal) {
     facade::setKeyChar(c);
     facade::preFrame();
     facade::beginLayout(10, 15, 80);
-      facade::textbox("test", text, cursorStart, cursorEnd);
+      facade::textbox("test", text);
     facade::endLayout();
     facade::postFrame();
   }
   ASSERT_TRUE(goal == text);
-  ASSERT_EQ(goal.size(), cursorStart);
-  ASSERT_EQ(goal.size(), cursorEnd);
 }
 
 bool validUtf8(std::string &data) {
@@ -249,49 +229,56 @@ bool validUtf8(std::string &data) {
 UTEST(textbox, textboxCursorValidity) {
   facade::init(2560);
   std::string text = "ði ıntəˈnæʃənəl fəˈnɛtık əsoʊsiˈeıʃn";
-  unsigned int cursorStart = 0;
-  unsigned int cursorEnd = 0;
   ASSERT_TRUE(validUtf8(text));
   // a full merseene twister is overkill for testing this, but what the heck.
   std::random_device r;
   std::mt19937 rng(r());
   std::uniform_int_distribution<> dis(0, 1);
   facade::setDefaultTextboxRenderer(
-    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {});
+    [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {});
   // Initialization complete
   // test this 10 times in a row.
   unsigned int direction;
   for (unsigned int t = 0; t < 1000; t++) {
     for (unsigned int i = 0; i < 100; i++) {
       direction = dis(rng);
-      facade::setControlCode(direction ? facade::left : facade::right, false);
-      facade::preFrame();
-      facade::beginLayout(10, 15, 80);
-        facade::textbox("test", text, cursorStart, cursorEnd);
-      facade::endLayout();
-      facade::postFrame();
-      facade::setKeyChar('0');
-      facade::preFrame();
-      facade::beginLayout(10, 15, 80);
-        facade::textbox("test", text, cursorStart, cursorEnd);
-      facade::endLayout();
-      facade::postFrame();
+      try {
+        facade::setControlCode(direction ? facade::left : facade::right, false);
+        facade::preFrame();
+        facade::beginLayout(10, 15, 80);
+          facade::textbox("test", text);
+        facade::endLayout();
+        facade::postFrame();
+      } catch (std::out_of_range &_oor) {
+        std::cout << (direction ? "left, " : "right, ");
+        std::cout << t << ", " << i << ", " << text << std::endl;
+        ASSERT_TRUE(false);
+      }
+      try {
+        facade::setKeyChar('0');
+        facade::preFrame();
+        facade::beginLayout(10, 15, 80);
+          facade::textbox("test", text);
+        facade::endLayout();
+        facade::postFrame();
+      } catch (std::out_of_range &_oor) {
+        std::cout << (direction ? "left, " : "right, ");
+        std::cout << t << ", " << i << ", " << text << std::endl;
+        ASSERT_TRUE(false);
+      }
     }
     ASSERT_TRUE(validUtf8(text));
     text = "ði ıntəˈnæʃənəl fəˈnɛtık əsoʊsiˈeıʃn";
-    cursorStart = 0;
-    cursorEnd = 0;
+    facade::clearFocusItem();
   }
 }
 
 UTEST(textbox, textboxClipboard) {
   facade::init(2560);
   std::string text = "Hello World!";
-  unsigned int cursorStart = 0;
-  unsigned int cursorEnd = 0;
   std::string clipboard = "Goodbye";
   facade::setDefaultTextboxRenderer(
-    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {});
+    [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {});
   facade::setClipboardCallback(
     [&]() -> std::string {
       return clipboard;
@@ -305,7 +292,7 @@ UTEST(textbox, textboxClipboard) {
     facade::setControlCode(facade::right, true);
     facade::preFrame();
     facade::beginLayout(10, 15, 80);
-      facade::textbox("test", text, cursorStart, cursorEnd);
+      facade::textbox("test", text);
     facade::endLayout();
     facade::postFrame();
   }
@@ -313,37 +300,33 @@ UTEST(textbox, textboxClipboard) {
   facade::setControlCode(facade::paste, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE(text == "Goodbye World!");
-  ASSERT_EQ(7u, cursorStart);
-  ASSERT_EQ(7u, cursorEnd);
   // Clear clipboard externally to test cut operation
   clipboard = "";
   // Select Goodbye, this time using the Home control code
   facade::setControlCode(facade::home, true);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   // Cut Goodbye
   facade::setControlCode(facade::cut, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE(text == " World!");
   ASSERT_TRUE(clipboard == "Goodbye");
-  ASSERT_EQ(0u, cursorStart);
-  ASSERT_EQ(0u, cursorEnd);
   // Paste it back in...
   facade::setControlCode(facade::paste, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   // Select " World!" with shift end
@@ -351,28 +334,28 @@ UTEST(textbox, textboxClipboard) {
   facade::setControlCode(facade::end, true);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   // Copy it
   facade::setControlCode(facade::copy, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   // paste it, which should be equivalent to just heading the cursor to the end
   facade::setControlCode(facade::paste, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   // Paste again...
   facade::setControlCode(facade::paste, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   // Verify results
@@ -382,111 +365,91 @@ UTEST(textbox, textboxClipboard) {
 UTEST(textbox, textboxCursorMovement) {
   facade::init(2560);
   std::string text = "12345";
-  unsigned int cursorStart = 0;
-  unsigned int cursorEnd = 0;
   facade::setDefaultTextboxRenderer(
-    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {});
+    [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {});
   // Initialization complete
   facade::setControlCode(facade::left, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(0u, cursorStart);
-  ASSERT_EQ(0u, cursorEnd);
   facade::setControlCode(facade::down, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(5u, cursorStart);
-  ASSERT_EQ(5u, cursorEnd);
   facade::setControlCode(facade::up, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(0u, cursorStart);
-  ASSERT_EQ(0u, cursorEnd);
   facade::setControlCode(facade::pagedown, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(5u, cursorStart);
-  ASSERT_EQ(5u, cursorEnd);
   facade::setControlCode(facade::pageup, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(0u, cursorStart);
-  ASSERT_EQ(0u, cursorEnd);
   facade::setControlCode(facade::end, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(5u, cursorStart);
-  ASSERT_EQ(5u, cursorEnd);
   facade::setControlCode(facade::home, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(0u, cursorStart);
-  ASSERT_EQ(0u, cursorEnd);
   facade::setControlCode(facade::end, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   facade::setControlCode(facade::right, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
-  ASSERT_EQ(5u, cursorStart);
-  ASSERT_EQ(5u, cursorEnd);
 }
 
 UTEST(textbox, textboxTab) {
   facade::init(2560);
   std::string text = "";
-  unsigned int cursorStart = 0;
-  unsigned int cursorEnd = 0;
   facade::setDefaultTextboxRenderer(
-    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {});
+    [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {});
   // Initialization complete
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test1", text, cursorStart, cursorEnd);
-    facade::textbox("test2", text, cursorStart, cursorEnd);
+    facade::textbox("test1", text);
+    facade::textbox("test2", text);
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE(facade::isFocused("test1"));
   facade::setControlCode(facade::tab, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test1", text, cursorStart, cursorEnd);
-    facade::textbox("test2", text, cursorStart, cursorEnd);
+    facade::textbox("test1", text);
+    facade::textbox("test2", text);
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE(facade::isFocused("test2"));
   facade::setControlCode(facade::tab, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test1", text, cursorStart, cursorEnd);
-    facade::textbox("test2", text, cursorStart, cursorEnd);
+    facade::textbox("test1", text);
+    facade::textbox("test2", text);
   facade::endLayout();
   facade::postFrame();
   // there should be no focus item now, which means the first focus aware control in the next frame will grab focus.
@@ -494,8 +457,8 @@ UTEST(textbox, textboxTab) {
   facade::setControlCode(facade::tab, true);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test1", text, cursorStart, cursorEnd);
-    facade::textbox("test2", text, cursorStart, cursorEnd);
+    facade::textbox("test1", text);
+    facade::textbox("test2", text);
   facade::endLayout();
   facade::postFrame();
   // here the shift-tab should have picked up the previous frame's last focus aware control and focus on it.
@@ -503,8 +466,8 @@ UTEST(textbox, textboxTab) {
   facade::setControlCode(facade::tab, true);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test1", text, cursorStart, cursorEnd);
-    facade::textbox("test2", text, cursorStart, cursorEnd);
+    facade::textbox("test1", text);
+    facade::textbox("test2", text);
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE(facade::isFocused("test1"));
@@ -513,20 +476,18 @@ UTEST(textbox, textboxTab) {
 UTEST(textbox, textboxDeletion) {
   facade::init(2560);
   std::string text = "JUNKJust This.JUNK";
-  unsigned int cursorStart = 0;
-  unsigned int cursorEnd = 0;
   facade::setDefaultTextboxRenderer(
-    [&](int x, int y, int w, int h, std::string text, unsigned int cursorStart, unsigned int cursorEnd, facade::display_state displayState) {});
+    [&](int x, int y, int w, int h, std::string text, unsigned int _cursorStart, unsigned int _cursorEnd, facade::display_state displayState) {});
   // Initialization complete
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   facade::setControlCode(facade::del, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE("UNKJust This.JUNK" == text);
@@ -535,7 +496,7 @@ UTEST(textbox, textboxDeletion) {
     facade::setControlCode(facade::right, true);
     facade::preFrame();
     facade::beginLayout(10, 15, 80);
-      facade::textbox("test", text, cursorStart, cursorEnd);
+      facade::textbox("test", text);
     facade::endLayout();
     facade::postFrame();
   }
@@ -543,7 +504,7 @@ UTEST(textbox, textboxDeletion) {
   facade::setControlCode(facade::del, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE("Just This.JUNK" == text);
@@ -551,7 +512,7 @@ UTEST(textbox, textboxDeletion) {
   facade::setControlCode(facade::backspace, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE("Just This.JUNK" == text);
@@ -559,14 +520,14 @@ UTEST(textbox, textboxDeletion) {
   facade::setControlCode(facade::end, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   // a delete at the end should also do nothing.
   facade::setControlCode(facade::del, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE("Just This.JUNK" == text);
@@ -574,7 +535,7 @@ UTEST(textbox, textboxDeletion) {
   facade::setControlCode(facade::backspace, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE("Just This.JUN" == text);
@@ -583,7 +544,7 @@ UTEST(textbox, textboxDeletion) {
     facade::setControlCode(facade::left, true);
     facade::preFrame();
     facade::beginLayout(10, 15, 80);
-      facade::textbox("test", text, cursorStart, cursorEnd);
+      facade::textbox("test", text);
     facade::endLayout();
     facade::postFrame();
   }
@@ -591,7 +552,7 @@ UTEST(textbox, textboxDeletion) {
   facade::setControlCode(facade::backspace, false);
   facade::preFrame();
   facade::beginLayout(10, 15, 80);
-    facade::textbox("test", text, cursorStart, cursorEnd);
+    facade::textbox("test", text);
   facade::endLayout();
   facade::postFrame();
   ASSERT_TRUE("Just This." == text);

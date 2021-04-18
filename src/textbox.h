@@ -26,8 +26,6 @@ namespace facade {
   void textbox(
     const std::string &id,
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd,
     int w,
     int h,
     bool disabled = false,
@@ -38,8 +36,6 @@ namespace facade {
   void textbox(
     const std::string &id,
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd,
     int w,
     bool disabled = false,
     textbox_renderer renderer = nullptr);
@@ -47,16 +43,12 @@ namespace facade {
   void textbox(
     const std::string &id,
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd,
     bool disabled = false,
     textbox_renderer renderer = nullptr);
 
   void textbox(
     const std::string &id,
     std::string &text,
-    unsigned int &cursorStart,
-    unsigned int &cursorEnd,
     textbox_renderer renderer);
 
 }
