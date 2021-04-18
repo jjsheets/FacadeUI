@@ -1,5 +1,7 @@
 # FacadeUI
 
+[![CI Status](https://github.com/jjsheets/FacadeUI/workflows/CI/badge.svg?branch=main)](https://github.com/jjsheets/FacadeUI/actions) [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](http://unlicense.org/)
+
 FacadeUI is meant to be a minimalist immediate mode GUI library in C++17/20, designed for use in games, with an absolute minimum of dependencies to ensure it is as portable and unintrusive as possible. Despite being programmed in C++, the methodology used is generally functional, rather than object oriented.
 
 ## UI Elements
