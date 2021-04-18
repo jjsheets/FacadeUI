@@ -11,6 +11,7 @@ jobs:
 
       - name: Install tup build system
         run: |
+          sudo apt -q -y install libfuse3-dev
           git clone git://github.com/gittup/tup.git
           cd tup
           ./bootstrap.sh
