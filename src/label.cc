@@ -29,7 +29,7 @@ void facade::label(
 {
   int x = 0;
   int y = 0;
-  facade::controlBounds(x, y, w, h, w == 0);
+  facade::controlBounds(x, y, w, h);
   auto _renderer = renderer ? renderer : state_default_label_renderer;
   _renderer(label, x, y, w, h);
 }

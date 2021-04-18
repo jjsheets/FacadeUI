@@ -33,7 +33,7 @@ bool facade::checkbox(
 {
   int x = 0;
   int y = 0;
-  facade::controlBounds(x, y, w, h, w == 0);
+  facade::controlBounds(x, y, w, h);
   facade::updateControlState(id, x, y, w, h, disabled);
   if (!disabled && facade::clicked(id)) {
     val = !val;

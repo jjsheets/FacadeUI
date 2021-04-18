@@ -32,7 +32,7 @@ bool facade::button(
 {
   int x = 0;
   int y = 0;
-  facade::controlBounds(x, y, w, h, w == 0);
+  facade::controlBounds(x, y, w, h);
   facade::updateControlState(id, x, y, w, h, disabled);
   auto _render = renderer ? renderer : state_default_button_renderer;
   _render(label, x, y, w, h, facade::displayState(id, disabled));

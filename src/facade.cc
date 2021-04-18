@@ -687,12 +687,11 @@ void facade::controlBounds(
   int &x,
   int &y,
   int &w,
-  int &h,
-  bool resizeW)
+  int &h)
 {
   curLayout->updateXY(x, y);
   curLayout->updateHeight(h);
-  if (resizeW) {
+  if (w == 0) {
     w = curLayout->availableWidth();
     curLayout->newRow();
   } else {

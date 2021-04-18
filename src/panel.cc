@@ -28,7 +28,7 @@ void facade::panel(
 {
   int x = 0;
   int y = 0;
-  facade::controlBounds(x, y, w, h, w == 0);
+  facade::controlBounds(x, y, w, h);
   auto _renderer = renderer ? renderer : state_default_panel_renderer;
   _renderer(x, y, w, h);
 }

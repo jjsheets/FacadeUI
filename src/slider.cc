@@ -37,10 +37,10 @@ double facade::slider(
   int y = 0;
   w = w > 0 ? w : 20;
   if (type == facade::orientation::horizontal) {
-    facade::controlBounds(x, y, l, w, l == 0);
+    facade::controlBounds(x, y, l, w);
   } else {
     l = l > 0 ? l : 160;
-    facade::controlBounds(x, y, w, l, w == 0);
+    facade::controlBounds(x, y, w, l);
   }
   const int regionW = type == facade::orientation::horizontal ? l : w;
   const int regionH = type == facade::orientation::horizontal ? w : l;

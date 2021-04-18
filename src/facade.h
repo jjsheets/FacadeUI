@@ -223,8 +223,7 @@ namespace facade {
     int& x,
     int& y,
     int& w,
-    int& h,
-    bool resizeW = true);
+    int& h);
 
   void updateControlState(
     const std::string &id,
