@@ -45,6 +45,8 @@ if ((button("buttonID", "Click Me!", false))) {
 }
 ```
 
+The boolean to disable a button will be last, or second to last if a custom renderer is specified.
+
 ## button Renderers
 
 `button` renderers are functions or function objects which match the following
