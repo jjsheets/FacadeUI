@@ -52,7 +52,8 @@ namespace facade {
   bool button(
     const std::string &id,
     const std::string &label,
-    int w);
+    int w,
+    button_renderer renderer = nullptr);
 
 }
 

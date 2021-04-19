@@ -71,9 +71,10 @@ bool facade::button(
 bool facade::button(
   const std::string &id,
   const std::string &label,
-  int w)
+  int w,
+  button_renderer renderer)
 {
-  return facade::button(id, label, w, 0, false, nullptr);
+  return facade::button(id, label, w, 0, false, renderer);
 }
 
 #endif // FACADE_Button_CC_INCLUDED
