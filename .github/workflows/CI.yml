@@ -1,6 +1,20 @@
 name: CI
 
-on: [push, pull_request]
+on: 
+  push:
+    paths:
+    - '**.cc'
+    - '**.h'
+    - '**Tupfile'
+    - 'Tuprules.tup'
+    - '.github/workflows/CI.yml'
+  pull_request:
+    paths:
+    - '**.cc'
+    - '**.h'
+    - '**Tupfile'
+    - 'Tuprules.tup'
+    - '.github/workflows/CI.yml'
 
 jobs:
   build:
