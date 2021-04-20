@@ -37,12 +37,12 @@ void facade::textbox(
   if (!disabled && facade::clicked(id)) {
     facade::focus(id);
   }
-  if (facade::isFocused(id) && !disabled) {
-    facade::handleKeyboardEditing(text);
-  }
   auto _renderer = renderer ? renderer : state_default_textbox_renderer;
   _renderer(x, y, w, h, text, facade::cursorStart(), facade::cursorEnd(),
     facade::displayState(id, disabled));
+  if (facade::isFocused(id) && !disabled) {
+    facade::handleKeyboardEditing(text);
+  }
   if (!disabled) {
     facade::setPreviousItem(id);
   }
